@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="paragraph">18sp</dimen>
+    <dimen name="paragraph2">24sp</dimen>
+    <dimen name="title1">64sp</dimen>
+    <dimen name="title2">48sp</dimen>
+    <dimen name="title3">24sp</dimen>
+    <dimen name="lightFont">24sp</dimen>
+
+    <dimen name="onboardingButtonHeight">85dp</dimen>
+    <dimen name="onboardingButtonWidth">85dp</dimen>
+
+</resources>
