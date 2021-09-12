@@ -14,11 +14,15 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 @AndroidEntryPoint
-class SplashFragment : BaseFragment<FragmentSplashBinding>() {
+class SplashFragment : BaseFragment<FragmentSplashBinding>(), CoroutineScope {
 
     private val viewModel: AuthViewModel by viewModels()
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + Job()
 
     @Inject
     lateinit var dataStoreObject: DataStoreObject
@@ -31,11 +35,10 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            delay(1000)
+        launch {
             dataStoreObject.getIsFirstTime().collect {
                 withContext(Dispatchers.Main) {
-                    view.post {
+                    view.post{
                         if (it) {
                             findNavController().navigate(R.id.action_splashFragment_to_onboardingFragment)
                         } else {
@@ -45,8 +48,9 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>() {
                 }
 
             }
-
         }
+
+
 
     }
 

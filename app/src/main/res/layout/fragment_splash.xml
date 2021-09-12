@@ -11,7 +11,7 @@
         android:id="@+id/logo_iv"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/ic_logo"
+        android:src="@drawable/ic_next_btn"
         tools:layout_editor_absoluteX="40dp"
         tools:layout_editor_absoluteY="325dp"
         app:layout_constraintStart_toStartOf="@id/vertical1_gl"
