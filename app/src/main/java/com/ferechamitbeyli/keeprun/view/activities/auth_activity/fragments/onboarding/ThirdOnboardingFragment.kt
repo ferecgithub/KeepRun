@@ -8,14 +8,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ferechamitbeyli.keeprun.R
 import com.ferechamitbeyli.keeprun.databinding.FragmentThirdOnboardingBinding
-import com.ferechamitbeyli.keeprun.model.local.cache.DataStoreObject
-import com.ferechamitbeyli.keeprun.view.activities.auth_activity.fragments.BaseFragment
+import com.ferechamitbeyli.keeprun.framework.model.local.cache.DataStoreObject
+import com.ferechamitbeyli.keeprun.view.base.BaseFragment
 import com.ferechamitbeyli.keeprun.viewmodel.activities.auth_activity.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -35,7 +31,7 @@ class ThirdOnboardingFragment : BaseFragment<FragmentThirdOnboardingBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.getStartedBtn.setOnClickListener {
-            viewModel.assignFirstUse(false)
+            viewModel.assignOnboardingFinished(true)
             findNavController().navigate(R.id.action_onboardingFragment_to_signInFragment)
 
             /*
