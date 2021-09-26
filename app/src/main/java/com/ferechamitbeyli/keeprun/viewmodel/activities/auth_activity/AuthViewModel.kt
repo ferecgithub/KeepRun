@@ -2,12 +2,12 @@ package com.ferechamitbeyli.keeprun.viewmodel.activities.auth_activity
 
 import android.util.Log
 import androidx.lifecycle.*
+import com.ferechamitbeyli.keeprun.framework.common.ValidationHelperFunctions.validateEmail
+import com.ferechamitbeyli.keeprun.framework.common.ValidationHelperFunctions.validatePassword
+import com.ferechamitbeyli.keeprun.framework.common.ValidationHelperFunctions.validatePasswords
 import com.ferechamitbeyli.keeprun.framework.model.local.cache.DataStoreObject
 import com.ferechamitbeyli.keeprun.framework.model.remote.enitities.enums.ValidationResults
 import com.ferechamitbeyli.keeprun.framework.model.repositories.BaseAuthRepository
-import com.ferechamitbeyli.keeprun.framework.common.validateEmail
-import com.ferechamitbeyli.keeprun.framework.common.validatePassword
-import com.ferechamitbeyli.keeprun.framework.common.validatePasswords
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

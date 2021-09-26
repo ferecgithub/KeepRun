@@ -1,0 +1,201 @@
+ext {
+
+    // AppConfig
+    compile_sdk = 31
+    min_sdk = 21
+    target_sdk = 31
+    version_code = 1
+    version_name = "1.0"
+    application_id = "com.ferechamitbeyli.keeprun"
+    test_instrumentation_runner = "androidx.test.runner.AndroidJUnitRunner"
+
+    AppConfig = [
+            compile_sdk: compile_sdk,
+            min_sdk: min_sdk,
+            target_sdk: target_sdk,
+            version_code: version_code,
+            version_name: version_name,
+            application_id: application_id,
+            test_instrumentation_runner: test_instrumentation_runner
+    ]
+
+    // AndroidX Core
+    appcompat = "1.3.1"
+    core_ktx = "1.6.0"
+    constraintlayout = "2.1.0"
+    legacy_support_v4 = "1.0.0"
+
+    AndroidX = [
+            appcompat: "androidx.appcompat:appcompat:${appcompat}",
+            constraint_layout: "androidx.constraintlayout:constraintlayout:${constraintlayout}",
+            legacy_support_v4: "androidx.legacy:legacy-support-v4:${legacy_support_v4}",
+            core_ktx: "androidx.core:core-ktx:${core_ktx}"
+    ]
+
+    // Google Libs
+    material = "1.4.0"
+
+    Google = [
+            material: "com.google.android.material:material:${material}"
+    ]
+
+    // AppClasspath
+    build_gradle = "7.0.2"
+    kotlin_gradle_plugin = "1.5.31"
+    navigation_safe_args_gradle_plugin = "2.3.5"
+    hilt_android_gradle_plugin = "2.38.1"
+    google_services = "4.3.10"
+
+    AppClasspath = [
+            build_gradle: "com.android.tools.build:gradle:${build_gradle}",
+            kotlin_gradle_plugin: "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_gradle_plugin}",
+            navigation_safe_args_gradle_plugin: "androidx.navigation:navigation-safe-args-gradle-plugin:${navigation_safe_args_gradle_plugin}",
+            hilt_android_gradle_plugin: "com.google.dagger:hilt-android-gradle-plugin:${hilt_android_gradle_plugin}",
+            google_services: "com.google.gms:google-services:${google_services}"
+    ]
+
+    // Lifecycle
+    lifecycle = "2.3.1"
+
+    Lifecycle = [
+            lifecycle_viewmodel_ktx: "androidx.lifecycle:lifecycle-viewmodel-ktx:${lifecycle}",
+            lifecycle_runtime_ktx: "androidx.lifecycle:lifecycle-runtime-ktx:${lifecycle}",
+            lifecycle_service: "androidx.lifecycle:lifecycle-service:${lifecycle}",
+            lifecycle_livedata_ktx: "androidx.lifecycle:lifecycle-livedata-ktx:${lifecycle}",
+            lifecycle_common_java8: "androidx.lifecycle:lifecycle-common-java8:${lifecycle}"
+    ]
+
+    // Navigation
+    navigation = "2.3.5"
+
+    Navigation = [
+            navigation_fragment_ktx: "androidx.navigation:navigation-fragment-ktx:${navigation}",
+            navigation_ui_ktx: "androidx.navigation:navigation-ui-ktx:${navigation}"
+    ]
+
+    // Activity & Fragment KTX
+    fragment_ktx = "1.3.6"
+    activity_ktx = "1.3.1"
+
+    ActivityFragmentKTX = [
+            activity_ktx: "androidx.activity:activity-ktx:${activity_ktx}",
+            fragment_ktx: "androidx.fragment:fragment-ktx:${fragment_ktx}"
+    ]
+
+    // Room
+    room = "2.3.0"
+
+    Room = [
+            room_runtime: "androidx.room:room-runtime:${room}",
+            room_ktx: "androidx.room:room-ktx:${room}",
+            room_compiler_kapt: "androidx.room:room-compiler:${room}"
+    ]
+
+    // DataStore
+    datastore_preferences = "1.0.0"
+    DataStore = [
+            datastore_preferences: "androidx.datastore:datastore-preferences:${datastore_preferences}"
+    ]
+
+    // Firebase
+    firebase_bom = "28.4.0"
+    firebase_auth_ktx = "21.0.1"
+
+    Firebase = [
+            firebase_bom: "com.google.firebase:firebase-bom:${firebase_bom}",
+            firebase_auth_ktx: "com.google.firebase:firebase-auth-ktx:${firebase_auth_ktx}"
+    ]
+
+    // Coroutines
+    kotlinx_coroutines = "1.5.2-native-mt"
+
+    Coroutines = [
+            kotlinx_coroutines_core: "org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinx_coroutines}",
+            kotlinx_coroutines_android: "org.jetbrains.kotlinx:kotlinx-coroutines-android:${kotlinx_coroutines}"
+    ]
+
+    // Retrofit2
+    retrofit2 = "2.9.0"
+
+    Retrofit2 = [
+            retrofit: "com.squareup.retrofit2:retrofit:${retrofit2}",
+            converter_gson: "com.squareup.retrofit2:converter-gson:${retrofit2}",
+            convert_scalars: "com.squareup.retrofit2:converter-scalars:${retrofit2}"
+    ]
+
+    // OkHttp3
+    okhttp3_logging_interceptor = "5.0.0-alpha.2"
+
+    OkHttp3 = [
+            logging_interceptor: "com.squareup.okhttp3:logging-interceptor:${okhttp3_logging_interceptor}"
+    ]
+
+    // PlayServices
+    play_services_location = "18.0.0"
+    play_services_maps = "17.0.1"
+
+    PlayServices = [
+            kotlinx_coroutines_play_services: "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.5.2-native-mt:${kotlinx_coroutines}",
+            play_services_location: "com.google.android.gms:play-services-location:${play_services_location}",
+            play_services_maps: "com.google.android.gms:play-services-maps:${play_services_maps}"
+    ]
+
+    // Dagger Hilt
+    dagger_hilt = "2.38.1"
+    hilt_lifecycle_viewmodel = "1.0.0-alpha03"
+    hilt_compiler = "2.38.1"
+
+    DaggerHilt = [
+            hilt_android: "com.google.dagger:hilt-android:${dagger_hilt}",
+            hilt_lifecycle_viewmodel: "androidx.hilt:hilt-lifecycle-viewmodel:${hilt_lifecycle_viewmodel}",
+            hilt_android_compiler_kapt: "com.google.dagger:hilt-android-compiler:${dagger_hilt}",
+            hilt_compiler_kapt: "com.google.dagger:hilt-compiler:${hilt_compiler}"
+    ]
+
+    // Glide
+    glide = "4.12.0"
+
+    Glide = [
+            glide: "com.github.bumptech.glide:glide:${glide}",
+            glide_compiler_kapt: "com.github.bumptech.glide:compiler:${glide}"
+    ]
+
+    // EasyPermissions
+    easypermissions_ktx = "1.0.0"
+
+    EasyPermissions = [
+            easy_permissions: "com.vmadalin:easypermissions-ktx:${easypermissions_ktx}"
+    ]
+
+    // CircularIndicator
+    circleindicator = "2.1.6"
+
+    CircularIndicator = [
+            circular_indicator: "me.relex:circleindicator:${circleindicator}"
+    ]
+
+    // Timber
+    timber = "5.0.1"
+
+    Timber = [
+            timber: "com.jakewharton.timber:timber:${timber}"
+    ]
+
+    // MPAndroidChart
+    mPAndroidChart = "v3.1.0"
+
+    MPAndroidChart = [
+            mpAndroidChart: "com.github.PhilJay:MPAndroidChart:${mPAndroidChart}"
+    ]
+
+    // Test Suites
+    junit = "4.13.2"
+    test_ext_junit = "1.1.3"
+    espresso_core = "3.4.0"
+
+    TestSuites = [
+            junit: "junit:junit:${junit}",
+            androidx_test_junit: "androidx.test.ext:junit:${test_ext_junit}",
+            androidx_text_espresso_core: "androidx.test.espresso:espresso-core:${espresso_core}"
+    ]
+}

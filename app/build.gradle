@@ -9,16 +9,16 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk AppConfig.compile_sdk
 
     defaultConfig {
-        applicationId "com.ferechamitbeyli.keeprun"
-        minSdk 21
-        targetSdk 31
-        versionCode 1
-        versionName "1.0"
+        applicationId AppConfig.application_id
+        minSdk AppConfig.min_sdk
+        targetSdk AppConfig.target_sdk
+        versionCode AppConfig.version_code
+        versionName AppConfig.version_name
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner AppConfig.test_instrumentation_runner
     }
 
     buildTypes {
@@ -47,32 +47,88 @@ kapt {
 dependencies {
     implementation project(':core')
 
+    // AndroidX Core
+    implementation AndroidX.appcompat
+    implementation AndroidX.constraint_layout
+    implementation AndroidX.legacy_support_v4
+    implementation AndroidX.core_ktx
+
+    // Google Libs
+    implementation Google.material
+
+    // Lifecycle
+    implementation Lifecycle.lifecycle_viewmodel_ktx
+    implementation Lifecycle.lifecycle_runtime_ktx
+    implementation Lifecycle.lifecycle_service
+    implementation Lifecycle.lifecycle_livedata_ktx
+    implementation Lifecycle.lifecycle_common_java8
+
+    // Navigation
+    implementation Navigation.navigation_fragment_ktx
+    implementation Navigation.navigation_ui_ktx
+
+    // Activity & Fragment KTX
+    implementation ActivityFragmentKTX.activity_ktx
+    implementation ActivityFragmentKTX.fragment_ktx
+
+    // Room
+    implementation Room.room_runtime
+    implementation Room.room_ktx
+    kapt Room.room_compiler_kapt
+
+    // DataStore
+    implementation DataStore.datastore_preferences
+
+    // Firebase
+    implementation Firebase.firebase_bom
+    implementation Firebase.firebase_auth_ktx
+
+    // Coroutines
+    implementation Coroutines.kotlinx_coroutines_core
+    implementation Coroutines.kotlinx_coroutines_android
+
+    // Retrofit2
+    implementation Retrofit2.retrofit
+    implementation Retrofit2.converter_gson
+    implementation Retrofit2.convert_scalars
+
+    // OkHttp3
+    implementation OkHttp3.logging_interceptor
+
+    // PlayServices
+    implementation PlayServices.kotlinx_coroutines_play_services
+    implementation PlayServices.play_services_location
+    implementation PlayServices.play_services_maps
+
+    // Dagger Hilt
+    implementation DaggerHilt.hilt_android
+    implementation DaggerHilt.hilt_lifecycle_viewmodel
+    kapt DaggerHilt.hilt_android_compiler_kapt
+    kapt DaggerHilt.hilt_compiler_kapt
+
+    // Glide
+    implementation Glide.glide
+    kapt Glide.glide_compiler_kapt
+
+    // EasyPermissions
+    implementation EasyPermissions.easy_permissions
+
+    // CircularIndicator
+    implementation CircularIndicator.circular_indicator
+
+    // Timber
+    implementation Timber.timber
+
+    // MPAndroidChart
+    implementation MPAndroidChart.mpAndroidChart
+
+    // Test Suites
+    implementation TestSuites.junit
+    implementation TestSuites.androidx_test_junit
+    implementation TestSuites.androidx_text_espresso_core
+
+
     /*
-    implementation Dependencies.AndroidX
-    implementation Dependencies.Google
-    implementation Dependencies.PlayServices
-    implementation Dependencies.Room
-    implementation Dependencies.DataStore
-    implementation Dependencies.Coroutines
-    implementation Dependencies.Lifecycle
-    implementation Dependencies.Navigation
-    implementation Dependencies.Firebase
-    implementation Dependencies.Retrofit2
-    implementation Dependencies.OkHttp3
-    implementation Dependencies.Glide
-    implementation Dependencies.ActivityFragmentKTX
-    implementation Dependencies.DaggerHilt
-    implementation Dependencies.CircularIndicator
-    implementation Dependencies.EasyPermissions
-    implementation Dependencies.Timber
-    implementation Dependencies.MPAndroidChart
-    implementation Dependencies.TestSuites
-
-     */
-
-
-
-
     implementation 'androidx.core:core-ktx:1.6.0'
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.4.0'
@@ -157,6 +213,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
+
+     */
 
      
 

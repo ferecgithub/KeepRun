@@ -3,12 +3,11 @@ package com.ferechamitbeyli.keeprun.framework.common
 import android.util.Patterns
 import com.ferechamitbeyli.keeprun.framework.model.remote.enitities.enums.ValidationResults
 
-class ValidationHelperFunctions {
+object ValidationHelperFunctions {
 
-    companion object {
-        /**
-         * Validation Helper Functions
-         */
+    /**
+     * Validation Helper Functions
+     */
 /*
 fun validateUsername(context: Context, input: String, editText: TextInputEditText) : Boolean {
     val userName = input.trim()
@@ -29,21 +28,20 @@ fun validateUsername(context: Context, input: String, editText: TextInputEditTex
 }
  */
 
-        fun validateUsername(input: String) : ValidationResults {
-            val userName = input.trim()
-            return when {
-                userName.isEmpty() -> {
-                    ValidationResults.EMPTY_USERNAME
-                }
-                userName.length > 15 -> {
-                    ValidationResults.LENGTH_TOO_LONG
-                }
-                else -> {
-                    ValidationResults.SUCCESS
-                }
+    fun validateUsername(input: String): ValidationResults {
+        val userName = input.trim()
+        return when {
+            userName.isEmpty() -> {
+                ValidationResults.EMPTY_USERNAME
+            }
+            userName.length > 15 -> {
+                ValidationResults.LENGTH_TOO_LONG
+            }
+            else -> {
+                ValidationResults.SUCCESS
             }
         }
-
+    }
 
 
 /*
@@ -66,20 +64,20 @@ fun validateEmail(context: Context, input: String, editText: TextInputEditText) 
 }
  */
 
-        fun validateEmail(input: String) : ValidationResults {
-            val userEmail = input.trim()
-            return when {
-                userEmail.isEmpty() -> {
-                    ValidationResults.EMPTY_EMAIL
-                }
-                !Patterns.EMAIL_ADDRESS.matcher(userEmail).matches() -> {
-                    ValidationResults.INVALID_EMAIL
-                }
-                else -> {
-                    ValidationResults.SUCCESS
-                }
+    fun validateEmail(input: String): ValidationResults {
+        val userEmail = input.trim()
+        return when {
+            userEmail.isEmpty() -> {
+                ValidationResults.EMPTY_EMAIL
+            }
+            !Patterns.EMAIL_ADDRESS.matcher(userEmail).matches() -> {
+                ValidationResults.INVALID_EMAIL
+            }
+            else -> {
+                ValidationResults.SUCCESS
             }
         }
+    }
 
 /*
 fun validatePassword(context: Context, password: String, confirmPassword: String, passwordEt: TextInputEditText, confirmPasswordEt: TextInputEditText) : Boolean {
@@ -109,38 +107,40 @@ fun validatePassword(context: Context, password: String, confirmPassword: String
 }
  */
 
-        fun validatePasswords(password: String, confirmPassword: String) : ValidationResults {
-            val pass = password.trim()
-            val confirmPass = confirmPassword.trim()
+    fun validatePasswords(password: String, confirmPassword: String): ValidationResults {
+        val pass = password.trim()
+        val confirmPass = confirmPassword.trim()
 
-            if(pass.isEmpty() or confirmPass.isEmpty()) {
-                ValidationResults.EMPTY_PASSWORD
-            } else if (pass.isNotEmpty() && confirmPass.isNotEmpty()) {
-                return when {
-                    (pass != confirmPass && confirmPass != pass) -> {
-                        ValidationResults.PASSWORDS_NOT_MATCHED
-                    }
-                    (!Constants.PASSWORD_PATTERN.matcher(pass).matches() && !Constants.PASSWORD_PATTERN.matcher(confirmPass).matches()) -> {
-                        ValidationResults.PASSWORD_CHAR_ERROR
-                    }
-                    else -> {
-                        ValidationResults.SUCCESS
-                    }
-                }
-            }
-            return ValidationResults.SUCCESS
-        }
-
-        fun validatePassword(input: String) : ValidationResults {
-            val pass = input.trim()
+        if (pass.isEmpty() or confirmPass.isEmpty()) {
+            ValidationResults.EMPTY_PASSWORD
+        } else if (pass.isNotEmpty() && confirmPass.isNotEmpty()) {
             return when {
-                pass.isEmpty() -> {
-                    ValidationResults.EMPTY_PASSWORD
-                } else -> {
+                (pass != confirmPass && confirmPass != pass) -> {
+                    ValidationResults.PASSWORDS_NOT_MATCHED
+                }
+                (!Constants.PASSWORD_PATTERN.matcher(pass)
+                    .matches() && !Constants.PASSWORD_PATTERN.matcher(confirmPass).matches()) -> {
+                    ValidationResults.PASSWORD_CHAR_ERROR
+                }
+                else -> {
                     ValidationResults.SUCCESS
                 }
             }
         }
+        return ValidationResults.SUCCESS
     }
 
+    fun validatePassword(input: String): ValidationResults {
+        val pass = input.trim()
+        return when {
+            pass.isEmpty() -> {
+                ValidationResults.EMPTY_PASSWORD
+            }
+            else -> {
+                ValidationResults.SUCCESS
+            }
+        }
+    }
 }
+
+
