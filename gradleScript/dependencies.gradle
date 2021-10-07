@@ -1,28 +1,35 @@
 ext {
 
     // AppConfig
-    compile_sdk = 31
+    compile_sdk_version = 31
     min_sdk = 21
     target_sdk = 31
     version_code = 1
     version_name = "1.0"
+    java_version = JavaVersion.VERSION_1_8
+    jvm_target = "1.8"
     application_id = "com.ferechamitbeyli.keeprun"
     test_instrumentation_runner = "androidx.test.runner.AndroidJUnitRunner"
+    consumerProguardFiles = "consumer-rules.pro"
 
     AppConfig = [
-            compile_sdk: compile_sdk,
+            compile_sdk_version: compile_sdk_version,
             min_sdk: min_sdk,
             target_sdk: target_sdk,
             version_code: version_code,
             version_name: version_name,
+            java_version: java_version,
+            jvm_target: jvm_target,
             application_id: application_id,
-            test_instrumentation_runner: test_instrumentation_runner
+            test_instrumentation_runner: test_instrumentation_runner,
+            consumer_proguard_files: consumerProguardFiles
+
     ]
 
     // AndroidX Core
     appcompat = "1.3.1"
     core_ktx = "1.6.0"
-    constraintlayout = "2.1.0"
+    constraintlayout = '2.1.1'
     legacy_support_v4 = "1.0.0"
 
     AndroidX = [
@@ -30,6 +37,13 @@ ext {
             constraint_layout: "androidx.constraintlayout:constraintlayout:${constraintlayout}",
             legacy_support_v4: "androidx.legacy:legacy-support-v4:${legacy_support_v4}",
             core_ktx: "androidx.core:core-ktx:${core_ktx}"
+    ]
+
+    // Domain specific
+    kotlin_version = "1.5.31"
+
+    Domain = [
+            kotlin_version: "org.jetbrains.kotlin:kotlin-stdlib:${kotlin_version}"
     ]
 
     // Google Libs
@@ -66,11 +80,12 @@ ext {
     ]
 
     // Navigation
-    navigation = "2.3.5"
+    navigation = '2.4.0-alpha10'
 
     Navigation = [
             navigation_fragment_ktx: "androidx.navigation:navigation-fragment-ktx:${navigation}",
-            navigation_ui_ktx: "androidx.navigation:navigation-ui-ktx:${navigation}"
+            navigation_ui_ktx: "androidx.navigation:navigation-ui-ktx:${navigation}",
+            navigation_testing_androidTestImplementation: "androidx.navigation:navigation-testing:${navigation}"
     ]
 
     // Activity & Fragment KTX
@@ -98,7 +113,7 @@ ext {
     ]
 
     // Firebase
-    firebase_bom = "28.4.0"
+    firebase_bom = '28.4.2'
     firebase_auth_ktx = "21.0.1"
 
     Firebase = [
@@ -111,7 +126,8 @@ ext {
 
     Coroutines = [
             kotlinx_coroutines_core: "org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinx_coroutines}",
-            kotlinx_coroutines_android: "org.jetbrains.kotlinx:kotlinx-coroutines-android:${kotlinx_coroutines}"
+            kotlinx_coroutines_android: "org.jetbrains.kotlinx:kotlinx-coroutines-android:${kotlinx_coroutines}",
+            kotlinx_coroutine_test: "org.jetbrains.kotlinx:kotlinx-coroutines-test:${kotlinx_coroutines}"
     ]
 
     // Retrofit2
@@ -135,15 +151,15 @@ ext {
     play_services_maps = "17.0.1"
 
     PlayServices = [
-            kotlinx_coroutines_play_services: "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.5.2-native-mt:${kotlinx_coroutines}",
+            kotlinx_coroutines_play_services: "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${kotlinx_coroutines}",
             play_services_location: "com.google.android.gms:play-services-location:${play_services_location}",
             play_services_maps: "com.google.android.gms:play-services-maps:${play_services_maps}"
     ]
 
     // Dagger Hilt
-    dagger_hilt = "2.38.1"
+    dagger_hilt = '2.39.1'
     hilt_lifecycle_viewmodel = "1.0.0-alpha03"
-    hilt_compiler = "2.38.1"
+    hilt_compiler = '2.39.1'
 
     DaggerHilt = [
             hilt_android: "com.google.dagger:hilt-android:${dagger_hilt}",
@@ -189,13 +205,15 @@ ext {
     ]
 
     // Test Suites
-    junit = "4.13.2"
-    test_ext_junit = "1.1.3"
+    junit = "5.8.1"
+    mockk = '1.12.0'
+
     espresso_core = "3.4.0"
 
     TestSuites = [
-            junit: "junit:junit:${junit}",
-            androidx_test_junit: "androidx.test.ext:junit:${test_ext_junit}",
-            androidx_text_espresso_core: "androidx.test.espresso:espresso-core:${espresso_core}"
+            junit_jupiter_api: "org.junit.jupiter:junit-jupiter-api:${junit}",
+            junit_jupiter_engine: "org.junit.jupiter:junit-jupiter-engine:${junit}",
+            androidx_text_espresso_core: "androidx.test.espresso:espresso-core:${espresso_core}",
+            mockk: "io.mockk:mockk:${mockk}"
     ]
 }

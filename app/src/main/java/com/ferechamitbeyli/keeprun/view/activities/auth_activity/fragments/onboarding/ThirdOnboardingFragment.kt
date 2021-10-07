@@ -33,17 +33,6 @@ class ThirdOnboardingFragment : BaseFragment<FragmentThirdOnboardingBinding>() {
         binding.getStartedBtn.setOnClickListener {
             viewModel.assignOnboardingFinished(true)
             findNavController().navigate(R.id.action_onboardingFragment_to_signInFragment)
-
-            /*
-            CoroutineScope(Dispatchers.IO).launch {
-                dataStoreObject.storeIfFirstTimeUse(false)
-                withContext(Dispatchers.Main) {
-
-                }
-            }
-
-             */
-
         }
 
     }

@@ -9,7 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ferechamitbeyli.keeprun.R
 import com.ferechamitbeyli.keeprun.databinding.FragmentOnboardingBinding
-import com.ferechamitbeyli.keeprun.framework.common.hideKeyboard
+import com.ferechamitbeyli.keeprun.framework.common.UIHelperFunctions.Companion.hideKeyboard
 import com.ferechamitbeyli.keeprun.view.activities.auth_activity.adapters.OnboardingAdapter
 import com.ferechamitbeyli.keeprun.view.base.BaseFragment
 import com.ferechamitbeyli.keeprun.viewmodel.activities.auth_activity.AuthViewModel
