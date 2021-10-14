@@ -1,8 +1,8 @@
 package com.ferechamitbeyli.keeprun.framework.model.local.db
 
 import android.content.Context
-import com.ferechamitbeyli.core.data.Run
-import com.ferechamitbeyli.core.repository.RunDataSource
+import com.ferechamitbeyli.domain.entity.Run
+import com.ferechamitbeyli.domain.repository.RunDataSource
 import com.ferechamitbeyli.keeprun.framework.model.local.entities.RunEntity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject

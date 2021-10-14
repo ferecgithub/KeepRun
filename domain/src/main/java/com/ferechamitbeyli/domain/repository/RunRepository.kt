@@ -1,6 +1,7 @@
-package com.ferechamitbeyli.core.repository
+package com.ferechamitbeyli.domain.repository
 
-import com.ferechamitbeyli.core.data.Run
+import com.ferechamitbeyli.domain.entity.Run
+import com.ferechamitbeyli.domain.repository.RunDataSource
 
 class RunRepository(
     private val dataSource: RunDataSource

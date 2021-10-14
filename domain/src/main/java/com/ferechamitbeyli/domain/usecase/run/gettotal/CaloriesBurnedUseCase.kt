@@ -1,6 +1,6 @@
-package com.ferechamitbeyli.core.usecase.run.gettotal
+package com.ferechamitbeyli.domain.usecase.run.gettotal
 
-import com.ferechamitbeyli.core.repository.RunRepository
+import com.ferechamitbeyli.domain.repository.RunRepository
 
 class CaloriesBurnedUseCase(
     private val runRepository: RunRepository

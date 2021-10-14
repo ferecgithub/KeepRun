@@ -9,10 +9,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "KeepRun"
 include ':app'
-include ':core'
-include ':base'
-include ':onboarding'
-include ':login'
 include ':domain'
-include ':navigation'
-include ':ui_components'

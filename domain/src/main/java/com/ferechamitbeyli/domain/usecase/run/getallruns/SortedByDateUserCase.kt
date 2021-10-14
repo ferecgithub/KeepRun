@@ -1,7 +1,6 @@
-package com.ferechamitbeyli.core.usecase.run.getallruns
+package com.ferechamitbeyli.domain.usecase.run.getallruns
 
-import com.ferechamitbeyli.core.data.Run
-import com.ferechamitbeyli.core.repository.RunRepository
+import com.ferechamitbeyli.domain.repository.RunRepository
 
 class SortedByDateUserCase(
     private val runRepository: RunRepository

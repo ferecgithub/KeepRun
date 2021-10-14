@@ -3,7 +3,7 @@ package com.ferechamitbeyli.keeprun.framework.model.local.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.ferechamitbeyli.core.data.Run
+import com.ferechamitbeyli.domain.entity.Run
 
 @Entity(tableName = "runs")
 data class RunEntity(

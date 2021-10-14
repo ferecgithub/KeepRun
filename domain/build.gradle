@@ -11,9 +11,12 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 dependencies {
     implementation Domain.kotlin_version
 
+    // Coroutines
+    implementation Coroutines.kotlinx_coroutines_core
+    implementation Coroutines.kotlinx_coroutine_test
+
     testImplementation TestSuites.junit_jupiter_api
     testImplementation TestSuites.junit_jupiter_engine
-    testImplementation TestSuites.androidx_text_espresso_core
     testImplementation TestSuites.mockk
 }
 

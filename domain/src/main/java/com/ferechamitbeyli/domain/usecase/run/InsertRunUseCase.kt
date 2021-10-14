@@ -1,7 +1,7 @@
-package com.ferechamitbeyli.core.usecase.run
+package com.ferechamitbeyli.domain.usecase.run
 
-import com.ferechamitbeyli.core.data.Run
-import com.ferechamitbeyli.core.repository.RunRepository
+import com.ferechamitbeyli.domain.entity.Run
+import com.ferechamitbeyli.domain.repository.RunRepository
 
 class InsertRunUseCase(
     private val runRepository: RunRepository

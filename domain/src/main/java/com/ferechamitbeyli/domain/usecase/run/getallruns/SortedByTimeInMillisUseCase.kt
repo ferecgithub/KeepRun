@@ -1,6 +1,6 @@
-package com.ferechamitbeyli.core.usecase.run.getallruns
+package com.ferechamitbeyli.domain.usecase.run.getallruns
 
-import com.ferechamitbeyli.core.repository.RunRepository
+import com.ferechamitbeyli.domain.repository.RunRepository
 
 class SortedByTimeInMillisUseCase(
     private val runRepository: RunRepository

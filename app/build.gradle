@@ -2,6 +2,10 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'kotlin-parcelize'
+    id "androidx.navigation.safeargs.kotlin"
+    id 'dagger.hilt.android.plugin'
+    id 'com.google.gms.google-services'
 
 }
 
@@ -47,13 +51,94 @@ kapt {
     correctErrorTypes true
 }
 
-kapt {
-    correctErrorTypes true
-}
-
 dependencies {
 
-    implementation project(':base')
     implementation project(':domain')
+
+    // AndroidX Core
+    implementation AndroidX.appcompat
+    implementation AndroidX.constraint_layout
+    implementation AndroidX.legacy_support_v4
+    implementation AndroidX.core_ktx
+
+    // Google Libs
+    implementation Google.material
+
+    // Lifecycle
+    implementation Lifecycle.lifecycle_viewmodel_ktx
+    implementation Lifecycle.lifecycle_runtime_ktx
+    implementation Lifecycle.lifecycle_service
+    implementation Lifecycle.lifecycle_livedata_ktx
+    implementation Lifecycle.lifecycle_common_java8
+
+    // Navigation
+    implementation Navigation.navigation_fragment_ktx
+    implementation Navigation.navigation_ui_ktx
+    implementation Navigation.navigation_testing_androidTestImplementation
+
+    // Activity & Fragment KTX
+    implementation ActivityFragmentKTX.activity_ktx
+    implementation ActivityFragmentKTX.fragment_ktx
+
+    // Room
+    implementation Room.room_runtime
+    implementation Room.room_ktx
+    kapt Room.room_compiler_kapt
+
+    // DataStore
+    implementation DataStore.datastore_preferences
+
+    // Firebase
+    implementation Firebase.firebase_bom
+    implementation Firebase.firebase_auth_ktx
+
+    // Coroutines
+    implementation Coroutines.kotlinx_coroutines_core
+    implementation Coroutines.kotlinx_coroutines_android
+    implementation Coroutines.kotlinx_coroutine_test
+
+    // Retrofit2
+    implementation Retrofit2.retrofit
+    implementation Retrofit2.converter_gson
+    implementation Retrofit2.convert_scalars
+
+    // OkHttp3
+    implementation OkHttp3.logging_interceptor
+
+    // PlayServices
+    implementation PlayServices.kotlinx_coroutines_play_services
+    implementation PlayServices.play_services_location
+    implementation PlayServices.play_services_maps
+
+    // Dagger Hilt
+    implementation DaggerHilt.hilt_android
+    implementation DaggerHilt.hilt_lifecycle_viewmodel
+    kapt DaggerHilt.hilt_android_compiler_kapt
+    kapt DaggerHilt.hilt_compiler_kapt
+
+    // Glide
+    implementation Glide.glide
+    kapt Glide.glide_compiler_kapt
+
+    // EasyPermissions
+    implementation EasyPermissions.easy_permissions
+
+    // CircularIndicator
+    implementation CircularIndicator.circular_indicator
+
+    // SquareUp Logcat
+    implementation SquareUpLogcat.squareup_logcat
+
+    // Timber
+    //implementation Timber.timber
+
+    // MPAndroidChart
+    implementation MPAndroidChart.mpAndroidChart
+
+    // Test Suites
+    implementation TestSuites.junit_jupiter_api
+    implementation TestSuites.junit_jupiter_engine
+    implementation TestSuites.mockk
+    implementation TestSuites.androidx_text_espresso_core
     
 }

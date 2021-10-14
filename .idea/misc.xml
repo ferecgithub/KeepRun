@@ -4,6 +4,16 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/layout/activity_auth.xml" value="0.2586050724637681" />
+        <entry key="app/src/main/res/layout/activity_home.xml" value="0.35052083333333334" />
+        <entry key="app/src/main/res/layout/fragment_first_onboarding.xml" value="0.35052083333333334" />
+        <entry key="app/src/main/res/layout/fragment_forgot_pass.xml" value="0.35052083333333334" />
+        <entry key="app/src/main/res/layout/fragment_initial.xml" value="0.35052083333333334" />
+        <entry key="app/src/main/res/layout/fragment_onboarding.xml" value="0.35052083333333334" />
+        <entry key="app/src/main/res/layout/fragment_second_onboarding.xml" value="0.35052083333333334" />
+        <entry key="app/src/main/res/layout/fragment_sign_in.xml" value="0.35052083333333334" />
+        <entry key="app/src/main/res/layout/fragment_sign_up.xml" value="0.35052083333333334" />
+        <entry key="app/src/main/res/layout/fragment_third_onboarding.xml" value="0.35052083333333334" />
+        <entry key="app/src/main/res/layout/fragment_tracking.xml" value="0.35052083333333334" />
       </map>
     </option>
   </component>

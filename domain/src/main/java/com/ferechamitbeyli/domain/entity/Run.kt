@@ -1,4 +1,4 @@
-package com.ferechamitbeyli.core.data
+package com.ferechamitbeyli.domain.entity
 
 data class Run(
     var img: String? = null,

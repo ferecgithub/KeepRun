@@ -10,4 +10,9 @@
         android:name="com.ferechamitbeyli.keeprun.view.activities.home_activity.fragments.TrackingFragment"
         android:label="fragment_tracking"
         tools:layout="@layout/fragment_tracking" />
+    <fragment
+        android:id="@+id/initialFragment"
+        android:name="com.ferechamitbeyli.keeprun.view.activities.home_activity.fragments.InitialFragment"
+        android:label="fragment_initial"
+        tools:layout="@layout/fragment_initial" />
 </navigation>

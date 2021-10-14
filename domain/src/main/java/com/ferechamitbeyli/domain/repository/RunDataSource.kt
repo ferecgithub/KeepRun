@@ -1,6 +1,8 @@
-package com.ferechamitbeyli.core.repository
+package com.ferechamitbeyli.domain.repository
 
-import com.ferechamitbeyli.core.data.Run
+import com.ferechamitbeyli.domain.Resource
+import com.ferechamitbeyli.domain.entity.Run
+import kotlinx.coroutines.flow.Flow
 
 interface RunDataSource {
 
@@ -8,17 +10,17 @@ interface RunDataSource {
     suspend fun remove(run: Run)
 
     /** Get all functions **/
-    suspend fun getAllRunsSortedByDate(): List<Run>?
-    suspend fun getAllRunsSortedByTimeInMillis(): List<Run>?
-    suspend fun getAllRunsSortedByCaloriesBurned(): List<Run>?
-    suspend fun getAllRunsSortedByAverageSpeed(): List<Run>?
-    suspend fun getAllRunsSortedByDistance(): List<Run>?
+    suspend fun getAllRunsSortedByDate(): Flow<Resource<List<Run>>>
+    suspend fun getAllRunsSortedByTimeInMillis(): Flow<Resource<List<Run>>>
+    suspend fun getAllRunsSortedByCaloriesBurned(): Flow<Resource<List<Run>>>
+    suspend fun getAllRunsSortedByAverageSpeed(): Flow<Resource<List<Run>>>
+    suspend fun getAllRunsSortedByDistance(): Flow<Resource<List<Run>>>
 
     /** Get total functions **/
-    suspend fun getTotalTimeInMillis(): Long?
-    suspend fun getTotalCaloriesBurned(): Int?
-    suspend fun getTotalDistanceInMeters(): Int?
-    suspend fun getTotalAverageSpeedInKMH(): Float?
-    suspend fun getTotalStepCount(): Int?
+    suspend fun getTotalTimeInMillis(): Flow<Resource<Long>>
+    suspend fun getTotalCaloriesBurned(): Flow<Resource<Int>>
+    suspend fun getTotalDistanceInMeters(): Flow<Resource<Int>>
+    suspend fun getTotalAverageSpeedInKMH(): Flow<Resource<Float>>
+    suspend fun getTotalStepCount(): Flow<Resource<Int>>
 
 }

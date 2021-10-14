@@ -54,7 +54,7 @@ ext {
     ]
 
     // AppClasspath
-    build_gradle = "7.0.2"
+    build_gradle = '7.0.3'
     kotlin_gradle_plugin = "1.5.31"
     navigation_safe_args_gradle_plugin = "2.3.5"
     hilt_android_gradle_plugin = "2.38.1"
@@ -188,6 +188,13 @@ ext {
 
     CircularIndicator = [
             circular_indicator: "me.relex:circleindicator:${circleindicator}"
+    ]
+
+    // SquareUp Logcat
+    squareup_logcat = "0.1"
+
+    SquareUpLogcat = [
+            squareup_logcat: "com.squareup.logcat:logcat:${squareup_logcat}"
     ]
 
     // Timber
