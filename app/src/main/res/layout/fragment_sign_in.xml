@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:src="@drawable/ic_logo"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal2_gl"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal3_gl"
         app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
         app:layout_constraintStart_toStartOf="@id/vertical1_gl"
         app:layout_constraintTop_toTopOf="@id/horizontal1_gl" />
@@ -25,7 +25,7 @@
         android:textSize="@dimen/title3"
         app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
         app:layout_constraintStart_toStartOf="@id/vertical1_gl"
-        app:layout_constraintTop_toTopOf="@id/horizontal25_gl" />
+        app:layout_constraintTop_toTopOf="@id/horizontal325_gl" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
@@ -35,7 +35,7 @@
         android:textAllCaps="false"
         android:textColor="@color/normalText"
         android:textSize="@dimen/paragraph2"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal35_gl"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal425_gl"
         app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
         app:layout_constraintStart_toStartOf="@id/vertical1_gl" />
 
@@ -50,8 +50,8 @@
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
         app:layout_constraintStart_toStartOf="@id/vertical1_gl"
-        app:layout_constraintTop_toTopOf="@id/horizontal35_gl"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal5_gl">
+        app:layout_constraintTop_toTopOf="@id/horizontal45_gl"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal60_gl">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/signInEmail_et"
@@ -80,8 +80,8 @@
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
         app:layout_constraintStart_toStartOf="@id/vertical1_gl"
-        app:layout_constraintTop_toBottomOf="@id/horizontal5_gl"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal65_gl"
+        app:layout_constraintTop_toBottomOf="@id/horizontal625_gl"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal775_gl"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -111,10 +111,10 @@
         android:textColor="@color/white"
         android:textSize="@dimen/title3"
         app:backgroundTint="@null"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal8_gl"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal875_gl"
         app:layout_constraintEnd_toStartOf="@+id/vertical9_gl"
         app:layout_constraintStart_toStartOf="@+id/vertical1_gl"
-        app:layout_constraintTop_toBottomOf="@id/horizontal7_gl" />
+        app:layout_constraintTop_toBottomOf="@id/horizontal8_gl" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/forgotPass_tv"
@@ -144,11 +144,6 @@
         android:fontFamily="@font/montserrat_medium"
         android:textSize="@dimen/paragraph" />
 
-
-
-
-
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/horizontal1_gl"
         android:layout_width="wrap_content"
@@ -157,46 +152,53 @@
         app:layout_constraintGuide_percent="0.1" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal2_gl"
+        android:id="@+id/horizontal3_gl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.2" />
+        app:layout_constraintGuide_percent="0.3" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal25_gl"
+        android:id="@+id/horizontal325_gl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25" />
+        app:layout_constraintGuide_percent="0.325" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal35_gl"
+        android:id="@+id/horizontal425_gl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.35" />
+        app:layout_constraintGuide_percent="0.425" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal5_gl"
+        android:id="@+id/horizontal45_gl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.45" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal65_gl"
+        android:id="@+id/horizontal60_gl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.65" />
+        app:layout_constraintGuide_percent="0.60" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal7_gl"
+        android:id="@+id/horizontal625_gl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.7" />
+        app:layout_constraintGuide_percent="0.625" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal775_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.775" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/horizontal8_gl"
@@ -204,6 +206,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.8" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal875_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.875" />
+
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/vertical1_gl"

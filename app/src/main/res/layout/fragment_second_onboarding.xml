@@ -38,8 +38,9 @@
         android:layout_height="@dimen/onboardingButtonHeight"
         android:background="@drawable/ic_next_btn"
         app:backgroundTint="@null"
+        android:contentDescription="@string/next_button"
         app:layout_constraintTop_toTopOf="@id/horizontal8_gl"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal9_gl"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal875_gl"
         app:layout_constraintStart_toStartOf="@id/vertical4_gl"
         app:layout_constraintEnd_toEndOf="@id/vertical6_gl"/>
 
@@ -79,11 +80,11 @@
         app:layout_constraintGuide_percent="0.8" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal9_gl"
+        android:id="@+id/horizontal875_gl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.9" />
+        app:layout_constraintGuide_percent="0.875" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/vertical1_gl"

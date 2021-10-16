@@ -43,7 +43,7 @@
         android:textColor="@color/white"
         android:textSize="@dimen/title3"
         app:backgroundTint="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/horizontal9_gl"
+        app:layout_constraintBottom_toBottomOf="@+id/horizontal875_gl"
         app:layout_constraintEnd_toStartOf="@+id/vertical9_gl"
         app:layout_constraintStart_toStartOf="@+id/vertical1_gl"
         app:layout_constraintTop_toTopOf="@+id/horizontal8_gl" />
@@ -84,11 +84,11 @@
         app:layout_constraintGuide_percent="0.8" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal9_gl"
+        android:id="@+id/horizontal875_gl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.9" />
+        app:layout_constraintGuide_percent="0.875" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/vertical1_gl"

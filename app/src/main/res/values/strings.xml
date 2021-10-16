@@ -36,4 +36,5 @@
     <string name="username_too_long">Username is too long</string>
     <string name="please_enter_matches_pass">Please enter a matched password</string>
     <string name="password_requires">The password is required to have at least one upper letter, one lower letter, one number and a special character</string>
+    <string name="next_button">Next Button</string>
 </resources>
