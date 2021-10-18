@@ -1,18 +1,15 @@
 package com.ferechamitbeyli.keeprun.framework.model.repositories
 
-import com.google.firebase.auth.FirebaseUser
+import com.ferechamitbeyli.domain.Resource
+import kotlinx.coroutines.flow.Flow
 
 
 interface BaseAuthRepository {
 
-    suspend fun signInWithEmailPassword(email:String , password:String): FirebaseUser?
-
-    suspend fun signUpWithEmailPassword(email: String , password: String): FirebaseUser?
-
-    fun signOut() : FirebaseUser?
-
-    fun getCurrentUser() : FirebaseUser?
-
-    suspend fun sendResetPassword(email : String) : Boolean
+    suspend fun signUp(email: String, password: String, username: String): Flow<Resource<Any>>
+    suspend fun signInWithEmailPassword(email: String, password: String): Flow<Resource<Any>>
+    suspend fun sendResetPassword(email : String): Flow<Resource<Any>>
+    suspend fun getCurrentUser(): Flow<Resource<Any>>
+    suspend fun signOut(): Flow<Resource<Any>>
 
 }

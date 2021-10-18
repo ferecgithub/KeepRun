@@ -17,12 +17,12 @@
         android:supportsRtl="true"
         android:theme="@style/SplashTheme"> <!-- @style/SplashTheme -->
         <activity
-            android:name=".view.activities.home_activity.HomeActivity"
+            android:name="com.ferechamitbeyli.keeprun.presentation.view.activities.home_activity.HomeActivity"
             android:exported="true"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             tools:ignore="Instantiatable" />
         <activity
-            android:name=".view.activities.auth_activity.AuthActivity"
+            android:name="com.ferechamitbeyli.keeprun.presentation.view.activities.auth_activity.AuthActivity"
             android:exported="true"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             tools:ignore="Instantiatable">

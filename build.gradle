@@ -15,56 +15,9 @@ buildscript {
         classpath(AppClasspath.navigation_safe_args_gradle_plugin)
         classpath(AppClasspath.hilt_android_gradle_plugin)
         classpath(AppClasspath.google_services)
-
     }
 
 }
-
-subprojects {
-    afterEvaluate { project ->
-        if (project.plugins.findPlugin('android') ?: project.plugins.findPlugin('android-library')) {
-            android {
-                compileSdkVersion AppConfig.compile_sdk_version
-
-                defaultConfig {
-                    minSdk AppConfig.min_sdk
-                    targetSdk AppConfig.target_sdk
-                    versionCode AppConfig.version_code
-                    versionName AppConfig.version_name
-
-                    testInstrumentationRunner AppConfig.test_instrumentation_runner
-                }
-                buildTypes {
-                    release {
-                        minifyEnabled false
-                        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-                    }
-                }
-
-                compileOptions {
-                    sourceCompatibility AppConfig.java_version
-                    targetCompatibility AppConfig.java_version
-                }
-
-                kotlinOptions {
-                    jvmTarget = AppConfig.jvm_target
-                }
-
-                buildFeatures {
-                    viewBinding true
-                }
-
-                testOptions.unitTests.all {
-                    testLogging {
-                        events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
-                    }
-                }
-
-            }
-        }
-    }
-}
-
 
 allprojects {
 
@@ -72,6 +25,14 @@ allprojects {
         google()
         maven { url 'https://jitpack.io' }
         mavenCentral()
+    }
+
+    configurations.all {
+
+        resolutionStrategy {
+            force 'org.objenesis:objenesis:2.6'
+            exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
+        }
     }
 }
 

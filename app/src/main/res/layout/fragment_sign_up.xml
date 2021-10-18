@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lightGreen"
-    tools:context=".view.activities.auth_activity.fragments.SignUpFragment">
+    tools:context=".presentation.view.activities.auth_activity.fragments.SignUpFragment">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="0dp"
@@ -43,7 +43,7 @@
         app:layout_constraintTop_toBottomOf="@id/horizontal30_gl" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/signUpName_til"
+        android:id="@+id/signUpUsername_til"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@id/horizontal35_gl">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/signUpName_et"
+            android:id="@+id/signUpUsername_et"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="16dp"

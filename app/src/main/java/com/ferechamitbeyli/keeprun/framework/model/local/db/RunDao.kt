@@ -1,8 +1,9 @@
 package com.ferechamitbeyli.keeprun.framework.model.local.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.ferechamitbeyli.domain.Resource
 import com.ferechamitbeyli.keeprun.framework.model.local.entities.RunEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RunDao {
@@ -14,37 +15,36 @@ interface RunDao {
     suspend fun removeRunEntity(runEntity: RunEntity)
 
     @Query("SELECT * FROM runs ORDER BY timestamp DESC")
-    fun getAllRunsSortedByDate(): LiveData<List<RunEntity>>
+    fun getAllRunsSortedByDate(): Flow<List<RunEntity>>
 
     @Query("SELECT * FROM runs ORDER BY time_in_millis DESC")
-    fun getAllRunsSortedByTimeInMillis(): LiveData<List<RunEntity>>
+    fun getAllRunsSortedByTimeInMillis(): Flow<List<RunEntity>>
 
     @Query("SELECT * FROM runs ORDER BY calories_burned DESC")
-    fun getAllRunsSortedByCaloriesBurned(): LiveData<List<RunEntity>>
+    fun getAllRunsSortedByCaloriesBurned(): Flow<List<RunEntity>>
 
     @Query("SELECT * FROM runs ORDER BY avg_speed_in_kmh DESC")
-    fun getAllRunsSortedByAverageSpeed(): LiveData<List<RunEntity>>
+    fun getAllRunsSortedByAverageSpeed(): Flow<List<RunEntity>>
 
     @Query("SELECT * FROM runs ORDER BY distance_in_meters DESC")
-    fun getAllRunsSortedByDistance(): LiveData<List<RunEntity>>
+    fun getAllRunsSortedByDistance(): Flow<List<RunEntity>>
 
     @Query("SELECT * FROM runs ORDER BY steps DESC")
-    fun getAllRunsSortedByStepCount(): LiveData<List<RunEntity>>
-
+    fun getAllRunsSortedByStepCount(): Flow<List<RunEntity>>
 
     @Query("SELECT SUM(time_in_millis) FROM runs")
-    fun getTotalTimeInMillis(): LiveData<Long>
+    fun getTotalTimeInMillis(): Flow<Long>
 
     @Query("SELECT SUM(calories_burned) FROM runs")
-    fun getTotalCaloriesBurned(): LiveData<Int>
+    fun getTotalCaloriesBurned(): Flow<Int>
 
     @Query("SELECT SUM(distance_in_meters) FROM runs")
-    fun getTotalDistanceInMeters(): LiveData<Int>
+    fun getTotalDistanceInMeters(): Flow<Int>
 
     @Query("SELECT SUM(steps) FROM runs")
-    fun getTotalStepCount(): LiveData<Int>
+    fun getTotalStepCount(): Flow<Int>
 
     @Query("SELECT AVG(avg_speed_in_kmh) FROM runs")
-    fun getTotalAverageSpeedInKMH(): LiveData<Float>
+    fun getTotalAverageSpeedInKMH(): Flow<Float>
 
 }

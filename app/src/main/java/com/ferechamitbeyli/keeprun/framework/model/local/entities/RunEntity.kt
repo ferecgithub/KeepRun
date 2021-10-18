@@ -7,7 +7,7 @@ import com.ferechamitbeyli.domain.entity.Run
 
 @Entity(tableName = "runs")
 data class RunEntity(
-    var img: String? = null,
+    var imageUrl: String? = null,
     var timestamp: Long = 0L,
 
     @ColumnInfo(name = "avg_speed_in_kmh")
@@ -31,7 +31,7 @@ data class RunEntity(
     companion object {
         fun fromRun(run: Run)
             = RunEntity(
-            run.img,
+            run.imageUrl,
             run.timestamp,
             run.avgSpeedInKMH,
             run.distanceInMeters,
@@ -42,5 +42,5 @@ data class RunEntity(
     }
 
     fun toRun()
-        = Run(img, timestamp, avgSpeedInKMH, distanceInMeters, timeInMillis, caloriesBurned, steps, id)
+        = Run(imageUrl, timestamp, avgSpeedInKMH, distanceInMeters, timeInMillis, caloriesBurned, steps, id)
 }

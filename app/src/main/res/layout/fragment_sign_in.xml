@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lightGreen"
-    tools:context=".view.activities.auth_activity.fragments.SignInFragment">
+    tools:context=".presentation.view.activities.auth_activity.fragments.SignInFragment">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="0dp"
@@ -51,13 +51,13 @@
         app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
         app:layout_constraintStart_toStartOf="@id/vertical1_gl"
         app:layout_constraintTop_toTopOf="@id/horizontal45_gl"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal60_gl">
+        app:layout_constraintBottom_toBottomOf="@id/horizontal55_gl">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/signInEmail_et"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/input_bg"
             android:hint="@string/enter_your_email"
             android:fontFamily="@font/montserrat_medium"
@@ -80,15 +80,15 @@
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
         app:layout_constraintStart_toStartOf="@id/vertical1_gl"
-        app:layout_constraintTop_toBottomOf="@id/horizontal625_gl"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal775_gl"
+        app:layout_constraintTop_toBottomOf="@id/horizontal575_gl"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal675_gl"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/signInPassword_et"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="16dp"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
             android:fontFamily="@font/montserrat_medium"
@@ -111,10 +111,10 @@
         android:textColor="@color/white"
         android:textSize="@dimen/title3"
         app:backgroundTint="@null"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal875_gl"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal8_gl"
         app:layout_constraintEnd_toStartOf="@+id/vertical9_gl"
         app:layout_constraintStart_toStartOf="@+id/vertical1_gl"
-        app:layout_constraintTop_toBottomOf="@id/horizontal8_gl" />
+        app:layout_constraintTop_toBottomOf="@id/horizontal725_gl" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/forgotPass_tv"
@@ -180,25 +180,32 @@
         app:layout_constraintGuide_percent="0.45" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal60_gl"
+        android:id="@+id/horizontal55_gl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.60" />
+        app:layout_constraintGuide_percent="0.55" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal625_gl"
+        android:id="@+id/horizontal575_gl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.625" />
+        app:layout_constraintGuide_percent="0.575" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal775_gl"
+        android:id="@+id/horizontal675_gl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.775" />
+        app:layout_constraintGuide_percent="0.675" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal725_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.725" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/horizontal8_gl"
@@ -206,15 +213,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.8" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal875_gl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.875" />
-
-
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/vertical1_gl"

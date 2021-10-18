@@ -113,12 +113,17 @@ ext {
     ]
 
     // Firebase
-    firebase_bom = '28.4.2'
+    firebase_bom = "28.4.2"
     firebase_auth_ktx = "21.0.1"
+    firebase_database = "20.0.2"
+    firebase_storage = "20.0.0"
 
     Firebase = [
             firebase_bom: "com.google.firebase:firebase-bom:${firebase_bom}",
-            firebase_auth_ktx: "com.google.firebase:firebase-auth-ktx:${firebase_auth_ktx}"
+            firebase_auth_ktx: "com.google.firebase:firebase-auth-ktx:${firebase_auth_ktx}",
+            firebase_database: "com.google.firebase:firebase-database-ktx:${firebase_database}",
+            firebase_storage: "com.google.firebase:firebase-storage-ktx:${firebase_storage}"
+
     ]
 
     // Coroutines

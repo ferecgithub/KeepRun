@@ -6,7 +6,6 @@ plugins {
     id "androidx.navigation.safeargs.kotlin"
     id 'dagger.hilt.android.plugin'
     id 'com.google.gms.google-services'
-
 }
 
 android {
@@ -39,11 +38,23 @@ android {
         sourceCompatibility AppConfig.java_version
         targetCompatibility AppConfig.java_version
     }
+
     kotlinOptions {
         jvmTarget = AppConfig.jvm_target
     }
+
     buildFeatures {
         viewBinding true
+    }
+
+    testOptions.unitTests.all {
+        testLogging {
+            events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+        }
+    }
+
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
     }
 }
 
@@ -91,6 +102,8 @@ dependencies {
     // Firebase
     implementation Firebase.firebase_bom
     implementation Firebase.firebase_auth_ktx
+    implementation Firebase.firebase_database
+    implementation Firebase.firebase_storage
 
     // Coroutines
     implementation Coroutines.kotlinx_coroutines_core

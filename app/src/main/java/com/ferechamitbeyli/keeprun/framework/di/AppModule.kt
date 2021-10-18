@@ -2,12 +2,10 @@ package com.ferechamitbeyli.keeprun.framework.di
 
 import android.content.Context
 import androidx.room.Room
+import com.ferechamitbeyli.domain.repository.AuthDataSource
 import com.ferechamitbeyli.keeprun.framework.model.local.cache.DataStoreObject
 import com.ferechamitbeyli.keeprun.framework.model.local.db.DatabaseService
-import com.ferechamitbeyli.keeprun.framework.model.remote.firebase.BaseAuthenticator
-import com.ferechamitbeyli.keeprun.framework.model.remote.firebase.FirebaseAuthenticator
-import com.ferechamitbeyli.keeprun.framework.model.repositories.AuthRepository
-import com.ferechamitbeyli.keeprun.framework.model.repositories.BaseAuthRepository
+import com.ferechamitbeyli.keeprun.framework.model.remote.firebase.FirebaseDataSource
 import com.ferechamitbeyli.keeprun.framework.common.Constants
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -26,13 +24,16 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideAuthenticator() : BaseAuthenticator
-        = FirebaseAuthenticator()
+    fun provideAuthenticator() : AuthDataSource
+        = FirebaseDataSource()
 
+    /*
     @Singleton
     @Provides
     fun provideAuthRepository() : BaseAuthRepository
         = AuthRepository(provideAuthenticator())
+
+     */
 
     /** Retrofit provide functions **/
 

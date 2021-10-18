@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/onboardingFragment"
-        android:name="com.ferechamitbeyli.keeprun.view.activities.auth_activity.fragments.onboarding.OnboardingFragment"
+        android:name="com.ferechamitbeyli.keeprun.presentation.view.activities.auth_activity.fragments.onboarding.OnboardingFragment"
         android:label="fragment_onboarding"
         tools:layout="@layout/fragment_onboarding" >
         <action
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/signInFragment"
-        android:name="com.ferechamitbeyli.keeprun.view.activities.auth_activity.fragments.SignInFragment"
+        android:name="com.ferechamitbeyli.keeprun.presentation.view.activities.auth_activity.fragments.SignInFragment"
         android:label="fragment_sign_in"
         tools:layout="@layout/fragment_sign_in" >
         <action
@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.ferechamitbeyli.keeprun.view.activities.auth_activity.fragments.SignUpFragment"
+        android:name="com.ferechamitbeyli.keeprun.presentation.view.activities.auth_activity.fragments.SignUpFragment"
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up" >
         <action
@@ -41,7 +41,7 @@
     </fragment>
     <fragment
         android:id="@+id/forgotPassFragment"
-        android:name="com.ferechamitbeyli.keeprun.view.activities.auth_activity.fragments.ForgotPassFragment"
+        android:name="com.ferechamitbeyli.keeprun.presentation.view.activities.auth_activity.fragments.ForgotPassFragment"
         android:label="fragment_forgot_pass"
         tools:layout="@layout/fragment_forgot_pass" >
         <action

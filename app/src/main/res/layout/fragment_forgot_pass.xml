@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/lightGreen"
-    tools:context=".view.activities.auth_activity.fragments.ForgotPassFragment">
+    tools:context=".presentation.view.activities.auth_activity.fragments.ForgotPassFragment">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="0dp"
