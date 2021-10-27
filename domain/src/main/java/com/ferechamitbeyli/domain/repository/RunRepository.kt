@@ -1,24 +1,40 @@
 package com.ferechamitbeyli.domain.repository
 
 import com.ferechamitbeyli.domain.entity.Run
-import com.ferechamitbeyli.domain.repository.RunDataSource
+import kotlinx.coroutines.flow.Flow
 
-class RunRepository(
-    private val dataSource: RunDataSource
-) {
-    suspend fun insert(run: Run) = dataSource.insert(run)
-    suspend fun remove(run: Run) = dataSource.remove(run)
+interface RunRepository {
+    suspend fun insert(run: Run)
+    suspend fun remove(run: Run)
 
-    suspend fun getAllRunsSortedByDate() = dataSource.getAllRunsSortedByDate()
-    suspend fun getAllRunsSortedByTimeInMillis() = dataSource.getAllRunsSortedByTimeInMillis()
-    suspend fun getAllRunsSortedByCaloriesBurned() = dataSource.getAllRunsSortedByCaloriesBurned()
-    suspend fun getAllRunsSortedByAverageSpeed() = dataSource.getAllRunsSortedByAverageSpeed()
-    suspend fun getAllRunsSortedByDistance() = dataSource.getAllRunsSortedByDistance()
+    /*
 
-    suspend fun getTotalTimeInMillis() = dataSource.getTotalTimeInMillis()
-    suspend fun getTotalCaloriesBurned() = dataSource.getTotalCaloriesBurned()
-    suspend fun getTotalDistanceInMeters() = dataSource.getTotalDistanceInMeters()
-    suspend fun getTotalAverageSpeedInKMH() = dataSource.getTotalAverageSpeedInKMH()
-    suspend fun getTotalStepCount() = dataSource.getTotalStepCount()
+    /** Get all functions from remote end-point **/
+    suspend fun getAllRunsFromRemote(): Flow<List<Run>>
+
+    /** Get total functions from remote end-point **/
+    suspend fun getTotalTimeInMillisFromRemote(): Flow<Long>
+    suspend fun getTotalCaloriesBurnedFromRemote(): Flow<Int>
+    suspend fun getTotalDistanceInMetersFromRemote(): Flow<Int>
+    suspend fun getTotalAverageSpeedInKMHFromRemote(): Flow<Float>
+    suspend fun getTotalStepCountFromRemote(): Flow<Int>
+
+    */
+
+    /** Get all functions **/
+    suspend fun getAllRunsSortedByDate() : Flow<List<Run>>
+    suspend fun getAllRunsSortedByTimeInMillis() : Flow<List<Run>>
+    suspend fun getAllRunsSortedByCaloriesBurned() : Flow<List<Run>>
+    suspend fun getAllRunsSortedByAverageSpeed() : Flow<List<Run>>
+    suspend fun getAllRunsSortedByDistance() : Flow<List<Run>>
+
+    /** Get total functions **/
+    suspend fun getTotalTimeInMillis() : Flow<Long>
+    suspend fun getTotalCaloriesBurned() : Flow<Int>
+    suspend fun getTotalDistanceInMeters() : Flow<Int>
+    suspend fun getTotalAverageSpeedInKMH() : Flow<Float>
+    suspend fun getTotalStepCount() : Flow<Int>
+
+
 
 }

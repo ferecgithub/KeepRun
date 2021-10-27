@@ -1,14 +1,13 @@
 package com.ferechamitbeyli.domain.repository
 
+import com.ferechamitbeyli.domain.Resource
 import com.ferechamitbeyli.domain.entity.User
+import kotlinx.coroutines.flow.Flow
 
-class AuthRepository(
-    private val dataSource: AuthDataSource
-) {
-    suspend fun signUpWithEmailPassword(email: String , password: String, username: String) = dataSource.signUp(email, password, username)
-    suspend fun signInWithEmailPassword(email: String, password: String) = dataSource.signInWithEmailPassword(email, password)
-    suspend fun sendResetPassword(email : String) = dataSource.sendResetPassword(email)
-    suspend fun getCurrentUser() = dataSource.getCurrentUser()
-    suspend fun signOut() = dataSource.signOut()
-    suspend fun createUserInRemoteDB(user: User, any: Any) = dataSource.createUserInRemoteDB(user, any)
+interface AuthRepository {
+    suspend fun signUp(email: String, password: String, username: String) : Flow<Resource<String>>
+    suspend fun signInWithEmailPassword(email: String, password: String) : Flow<Resource<String>>
+    suspend fun sendResetPassword(email : String) : Flow<Resource<String>>
+    suspend fun signOut() : Flow<Resource<String>>
+    suspend fun createUserInRemoteDB(user: User) : Flow<Resource<String>>
 }

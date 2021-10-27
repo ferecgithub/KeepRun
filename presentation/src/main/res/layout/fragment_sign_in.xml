@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightGrey" >
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_logo"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal3_gl"
+        app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical1_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal1_gl" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/welcome_w_exclamation"
+        android:textColor="@color/normalText"
+        android:textSize="@dimen/title3"
+        app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical1_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal325_gl" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_regular"
+        android:text="@string/sign_in"
+        android:textAllCaps="false"
+        android:textColor="@color/normalText"
+        android:textSize="@dimen/paragraph2"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal425_gl"
+        app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical1_gl" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/signInEmail_til"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        app:boxBackgroundMode="filled"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        app:errorEnabled="true"
+        app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical1_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal45_gl"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal55_gl">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/signInEmail_et"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/input_bg"
+            android:layout_margin="4dp"
+            android:gravity="center"
+            android:hint="@string/enter_your_email"
+            android:fontFamily="@font/montserrat_medium"
+            android:textSize="@dimen/paragraph"
+            android:textColorHint="@color/hintText"
+            android:inputType="textEmailAddress"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/signInPassword_til"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        app:boxBackgroundMode="filled"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        app:errorEnabled="true"
+        app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical1_gl"
+        app:layout_constraintTop_toBottomOf="@id/horizontal575_gl"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal675_gl"
+        app:passwordToggleEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/signInPassword_et"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/input_bg"
+            android:layout_margin="4dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:fontFamily="@font/montserrat_medium"
+            android:gravity="center"
+            android:hint="@string/enter_your_password"
+            android:inputType="textPassword"
+            android:textColorHint="@color/hintText"
+             />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/signIn_btn"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/btn_background"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/sign_in"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textSize="@dimen/title3"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal8_gl"
+        app:layout_constraintEnd_toStartOf="@+id/vertical9_gl"
+        app:layout_constraintStart_toStartOf="@+id/vertical1_gl"
+        app:layout_constraintTop_toBottomOf="@id/horizontal725_gl" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/forgotPass_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toStartOf="@+id/vertical9_gl"
+        app:layout_constraintStart_toStartOf="@+id/vertical1_gl"
+        app:layout_constraintTop_toBottomOf="@id/signIn_btn"
+        android:text="@string/forgot_your_password"
+        android:textColor="@color/normalText"
+        android:fontFamily="@font/montserrat_medium"
+        android:textSize="@dimen/paragraph" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/signUp_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toStartOf="@+id/vertical9_gl"
+        app:layout_constraintStart_toStartOf="@+id/vertical1_gl"
+        app:layout_constraintTop_toBottomOf="@id/forgotPass_tv"
+        android:text="@string/do_not_have_acc"
+        android:textColor="@color/normalText"
+        android:fontFamily="@font/montserrat_medium"
+        android:textSize="@dimen/paragraph" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal1_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal3_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal325_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.325" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal425_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.425" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal45_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.45" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal55_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.55" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal575_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.575" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal675_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.675" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal725_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.725" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal8_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical1_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical9_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

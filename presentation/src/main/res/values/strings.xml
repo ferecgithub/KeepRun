@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">KeepRun</string>
+
+    <string name="onboardingText1">
+        Welcome to KEEPRUN! A journey to healthy &amp; active life!
+    </string>
+
+    <string name="onboardingText2">
+        You can track your calories burned and statistics under your profile.
+    </string>
+
+    <string name="onboardingText3">
+        Let’s burn some calories and get fit!
+    </string>
+
+    <string name="get_started">Get Started</string>
+    <string name="welcome_w_exclamation">Welcome!</string>
+    <string name="welcome">Welcome</string>
+    <string name="sign_in">Sign In</string>
+    <string name="enter_your_email">Enter your email</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="forgot_your_password">Forgot your password?</string>
+    <string name="do_not_have_acc">Don\'t have an account? <font color='#488B49'>Sign Up</font></string>
+    <string name="already_have_acc">Already have an account? <font color='#488B49'>Sign In</font></string>
+    <string name="welcome_onboard">Welcome Onboard!</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="enter_your_username">Enter your user name</string>
+    <string name="enter_a_password">Enter a password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="please_enter_your_email">Please enter your email.</string>
+    <string name="send">Send</string>
+    <string name="back">Back</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="fields_cant_be_empty">Fields can not be empty.</string>
+    <string name="username_too_long">Username is too long</string>
+    <string name="please_enter_matches_pass">Please enter a matched password</string>
+    <string name="password_requires">The password is required to have at least one upper letter, one lower letter, one number and a special character</string>
+    <string name="next_button">Next Button</string>
+    <string name="please_enter_your_weight">Please enter your weight.</string>
+    <string name="enter_your_weight">Enter your weight</string>
+    <string name="submit">Submit</string>
+    <string name="we_need_this_for_calculation_of_calories_burned">We need this for calculation of calories burned.</string>
+</resources>

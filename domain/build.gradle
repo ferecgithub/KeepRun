@@ -15,6 +15,9 @@ dependencies {
     implementation Coroutines.kotlinx_coroutines_core
     implementation Coroutines.kotlinx_coroutine_test
 
+    // Inject
+    implementation JavaxInject.javax_inject
+
     testImplementation TestSuites.junit_jupiter_api
     testImplementation TestSuites.junit_jupiter_engine
     testImplementation TestSuites.mockk

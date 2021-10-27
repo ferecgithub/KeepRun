@@ -3,11 +3,8 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.8">
       <module name="KeepRun.app" target="11" />
-      <module name="KeepRun.base" target="11" />
-      <module name="KeepRun.login" target="11" />
-      <module name="KeepRun.navigation" target="11" />
-      <module name="KeepRun.onboarding" target="11" />
-      <module name="KeepRun.ui_components" target="11" />
+      <module name="KeepRun.data" target="11" />
+      <module name="KeepRun.presentation" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

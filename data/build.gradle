@@ -1,0 +1,115 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlin-parcelize'
+    id "androidx.navigation.safeargs.kotlin"
+    id 'dagger.hilt.android.plugin'
+    id 'com.google.gms.google-services'
+}
+
+android {
+    compileSdkVersion AppConfig.compile_sdk_version
+
+    defaultConfig {
+        minSdk AppConfig.min_sdk
+        targetSdk AppConfig.target_sdk
+        versionCode AppConfig.version_code
+        versionName AppConfig.version_name
+
+        testInstrumentationRunner AppConfig.test_instrumentation_runner
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility AppConfig.java_version
+        targetCompatibility AppConfig.java_version
+    }
+
+    kotlinOptions {
+        AppConfig.jvm_target
+    }
+}
+
+hilt { enableAggregatingTask = true }
+
+kapt {
+    correctErrorTypes true
+}
+
+dependencies {
+
+    implementation project(':domain')
+
+    // AndroidX Core
+    implementation AndroidX.core_ktx
+    implementation AndroidX.legacy_support_v4
+
+    // Lifecycle
+    implementation Lifecycle.lifecycle_viewmodel_ktx
+    implementation Lifecycle.lifecycle_runtime_ktx
+    implementation Lifecycle.lifecycle_service
+    implementation Lifecycle.lifecycle_livedata_ktx
+    implementation Lifecycle.lifecycle_common_java8
+
+    // Room
+    implementation Room.room_runtime
+    implementation Room.room_ktx
+    kapt Room.room_compiler_kapt
+
+    // DataStore
+    api DataStore.datastore_preferences
+
+    // Firebase
+    api Firebase.firebase_bom
+    api Firebase.firebase_auth_ktx
+    api Firebase.firebase_database
+    api Firebase.firebase_storage
+
+    // Coroutines
+    implementation Coroutines.kotlinx_coroutines_android
+    implementation Coroutines.kotlinx_coroutines_core
+    implementation Coroutines.kotlinx_coroutine_test
+
+    // Dagger Hilt
+    implementation DaggerHilt.hilt_android
+    implementation DaggerHilt.hilt_lifecycle_viewmodel
+    //kapt DaggerHilt.hilt_android_compiler_kapt
+    kapt DaggerHilt.hilt_compiler_kapt
+
+    // Retrofit2
+    api Retrofit2.retrofit
+    api Retrofit2.converter_gson
+    api Retrofit2.convert_scalars
+
+    // OkHttp3
+    api OkHttp3.logging_interceptor
+
+    // PlayServices
+    implementation PlayServices.kotlinx_coroutines_play_services
+    implementation PlayServices.play_services_location
+    implementation PlayServices.play_services_maps
+
+    // EasyPermissions
+    implementation EasyPermissions.easy_permissions
+
+    // SquareUp Logcat
+    api SquareUpLogcat.squareup_logcat
+
+    // Timber
+    //implementation Timber.timber
+
+    // Test Suites
+    implementation TestSuites.junit_jupiter_api
+    implementation TestSuites.junit_jupiter_engine
+    implementation TestSuites.mockk
+    implementation TestSuites.androidx_text_espresso_core
+
+
+}

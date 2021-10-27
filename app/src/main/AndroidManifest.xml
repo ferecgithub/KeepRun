@@ -4,6 +4,7 @@
     package="com.ferechamitbeyli.keeprun">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -17,14 +18,14 @@
         android:supportsRtl="true"
         android:theme="@style/SplashTheme"> <!-- @style/SplashTheme -->
         <activity
-            android:name="com.ferechamitbeyli.keeprun.presentation.view.activities.home_activity.HomeActivity"
+            android:name="com.ferechamitbeyli.presentation.view.activities.home_activity.HomeActivity"
             android:exported="true"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing"
             tools:ignore="Instantiatable" />
         <activity
-            android:name="com.ferechamitbeyli.keeprun.presentation.view.activities.auth_activity.AuthActivity"
+            android:name="com.ferechamitbeyli.presentation.view.activities.auth_activity.AuthActivity"
             android:exported="true"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing"
             tools:ignore="Instantiatable">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
