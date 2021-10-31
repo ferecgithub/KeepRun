@@ -17,6 +17,14 @@
         app:layout_constraintStart_toStartOf="@id/vertical1_gl"
         android:src="@drawable/onboarding_img1" />
 
+    <include
+        android:id="@+id/onboardingPagerIndicator_layout"
+        layout="@layout/pager_indicator_layout"
+        app:layout_constraintStart_toStartOf="@id/vertical1_gl"
+        app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal3_gl"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal4_gl"/>
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/onboardingTitle_tv"
         android:layout_width="0dp"

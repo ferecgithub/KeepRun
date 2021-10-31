@@ -20,12 +20,12 @@
         <activity
             android:name="com.ferechamitbeyli.presentation.view.activities.home_activity.HomeActivity"
             android:exported="true"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
             tools:ignore="Instantiatable" />
         <activity
             android:name="com.ferechamitbeyli.presentation.view.activities.auth_activity.AuthActivity"
             android:exported="true"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
             tools:ignore="Instantiatable">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -5,6 +5,7 @@ import javax.inject.Inject
 
 data class SessionUseCases @Inject constructor(
     val getCurrentUserUseCase: GetCurrentUserUseCase,
+    val signOutUseCase: SignOutUseCase,
     val getFirstUseStateUseCase: GetFirstUseStateUseCase,
     val getInitialSetupStateUseCase: GetInitialSetupStateUseCase,
     val getUserUidUseCase: GetUserUidUseCase,

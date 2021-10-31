@@ -13,6 +13,10 @@ class OnboardingAdapter(
 
     private val fragmentList = list
 
+    override fun getItemId(position: Int): Long {
+        return super.getItemId(position)
+    }
+
     override fun getItemCount() = fragmentList.size
 
     override fun createFragment(position: Int) = fragmentList[position]

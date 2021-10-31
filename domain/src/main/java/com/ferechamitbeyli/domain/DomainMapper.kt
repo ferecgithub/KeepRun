@@ -1,4 +1,4 @@
-package com.ferechamitbeyli.data.utils
+package com.ferechamitbeyli.domain
 
 interface DomainMapper <T, DomainModel> {
     fun mapToDomainModel(model: T) : DomainModel

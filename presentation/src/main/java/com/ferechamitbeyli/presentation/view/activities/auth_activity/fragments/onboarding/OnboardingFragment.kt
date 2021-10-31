@@ -10,10 +10,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.ferechamitbeyli.presentation.R
 import com.ferechamitbeyli.presentation.databinding.FragmentOnboardingBinding
-import com.ferechamitbeyli.presentation.utils.UIHelperFunctions.Companion.hideKeyboard
-import com.ferechamitbeyli.presentation.utils.UIHelperFunctions.Companion.startNewActivity
-import com.ferechamitbeyli.presentation.utils.enums.SessionResults
-import com.ferechamitbeyli.presentation.utils.states.OnboardingState
+import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.hideKeyboard
+import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.startNewActivity
+import com.ferechamitbeyli.presentation.utils.helpers.ZoomOutPageTransformer
+import com.ferechamitbeyli.presentation.utils.states.EventState
 import com.ferechamitbeyli.presentation.view.activities.auth_activity.adapters.OnboardingAdapter
 import com.ferechamitbeyli.presentation.view.activities.home_activity.HomeActivity
 import com.ferechamitbeyli.presentation.view.base.BaseFragment
@@ -35,105 +35,47 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getCurrentUser()
-        viewModel.getFirstUseState()
+        getUserEmailFromCache()
         listenOnboardingEventChannel()
-        /*
-        if (viewModel.getCurrentUser().equals(true)) {
-            listenOnboardingEventChannel()
-        } else {
-            viewModel.getFirstUseState().invokeOnCompletion { listenOnboardingEventChannel() }
-
-        }
-
-         */
-
     }
 
-    private fun listenOnboardingEventChannel() = lifecycleScope.launchWhenStarted {
+    private fun listenOnboardingEventChannel() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
         viewModel.onboardingEventsFlow.collect {
-            when(it) {
-                is OnboardingState.Success -> {
-                    when(it.result) {
-                        SessionResults.FIRST_USE -> {
-                            setupPager()
-                        }
-                        SessionResults.NOT_FIRST_USE -> {
-                            findNavController().navigate(R.id.action_onboardingFragment_to_signInFragment)
-                            hideKeyboard()
-                        }
-                        SessionResults.THERE_IS_A_CURRENT_USER -> {
-                            requireActivity().startNewActivity(HomeActivity::class.java)
-                        }
-                        else -> {
-                            /** NO-OP **/
-                        }
-                    }
+            when (it) {
+                is EventState.Error -> {
+                    Snackbar.make(binding.root, it.message, Snackbar.LENGTH_LONG).show()
                 }
-                is OnboardingState.Error -> {
-
-                }
-                OnboardingState.Loading -> {
-
+                else -> {
+                    /** NO-OP **/
                 }
             }
         }
+
     }
 
-    private fun getFirstUseState() = lifecycleScope.launchWhenStarted {
-        viewModel.getFirstUseState()
-        listenOnboardingEventChannel()
-    }
-
-    private fun getCurrentUser() = lifecycleScope.launchWhenStarted {
-        viewModel.getCurrentUser()
-        listenOnboardingEventChannel()
-    }
-
-    /*
-    private suspend fun checkFirstUseState() = lifecycleScope.launchWhenStarted {
+    private fun getFirstUseState() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
         viewModel.getFirstUseState()
         viewModel.firstUseState.collect {
-            if (it == true) {
+            if (it) {
+                setupPager()
+            } else {
                 findNavController().navigate(R.id.action_onboardingFragment_to_signInFragment)
                 hideKeyboard()
+            }
+        }
+    }
+
+
+    private fun getUserEmailFromCache() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        viewModel.getUserEmailFromCache()
+        viewModel.userEmailFlow.collect {
+            if (it.isBlank()) {
+                getFirstUseState()
             } else {
-                setupPager()
-            }
-        }
-    }
-
-
-
-    private suspend fun setupRedirection() {
-        getCurrentUser()
-    }
-
-     */
-
-    /*
-    private fun checkInitialSetupState() = lifecycleScope.launchWhenStarted {
-        viewModel.getInitialSetupState()
-        viewModel.initialSetupState.collect {
-            if (it == true) {
                 requireActivity().startNewActivity(HomeActivity::class.java)
             }
         }
     }
-
-     */
-
-    /*
-    private suspend fun getCurrentUser() = lifecycleScope.launchWhenStarted {
-        viewModel.getCurrentUser()
-        viewModel.currentUser.collect {
-            it?.let {
-                requireActivity().startNewActivity(HomeActivity::class.java)
-            }
-        }
-    }
-
-     */
 
     private fun setupPager() {
         val fragmentList = arrayListOf<Fragment>(
@@ -144,17 +86,25 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding>() {
 
         val adapter = OnboardingAdapter(
             fragmentList,
-            requireActivity().supportFragmentManager,
+            childFragmentManager,
             lifecycle
         )
 
+        binding.onboardingPagerVp2.setPageTransformer(ZoomOutPageTransformer())
         binding.onboardingPagerVp2.adapter = adapter
 
         // Set viewPager indicator
-        binding.onboardingPagerIndicatorCi3.setViewPager(binding.onboardingPagerVp2)
-
-
+        when (binding.onboardingPagerVp2.currentItem) {
+            0 -> {
+                viewModel.assignPagerPosition(0)
+            }
+            1 -> {
+                viewModel.assignPagerPosition(1)
+            }
+            else -> {
+                viewModel.assignPagerPosition(2)
+            }
+        }
     }
-
 
 }

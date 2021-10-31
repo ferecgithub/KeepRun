@@ -13,7 +13,7 @@
         android:fontFamily="@font/montserrat_bold"
         android:text="@string/welcome"
         android:textSize="@dimen/title3"
-        android:textColor="@color/normalText"
+        android:textColor="@color/darkGreen"
         app:layout_constraintEnd_toStartOf="@id/welcomeUsername_tv"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="@id/vertical1_gl"
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat_bold"
         android:textSize="@dimen/title3"
-        android:textColor="@color/normalText"
+        android:textColor="@color/darkGreen"
         android:layout_marginLeft="8dp"
         app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
         app:layout_constraintStart_toEndOf="@id/welcomeTitle_tv"
@@ -60,7 +60,7 @@
         app:layout_constraintTop_toTopOf="@id/horizontal45_gl" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/signInPassword_til"
+        android:id="@+id/initialWeight_til"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
@@ -68,11 +68,10 @@
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
         app:errorEnabled="true"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal675_gl"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal65_gl"
         app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
         app:layout_constraintStart_toStartOf="@id/vertical1_gl"
-        app:layout_constraintTop_toBottomOf="@id/horizontal575_gl"
-        app:passwordToggleEnabled="true">
+        app:layout_constraintTop_toBottomOf="@id/horizontal575_gl" >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/initialWeight_et"
@@ -82,7 +81,7 @@
             android:fontFamily="@font/montserrat_medium"
             android:hint="@string/enter_your_weight"
             android:gravity="center"
-            android:inputType="textPassword"
+            android:inputType="number"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
             android:textColor="@color/normalText"
@@ -102,10 +101,10 @@
         android:gravity="center"
         android:textSize="@dimen/title3"
         app:backgroundTint="@null"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal8_gl"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal775_gl"
         app:layout_constraintEnd_toStartOf="@+id/vertical9_gl"
         app:layout_constraintStart_toStartOf="@+id/vertical1_gl"
-        app:layout_constraintTop_toBottomOf="@id/horizontal725_gl" />
+        app:layout_constraintTop_toBottomOf="@id/horizontal7_gl" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/horizontal1_gl"
@@ -157,25 +156,25 @@
         app:layout_constraintGuide_percent="0.575" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal675_gl"
+        android:id="@+id/horizontal65_gl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.675" />
+        app:layout_constraintGuide_percent="0.65" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal725_gl"
+        android:id="@+id/horizontal7_gl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.725" />
+        app:layout_constraintGuide_percent="0.7" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal8_gl"
+        android:id="@+id/horizontal775_gl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.8" />
+        app:layout_constraintGuide_percent="0.775" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/vertical1_gl"

@@ -7,6 +7,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_FIRST_TIME_USE
 import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_HAS_PERMISSION
 import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_INITIAL_SETUP_DONE
+import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_NOTIFICATION_ENABLED
 import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_USERNAME
 import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_USER_EMAIL
 import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_USER_PHOTO_URL
@@ -32,6 +33,7 @@ class DataStoreObject @Inject constructor(@ApplicationContext appContext: Contex
         val userUidCached = stringPreferencesKey(CACHE_KEY_FOR_USER_UID)
         val usernameCached = stringPreferencesKey(CACHE_KEY_FOR_USERNAME)
         val userEmailCached = stringPreferencesKey(CACHE_KEY_FOR_USER_EMAIL)
+        val userNotificationEnableCached = booleanPreferencesKey(CACHE_KEY_FOR_NOTIFICATION_ENABLED)
         val userPhotoUrlCached = stringPreferencesKey(CACHE_KEY_FOR_USER_PHOTO_URL)
 
         /** Miscellaneous Information **/
@@ -52,11 +54,12 @@ class DataStoreObject @Inject constructor(@ApplicationContext appContext: Contex
 
      */
 
-    suspend fun storeUserAccount(userUid: String, username: String, userEmail: String, userPhotoUrl: String) {
+    suspend fun storeUserAccount(userUid: String, username: String, userEmail: String, isNotificationEnabled: Boolean, userPhotoUrl: String) {
         keepRunDataStore.edit {
             it[userUidCached] = userUid
             it[usernameCached] = username
             it[userEmailCached] = userEmail
+            it[userNotificationEnableCached] = isNotificationEnabled
             it[userPhotoUrlCached] = userPhotoUrl
         }
     }
@@ -103,6 +106,12 @@ class DataStoreObject @Inject constructor(@ApplicationContext appContext: Contex
         Resource.Error(it.toString(),null)
     }
 
+    fun getNotificationEnabled() = keepRunDataStore.data.map {
+        Resource.Success(it[userNotificationEnableCached] ?: true)
+    }.catch {
+        Resource.Error(it.toString(),null)
+    }
+
     fun getUserPhotoUrl() = keepRunDataStore.data.map {
         Resource.Success(it[userPhotoUrlCached] ?: "")
     }.catch {
@@ -132,12 +141,5 @@ class DataStoreObject @Inject constructor(@ApplicationContext appContext: Contex
     }.catch {
         Resource.Error(it.toString(),null)
     }
-
-    /*
-    fun getIsOnboardingFinished() = keepRunDataStore.data.map {
-        it[isOnboardingFinished] ?: false
-    }
-
-     */
 
 }

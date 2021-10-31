@@ -1,4 +1,4 @@
-package com.ferechamitbeyli.presentation.utils
+package com.ferechamitbeyli.presentation.utils.helpers
 
 import android.app.Activity
 import android.content.Context

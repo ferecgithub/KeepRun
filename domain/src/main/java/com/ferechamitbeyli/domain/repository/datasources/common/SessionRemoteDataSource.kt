@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface SessionRemoteDataSource {
     suspend fun getCurrentUser() : Flow<Resource<User>>
+    suspend fun signOut(): Flow<Resource<String>>
 }

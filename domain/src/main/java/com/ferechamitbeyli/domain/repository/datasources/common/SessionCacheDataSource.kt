@@ -11,6 +11,7 @@ interface SessionCacheDataSource {
         userUid: String,
         username: String,
         userEmail: String,
+        userNotificationEnabled: Boolean,
         userPhotoUrl: String
     )
     suspend fun getUserUid(): Flow<Resource<String>>

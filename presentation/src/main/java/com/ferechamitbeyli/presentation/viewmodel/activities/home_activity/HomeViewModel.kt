@@ -1,6 +1,9 @@
 package com.ferechamitbeyli.presentation.viewmodel.activities.home_activity
 
 import androidx.lifecycle.ViewModel
+import com.ferechamitbeyli.domain.dispatchers.CoroutineDispatchers
+import com.ferechamitbeyli.presentation.utils.helpers.NetworkConnectionTracker
+import com.ferechamitbeyli.presentation.viewmodel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -98,4 +101,5 @@ class HomeViewModel @Inject constructor(
  */
 
 @HiltViewModel
-class HomeViewModel @Inject constructor() : ViewModel()
+class HomeViewModel @Inject constructor(networkConnectionTracker: NetworkConnectionTracker, coroutineDispatchers: CoroutineDispatchers) :
+    BaseViewModel(networkConnectionTracker, coroutineDispatchers)

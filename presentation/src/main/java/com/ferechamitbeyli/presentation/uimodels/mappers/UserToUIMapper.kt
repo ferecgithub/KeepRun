@@ -1,12 +1,11 @@
-package com.ferechamitbeyli.data.remote.entities.mappers
+package com.ferechamitbeyli.presentation.uimodels.mappers
 
-import com.ferechamitbeyli.data.remote.entities.UserDto
 import com.ferechamitbeyli.domain.DomainMapper
 import com.ferechamitbeyli.domain.entity.User
+import com.ferechamitbeyli.presentation.uimodels.UserUIModel
 
-object UserDtoMapper : DomainMapper<UserDto, User> {
-
-    override fun mapToDomainModel(model: UserDto): User = User(
+object UserToUIMapper : DomainMapper<UserUIModel, User> {
+    override fun mapToDomainModel(model: UserUIModel): User = User(
         uid = model.uid,
         email = model.email,
         username = model.username,
@@ -14,7 +13,7 @@ object UserDtoMapper : DomainMapper<UserDto, User> {
         photoUrl = model.photoUrl
     )
 
-    override fun mapFromDomainModel(domainModel: User): UserDto = UserDto(
+    override fun mapFromDomainModel(domainModel: User): UserUIModel = UserUIModel(
         uid = domainModel.uid,
         email = domainModel.email,
         username = domainModel.username,
@@ -22,10 +21,9 @@ object UserDtoMapper : DomainMapper<UserDto, User> {
         photoUrl = domainModel.photoUrl
     )
 
-    override fun mapToDomainModelList(list: List<UserDto>): List<User> =
+    override fun mapToDomainModelList(list: List<UserUIModel>): List<User> =
         list.map { mapToDomainModel(it) }
 
-    override fun mapFromDomainModelList(list: List<User>): List<UserDto> =
+    override fun mapFromDomainModelList(list: List<User>): List<UserUIModel> =
         list.map { mapFromDomainModel(it) }
-
 }

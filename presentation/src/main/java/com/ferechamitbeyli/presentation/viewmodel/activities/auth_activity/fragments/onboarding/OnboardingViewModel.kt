@@ -1,91 +1,89 @@
 package com.ferechamitbeyli.presentation.viewmodel.activities.auth_activity.fragments.onboarding
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.ferechamitbeyli.domain.Resource
 import com.ferechamitbeyli.domain.dispatchers.CoroutineDispatchers
-import com.ferechamitbeyli.domain.entity.User
-import com.ferechamitbeyli.presentation.utils.enums.SessionResults
-import com.ferechamitbeyli.presentation.utils.states.OnboardingState
+import com.ferechamitbeyli.presentation.utils.helpers.NetworkConnectionTracker
+import com.ferechamitbeyli.presentation.utils.states.EventState
 import com.ferechamitbeyli.presentation.utils.usecases.SessionUseCases
+import com.ferechamitbeyli.presentation.viewmodel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
     private val useCases: SessionUseCases,
-    private val coroutineDispatchers: CoroutineDispatchers
-) : ViewModel() {
+    coroutineDispatchers: CoroutineDispatchers,
+    networkConnectionTracker: NetworkConnectionTracker
+) : BaseViewModel(networkConnectionTracker, coroutineDispatchers) {
 
     /**
-     * Data and functions related to if onboarding/walkthrough screen finished or not
+     * Data and function related to detect current onboarding pager position
      */
 
-    private var _onboardingEventsFlow = MutableSharedFlow<OnboardingState>()
-    val onboardingEventsFlow: MutableSharedFlow<OnboardingState> = _onboardingEventsFlow
+    private var _currentPagerPosition = MutableStateFlow(0)
+    val currentPagerPosition: StateFlow<Int> = _currentPagerPosition
+
+    fun assignPagerPosition(currentPosition: Int) = defaultScope.launch {
+        _currentPagerPosition.emit(currentPosition)
+    }
+
+    /**
+     * Data and functions related to detect if onboarding screen is finished or not
+     */
+
+
+    private var _onboardingEventsFlow = MutableSharedFlow<EventState>()
+    val onboardingEventsFlow: SharedFlow<EventState> = _onboardingEventsFlow
+
 
     /**
      * Checks and stores the first use state of the application in cache
      */
-    private var _firstUseState = MutableSharedFlow<Boolean?>()
-    val firstUseState: MutableSharedFlow<Boolean?> = _firstUseState
+    private var _firstUseState = MutableStateFlow<Boolean>(true)
+    val firstUseState: StateFlow<Boolean> = _firstUseState
 
     fun storeFirstUseState(isFinished: Boolean) =
-        viewModelScope.launch(coroutineDispatchers.io()) {
+        ioScope.launch {
             useCases.cacheFirstUseStateUseCase.invoke(isFinished)
-            _onboardingEventsFlow.emit(OnboardingState.Success(SessionResults.FIRST_USE_STATE_STORED))
-            //_firstUseState.emit(isFinished)
+            _firstUseState.emit(isFinished)
         }
 
-    fun getFirstUseState() = viewModelScope.launch(coroutineDispatchers.io()) {
+    fun getFirstUseState() = ioScope.launch {
         useCases.getFirstUseStateUseCase.invoke().collect {
-            if (it.data == true) {
-                _onboardingEventsFlow.emit(OnboardingState.Success(SessionResults.FIRST_USE))
-            } else {
-                _onboardingEventsFlow.emit(OnboardingState.Success(SessionResults.NOT_FIRST_USE))
+            when (it) {
+                is Resource.Success -> {
+                    _firstUseState.emit(it.data == true).also { _onboardingEventsFlow.emit(EventState.Success()) }
+                }
+                is Resource.Error -> {
+                    _onboardingEventsFlow.emit(EventState.Error(it.message.toString()))
+                }
+                is Resource.Loading -> _onboardingEventsFlow.emit(EventState.Loading())
             }
-            //_firstUseState.emit(it.data)
         }
     }
-
-    /*
-    /**
-     * Checks the initial setup state of home screen from cache.
-     * If true, this means the user already completed onboarding,
-     * and entered weight information on InitialFragment.
-     */
-    private var _initialSetupState = MutableSharedFlow<Boolean?>()
-    val initialSetupState: MutableSharedFlow<Boolean?> = _initialSetupState
-
-    suspend fun getInitialSetupState() = viewModelScope.launch(coroutineDispatchers.io()) {
-        onboardingUseCases.getInitialSetupStateUseCase.invoke().collect {
-            if (it.data == true) {
-                _onboardingEventsFlow.emit(OnboardingState.Success(SessionResults.INITIAL_SETUP_DONE))
-            } else {
-                _onboardingEventsFlow.emit(OnboardingState.Success(SessionResults.INITIAL_SETUP_NOT_DONE))
-            }
-            //_initialSetupState.emit(it.data)
-        }
-    }
-
-     */
 
     /**
-     * Fetches current user from cache. Currently, it is fetched from FirebaseAuth.
+     * Fetches current user from cache.
      */
-    private var _currentUser = MutableSharedFlow<User?>()
-    val currentUser: MutableSharedFlow<User?> = _currentUser
 
-    fun getCurrentUser() = viewModelScope.launch(coroutineDispatchers.io()) {
-        useCases.getCurrentUserUseCase.invoke().collect {
-            if (it.data != null) {
-                _onboardingEventsFlow.emit(OnboardingState.Success(SessionResults.THERE_IS_A_CURRENT_USER))
-            } else {
-                _onboardingEventsFlow.emit(OnboardingState.Success(SessionResults.THERE_IS_NOT_A_CURRENT_USER))
+    private var _userEmailFlow = MutableStateFlow<String>("")
+    val userEmailFlow: StateFlow<String> = _userEmailFlow
+
+    fun getUserEmailFromCache() = ioScope.launch {
+        useCases.getUserEmailUseCase.invoke().collect {
+            when (it) {
+                is Resource.Success -> {
+                    _userEmailFlow.emit(it.data.toString())
+                }
+                is Resource.Error -> {
+                    _onboardingEventsFlow.emit(EventState.Error(it.message.toString()))
+                }
+                is Resource.Loading ->  _onboardingEventsFlow.emit(EventState.Loading())
             }
-            //_currentUser.emit(it.data)
         }
     }
+
+
 }

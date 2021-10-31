@@ -4,17 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lightGreen" >
-
-    <me.relex.circleindicator.CircleIndicator3
-        android:id="@+id/onboardingPagerIndicator_ci3"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="@id/vertical1_gl"
-        app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
-        app:layout_constraintTop_toTopOf="@id/horizontal3_gl"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal4_gl" />
-
+    android:background="@color/lightGrey" >
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/onboardingPager_vp2"

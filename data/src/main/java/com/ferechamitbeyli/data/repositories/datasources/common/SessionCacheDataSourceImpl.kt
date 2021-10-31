@@ -1,4 +1,4 @@
-package com.ferechamitbeyli.data.repositories.datasources.auth
+package com.ferechamitbeyli.data.repositories.datasources.common
 
 import com.ferechamitbeyli.data.local.cache.DataStoreObject
 import com.ferechamitbeyli.domain.Resource
@@ -23,8 +23,9 @@ class SessionCacheDataSourceImpl @Inject constructor(
         userUid: String,
         username: String,
         userEmail: String,
+        userNotificationEnabled: Boolean,
         userPhotoUrl: String
-    ) = dataStoreObject.storeUserAccount(userUid, username, userEmail, userPhotoUrl)
+    ) = dataStoreObject.storeUserAccount(userUid, username, userEmail, userNotificationEnabled, userPhotoUrl)
 
     override suspend fun getUserUid(): Flow<Resource<String>> =
         dataStoreObject.getUserUid().flowOn(coroutineDispatchers.io())

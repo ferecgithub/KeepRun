@@ -1,6 +1,6 @@
-package com.ferechamitbeyli.domain.entity
+package com.ferechamitbeyli.presentation.uimodels
 
-data class User(
+data class UserUIModel(
     var uid: String? = "",
     var email: String? = "",
     var username: String? = "",

@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat_bold"
         android:text="@string/welcome_w_exclamation"
-        android:textColor="@color/normalText"
+        android:textColor="@color/darkGreen"
         android:textSize="@dimen/title3"
         app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
         app:layout_constraintStart_toStartOf="@id/vertical1_gl"
@@ -101,7 +101,6 @@
              />
 
     </com.google.android.material.textfield.TextInputLayout>
-
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/signIn_btn"

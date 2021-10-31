@@ -1,7 +1,6 @@
 package com.ferechamitbeyli.data.utils
 
 import android.graphics.Color
-import java.util.regex.Pattern
 
 object Constants {
 
@@ -14,6 +13,7 @@ object Constants {
     const val CACHE_KEY_FOR_USER_UID = "user_uid"
     const val CACHE_KEY_FOR_USERNAME = "user_name"
     const val CACHE_KEY_FOR_USER_EMAIL = "user_email"
+    const val CACHE_KEY_FOR_NOTIFICATION_ENABLED = "notification_enabled"
     const val CACHE_KEY_FOR_USER_PHOTO_URL = "user_photo_url"
     const val CACHE_KEY_FOR_WEIGHT = "user_weight"
     const val CACHE_KEY_FOR_FIRST_TIME_USE = "is_first_use"

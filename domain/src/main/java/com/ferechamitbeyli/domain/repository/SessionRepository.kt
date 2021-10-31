@@ -9,11 +9,13 @@ interface SessionRepository {
     suspend fun storeFirstUseState(isFirstTime: Boolean)
 
     suspend fun getCurrentUser(): Flow<Resource<User>>
+    suspend fun signOut(): Flow<Resource<String>>
 
     suspend fun cacheUserAccount(
         userUid: String,
         username: String,
         userEmail: String,
+        userNotificationEnabled: Boolean,
         userPhotoUrl: String
     )
     suspend fun getUserUid(): Flow<Resource<String>>

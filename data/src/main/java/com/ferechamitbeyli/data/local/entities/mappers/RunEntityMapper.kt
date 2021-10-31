@@ -1,10 +1,10 @@
 package com.ferechamitbeyli.data.local.entities.mappers
 
 import com.ferechamitbeyli.data.local.entities.RunEntity
-import com.ferechamitbeyli.data.utils.DomainMapper
+import com.ferechamitbeyli.domain.DomainMapper
 import com.ferechamitbeyli.domain.entity.Run
 
-class RunEntityMapper : DomainMapper<RunEntity, Run> {
+object RunEntityMapper : DomainMapper<RunEntity, Run> {
 
     override fun mapToDomainModel(model: RunEntity): Run = Run(
         imageUrl = model.imageUrl,
@@ -27,8 +27,10 @@ class RunEntityMapper : DomainMapper<RunEntity, Run> {
         steps = domainModel.steps
     )
 
-    override fun mapToDomainModelList(list: List<RunEntity>): List<Run> = list.map { mapToDomainModel(it) }
+    override fun mapToDomainModelList(list: List<RunEntity>): List<Run> =
+        list.map { mapToDomainModel(it) }
 
-    override fun mapFromDomainModelList(list: List<Run>): List<RunEntity> = list.map { mapFromDomainModel(it) }
+    override fun mapFromDomainModelList(list: List<Run>): List<RunEntity> =
+        list.map { mapFromDomainModel(it) }
 
 }

@@ -10,8 +10,9 @@ class CacheUserAccountUseCase @Inject constructor(
         userUid: String,
         username: String,
         userEmail: String,
+        userNotificationEnabled: Boolean,
         userPhotoUrl: String
     ) = sessionRepository.cacheUserAccount(
-        userUid, username, userEmail, userPhotoUrl
+        userUid, username, userEmail, userNotificationEnabled, userPhotoUrl
     )
 }

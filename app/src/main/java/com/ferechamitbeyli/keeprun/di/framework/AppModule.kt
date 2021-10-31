@@ -12,10 +12,10 @@ import com.ferechamitbeyli.data.repositories.AuthRepositoryImpl
 import com.ferechamitbeyli.data.repositories.SessionRepositoryImpl
 import com.ferechamitbeyli.data.repositories.datasources.auth.AuthDataSourceImpl
 import com.ferechamitbeyli.data.repositories.datasources.auth.AuthRemoteDBDataSourceImpl
-import com.ferechamitbeyli.data.repositories.datasources.auth.SessionCacheDataSourceImpl
+import com.ferechamitbeyli.data.repositories.datasources.common.SessionCacheDataSourceImpl
 import com.ferechamitbeyli.data.repositories.datasources.common.SessionRemoteDataSourceImpl
 import com.ferechamitbeyli.data.utils.Constants
-import com.ferechamitbeyli.data.utils.DomainMapper
+import com.ferechamitbeyli.domain.DomainMapper
 import com.ferechamitbeyli.domain.dispatchers.CoroutineDispatchers
 import com.ferechamitbeyli.domain.dispatchers.CoroutineDispatchersImpl
 import com.ferechamitbeyli.domain.entity.Run
@@ -26,7 +26,9 @@ import com.ferechamitbeyli.domain.repository.datasources.auth.AuthDataSource
 import com.ferechamitbeyli.domain.repository.datasources.auth.AuthRemoteDBDataSource
 import com.ferechamitbeyli.domain.repository.datasources.common.SessionCacheDataSource
 import com.ferechamitbeyli.domain.repository.datasources.common.SessionRemoteDataSource
-import com.ferechamitbeyli.presentation.utils.NetworkConnectionTracker
+import com.ferechamitbeyli.presentation.uimodels.UserUIModel
+import com.ferechamitbeyli.presentation.uimodels.mappers.UserToUIMapper
+import com.ferechamitbeyli.presentation.utils.helpers.NetworkConnectionTracker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -58,13 +60,14 @@ class AppModule {
     @Singleton
     @Provides
     fun provideUserDtoMapper(): DomainMapper<UserDto, User> =
-        UserDtoMapper()
+        UserDtoMapper
 
     /** Data Sources **/
 
     @Singleton
     @Provides
-    fun provideAuthDataSource(): AuthDataSource = AuthDataSourceImpl(
+    fun provideAuthDataSource(@ApplicationContext appContext: Context): AuthDataSource = AuthDataSourceImpl(
+        provideSessionCacheDataSource(appContext),
         provideAuthRemoteDBDataSource(),
         provideUserDtoMapper(),
         provideFirebaseAuth(),
@@ -100,14 +103,13 @@ class AppModule {
     fun provideSessionRepository(@ApplicationContext appContext: Context): SessionRepository =
         SessionRepositoryImpl(
             provideSessionCacheDataSource(appContext),
-            provideSessionRemoteDataSource(),
-            provideCoroutineDispatchers()
+            provideSessionRemoteDataSource()
         )
 
     @Singleton
     @Provides
-    fun provideAuthRepository(): AuthRepository =
-        AuthRepositoryImpl(provideAuthDataSource(), provideAuthRemoteDBDataSource() , provideCoroutineDispatchers())
+    fun provideAuthRepository(@ApplicationContext appContext: Context): AuthRepository =
+        AuthRepositoryImpl(provideAuthDataSource(appContext), provideAuthRemoteDBDataSource())
 
 
     /** -------------------- End of Authentication provide functions -------------------- **/
@@ -119,7 +121,12 @@ class AppModule {
     @Singleton
     @Provides
     fun provideRunEntityMapper(): DomainMapper<RunEntity, Run> =
-        RunEntityMapper()
+        RunEntityMapper
+
+    @Singleton
+    @Provides
+    fun provideUserToUIMapper(): DomainMapper<UserUIModel, User> =
+        UserToUIMapper
 
     /** Data Sources **/
 
@@ -128,9 +135,12 @@ class AppModule {
 
     /** Network Connection Tracker provide function **/
 
+
     @Provides
     @Singleton
     fun provideNetworkConnectionTracker(@ApplicationContext appContext: Context): NetworkConnectionTracker = NetworkConnectionTracker(appContext)
+
+
 
     /** Retrofit provide functions **/
 

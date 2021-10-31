@@ -44,11 +44,4 @@ class RunLocalDataSourceImpl @Inject constructor(
 
     override suspend fun getTotalStepCount(): Flow<Int> = runDao.getTotalStepCount()
 
-    /*
-
-    override suspend fun insert(run: Run) = runDao.insertRunEntity(RunEntity.fromRun(run))
-
-    override suspend fun remove(run: Run) = runDao.removeRunEntity(RunEntity.fromRun(run))
-
-     */
 }

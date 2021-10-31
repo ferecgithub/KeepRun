@@ -1,20 +1,20 @@
 package com.ferechamitbeyli.presentation.viewmodel.activities.auth_activity
 
-import androidx.lifecycle.*
 import com.ferechamitbeyli.domain.Resource
 import com.ferechamitbeyli.domain.dispatchers.CoroutineDispatchers
-import com.ferechamitbeyli.presentation.utils.NetworkConnectionTracker
-import com.ferechamitbeyli.presentation.utils.ValidationHelperFunctions.validateEmail
-import com.ferechamitbeyli.presentation.utils.ValidationHelperFunctions.validatePassword
-import com.ferechamitbeyli.presentation.utils.ValidationHelperFunctions.validatePasswords
-import com.ferechamitbeyli.presentation.utils.ValidationHelperFunctions.validateUsername
-import com.ferechamitbeyli.presentation.utils.enums.ConnectionErrorResults
-import com.ferechamitbeyli.presentation.utils.enums.ValidationResults
-import com.ferechamitbeyli.presentation.utils.states.AuthState
+import com.ferechamitbeyli.presentation.utils.helpers.NetworkConnectionTracker
+import com.ferechamitbeyli.presentation.utils.helpers.ValidationHelperFunctions.validateEmail
+import com.ferechamitbeyli.presentation.utils.helpers.ValidationHelperFunctions.validatePassword
+import com.ferechamitbeyli.presentation.utils.helpers.ValidationHelperFunctions.validatePasswords
+import com.ferechamitbeyli.presentation.utils.helpers.ValidationHelperFunctions.validateUsername
+import com.ferechamitbeyli.presentation.utils.states.EventState
+import com.ferechamitbeyli.presentation.utils.states.ValidationState
 import com.ferechamitbeyli.presentation.utils.usecases.AuthUseCases
 import com.ferechamitbeyli.presentation.utils.usecases.SessionUseCases
+import com.ferechamitbeyli.presentation.viewmodel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,156 +22,122 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(
     private val authUseCases: AuthUseCases,
     private val sessionUseCases: SessionUseCases,
-    private val coroutineDispatchers: CoroutineDispatchers,
-    //private val networkConnectionTracker: NetworkConnectionTracker
-) : ViewModel() {
+    coroutineDispatchers: CoroutineDispatchers,
+    networkConnectionTracker: NetworkConnectionTracker
+) : BaseViewModel(networkConnectionTracker, coroutineDispatchers) {
 
-    @Inject
-    lateinit var networkConnectionTracker: NetworkConnectionTracker
+    private var _authValidationEventsChannel = MutableSharedFlow<ValidationState>()
+    val authValidationEventsChannel: MutableSharedFlow<ValidationState> =
+        _authValidationEventsChannel
 
-    private var _authEventsChannel = MutableSharedFlow<AuthState>()
-    val authEventsFlow: MutableSharedFlow<AuthState> = _authEventsChannel
-
-    private var _networkState = MutableStateFlow<Boolean>(true)
-    val networkState: MutableSharedFlow<Boolean> = _networkState
-
-    init {
-        _networkState.value = networkConnectionTracker.value ?: false
-    }
+    private var _authEventsChannel = MutableSharedFlow<EventState>()
+    val authEventsChannel: MutableSharedFlow<EventState> = _authEventsChannel
 
     fun validateBeforeSignIn(email: String, password: String) =
-        viewModelScope.launch(coroutineDispatchers.default()) {
+        defaultScope.launch {
             val emailValidation = validateEmail(email)
             val passwordValidation = validatePassword(password)
 
-            when {
-                (emailValidation != AuthState.Success(ValidationResults.VALID_EMAIL)) -> {
-                    _authEventsChannel.emit(emailValidation)
-                }
-                (passwordValidation != AuthState.Success(ValidationResults.VALID_PASSWORD)) -> {
-                    _authEventsChannel.emit(passwordValidation)
-                }
-                else -> {
-                    signInUser(email, password)
-                }
-            }
+            _authValidationEventsChannel.emit(emailValidation)
+            _authValidationEventsChannel.emit(passwordValidation)
         }
 
     fun validateBeforeSignUp(
+        username: String,
         email: String,
         password: String,
-        confirmPass: String,
-        username: String
+        confirmPass: String
     ) =
-        viewModelScope.launch(coroutineDispatchers.default()) {
+        defaultScope.launch {
             val emailValidation = validateEmail(email)
             val passwordsValidation = validatePasswords(password, confirmPass)
             val usernameValidation = validateUsername(username)
 
-            when {
-                (emailValidation != AuthState.Success(ValidationResults.VALID_EMAIL)) -> {
-                    _authEventsChannel.emit(emailValidation)
-                }
-                (passwordsValidation != AuthState.Success(ValidationResults.VALID_CONFIRM_PASSWORD)) -> {
-                    _authEventsChannel.emit(passwordsValidation)
-                }
-                (usernameValidation != AuthState.Success(ValidationResults.VALID_USERNAME)) -> {
-                    _authEventsChannel.emit(usernameValidation)
-                }
-                else -> {
-                    signUpUser(email, password, username)
-                }
-            }
+            _authValidationEventsChannel.emit(emailValidation)
+            _authValidationEventsChannel.emit(passwordsValidation)
+            _authValidationEventsChannel.emit(usernameValidation)
         }
 
-    fun verifySendPasswordReset(email: String) =
-        viewModelScope.launch(coroutineDispatchers.default()) {
+    fun validateBeforePasswordReset(email: String) =
+        defaultScope.launch {
             val emailValidation = validateEmail(email)
-            if (emailValidation != AuthState.Success(ValidationResults.VALID_EMAIL)) {
-                _authEventsChannel.emit(emailValidation)
-            } else {
-                sendPasswordResetEmail(email)
-            }
+            _authValidationEventsChannel.emit(emailValidation)
         }
 
-    private fun signInUser(email: String, password: String) =
-        viewModelScope.launch(coroutineDispatchers.io()) {
+    fun signInUser(email: String, password: String) =
+        ioScope.launch {
             authUseCases.signInUseCase.invoke(email, password).collect {
                 when (it) {
                     is Resource.Success -> {
-                        _authEventsChannel.emit(AuthState.Success(ValidationResults.SUCCESS_SIGNIN))
+                        _authEventsChannel.emit(EventState.Success(it.data))
                     }
                     is Resource.Error -> {
-                        _authEventsChannel.emit(AuthState.Error(ConnectionErrorResults.GENERAL_ERROR))
+                        _authEventsChannel.emit(EventState.Error(it.message.toString()))
                     }
-                    is Resource.Loading -> _authEventsChannel.emit(AuthState.Loading)
+                    is Resource.Loading -> _authEventsChannel.emit(EventState.Loading())
                 }
             }
         }
 
-    private fun signUpUser(email: String, password: String, username: String) =
-        viewModelScope.launch(coroutineDispatchers.io()) {
+    fun signUpUser(email: String, password: String, username: String) =
+        ioScope.launch {
             authUseCases.signUpUseCase.invoke(email, password, username).collect {
                 when (it) {
                     is Resource.Success -> {
-                        _authEventsChannel.emit(AuthState.Success(ValidationResults.SUCCESS_SIGNUP))
+                        _authEventsChannel.emit(EventState.Success(it.data))
                     }
                     is Resource.Error -> {
-                        _authEventsChannel.emit(AuthState.Error(ConnectionErrorResults.GENERAL_ERROR))
+                        _authEventsChannel.emit(EventState.Error(it.message.toString()))
                     }
-                    is Resource.Loading -> _authEventsChannel.emit(AuthState.Loading)
+                    is Resource.Loading -> _authEventsChannel.emit(EventState.Loading())
                 }
             }
         }
 
-    fun signOut() = viewModelScope.launch(coroutineDispatchers.io()) {
-        authUseCases.signOutUseCase.invoke().collect {
+    fun signOut() = ioScope.launch {
+        sessionUseCases.signOutUseCase.invoke().collect {
             when (it) {
                 is Resource.Success -> {
-                    _authEventsChannel.emit(AuthState.Success(ValidationResults.SUCCESS_SIGNOUT))
+                    _authEventsChannel.emit(EventState.Success(it.data))
                 }
                 is Resource.Error -> {
-                    _authEventsChannel.emit(AuthState.Error(ConnectionErrorResults.GENERAL_ERROR))
+                    _authEventsChannel.emit(EventState.Error(it.message.toString()))
                 }
-                is Resource.Loading -> _authEventsChannel.emit(AuthState.Loading)
+                is Resource.Loading -> _authEventsChannel.emit(EventState.Loading())
             }
         }
     }
 
-    fun getCurrentUser() = viewModelScope.launch(coroutineDispatchers.io()) {
-        sessionUseCases.getCurrentUserUseCase.invoke().collect {
+    /*
+    fun getUserUidFromCache() = viewModelScope.launch(coroutineDispatchers.io()) {
+        sessionUseCases.getUserUidUseCase.invoke().collect {
             when (it) {
                 is Resource.Success -> {
-
-                    sessionUseCases.cacheUserAccountUseCase.invoke(
-                        it.data?.uid.toString(),
-                        it.data?.username.toString(),
-                        it.data?.email.toString(),
-                        it.data?.photoUrl.toString()
-                    )
-
-                    _authEventsChannel.emit(AuthState.Success(ValidationResults.SUCCESS_GOT_USER))
+                    if (it.data?.isBlank() == false) {
+                        _authEventsChannel.emit(EventState.Success("Successfully fetched the user."))
+                    }
                 }
                 is Resource.Error -> {
-                    _authEventsChannel.emit(AuthState.Error(ConnectionErrorResults.GENERAL_ERROR))
+                    _authEventsChannel.emit(EventState.Error(it.message.toString()))
                 }
-                is Resource.Loading -> _authEventsChannel.emit(AuthState.Loading)
+                is Resource.Loading -> _authEventsChannel.emit(EventState.Loading())
             }
         }
     }
 
+     */
 
-    private fun sendPasswordResetEmail(email: String) =
-        viewModelScope.launch(coroutineDispatchers.io()) {
+    fun sendPasswordResetEmail(email: String) =
+        ioScope.launch {
             authUseCases.sendResetPasswordUseCase.invoke(email).collect {
                 when (it) {
                     is Resource.Success -> {
-                        _authEventsChannel.emit(AuthState.Success(ValidationResults.SUCCESS_SENT_RESET_PASSWORD))
+                        _authEventsChannel.emit(EventState.Success(it.data))
                     }
                     is Resource.Error -> {
-                        _authEventsChannel.emit(AuthState.Error(ConnectionErrorResults.GENERAL_ERROR))
+                        _authEventsChannel.emit(EventState.Error(it.message.toString()))
                     }
-                    is Resource.Loading -> _authEventsChannel.emit(AuthState.Loading)
+                    is Resource.Loading -> _authEventsChannel.emit(EventState.Loading())
                 }
             }
         }
