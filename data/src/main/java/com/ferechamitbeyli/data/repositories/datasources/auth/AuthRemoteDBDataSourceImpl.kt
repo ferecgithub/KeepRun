@@ -50,18 +50,6 @@ class AuthRemoteDBDataSourceImpl @Inject constructor(
                 } else {
                     emit(Resource.Error("An error occurred while creating the user."))
                 }
-
-                /*
-                updateProfile(profileChangeRequest).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        flow<Resource<String>> {
-                            sendEmailVerification().await()
-                            emit(Resource.Success("User is successfully created."))
-                        }
-                    }
-                }
-
-                 */
             }
 
         }.catch {

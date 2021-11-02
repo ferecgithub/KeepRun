@@ -158,24 +158,29 @@ class SessionRemoteDataSourceImpl @Inject constructor(
     override suspend fun updateUserChangesToRemoteDB(user: User): Flow<Resource<String>> =
         flow<Resource<String>> {
 
+            var onSuccessFlag: Boolean? = null
+
             val currentUser = UserDtoMapper.mapFromDomainModel(user)
 
             val firebaseUsersDbRef =
                 FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
-            val isProcessSuccessful =
                 firebaseUsersDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                    .setValue(currentUser).isSuccessful
+                    .setValue(currentUser)
 
             val profileChangeRequest = UserProfileChangeRequest.Builder()
                 .setDisplayName(currentUser.username)
                 .build()
 
             firebaseAuth.currentUser?.apply {
-                updateProfile(profileChangeRequest).await()
-            }
+                updateProfile(profileChangeRequest).addOnCompleteListener {
+                    onSuccessFlag = it.isSuccessful
+                }
 
-            if (isProcessSuccessful) {
-                emit(Resource.Success("User is successfully updated."))
+                if (onSuccessFlag == true) {
+                    emit(Resource.Success("User is successfully updated."))
+                } else {
+                    emit(Resource.Error("An error occurred while updating the user."))
+                }
             }
 
         }.catch {
@@ -185,22 +190,27 @@ class SessionRemoteDataSourceImpl @Inject constructor(
     override suspend fun updateUsernameToRemoteDB(username: String): Flow<Resource<String>> =
         flow<Resource<String>> {
 
+            var onSuccessFlag: Boolean? = null
+
             val firebaseRealtimeDbRef =
                 FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
-            val isProcessSuccessful =
                 firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                    .child(Constants.USER_TABLE_USERNAME_REF).setValue(username).isSuccessful
+                    .child(Constants.USER_TABLE_USERNAME_REF).setValue(username)
 
             val profileChangeRequest = UserProfileChangeRequest.Builder()
                 .setDisplayName(username)
                 .build()
 
             firebaseAuth.currentUser?.apply {
-                updateProfile(profileChangeRequest).await()
-            }
+                updateProfile(profileChangeRequest).addOnCompleteListener {
+                    onSuccessFlag = it.isSuccessful
+                }
 
-            if (isProcessSuccessful) {
-                emit(Resource.Success("Username is successfully updated."))
+                if (onSuccessFlag == true) {
+                    emit(Resource.Success("Username is successfully updated."))
+                } else {
+                    emit(Resource.Error("An error occurred while updating the username."))
+                }
             }
 
         }.catch {
@@ -210,16 +220,15 @@ class SessionRemoteDataSourceImpl @Inject constructor(
     override suspend fun updateUserNotificationState(isNotificationEnabled: Boolean): Flow<Resource<String>> =
         flow<Resource<String>> {
 
+            TODO("BURAYA BAK")
+
             val firebaseRealtimeDbRef =
                 FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
-            val isProcessSuccessful =
                 firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
                     .child(Constants.USER_TABLE_NOTIFICATION_ENABLE_REF)
-                    .setValue(isNotificationEnabled).isSuccessful
+                    .setValue(isNotificationEnabled)
 
-            if (isProcessSuccessful) {
-                emit(Resource.Success("Username is successfully updated."))
-            }
+            emit(Resource.Success("Username is successfully updated."))
 
         }.catch {
             emit(Resource.Error(it.message.toString()))
