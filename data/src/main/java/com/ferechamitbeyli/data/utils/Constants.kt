@@ -46,4 +46,18 @@ object Constants {
 
     const val MAP_CAMERA_ZOOM = 15f
 
+    // Firebase Realtime Database
+    const val FIREBASE_DB_REF = "https://keeprun-c873e-default-rtdb.europe-west1.firebasedatabase.app"
+    const val USERS_TABLE_REF = "Users"
+
+    const val USER_TABLE_UID_REF = "uid"
+    const val USER_TABLE_USERNAME_REF = "username"
+    const val USER_TABLE_EMAIL_REF = "email"
+    const val USER_TABLE_NOTIFICATION_ENABLE_REF = "notificationEnable"
+    const val USER_TABLE_PHOTO_URL_REF = "photoUrl"
+
+    const val RUNS_TABLE_REF = "Runs"
+
+
+
 }

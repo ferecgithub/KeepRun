@@ -61,11 +61,15 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>() {
         }
 
         binding.forgotPassTv.setOnClickListener {
-            findNavController().navigate(R.id.action_signInFragment_to_forgotPassFragment)
+            if (findNavController().currentDestination?.id == R.id.signInFragment) {
+                findNavController().navigate(R.id.action_signInFragment_to_forgotPassFragment)
+            }
         }
 
         binding.signUpTv.setOnClickListener {
-            findNavController().navigate(R.id.action_signInFragment_to_signUpFragment)
+            if (findNavController().currentDestination?.id == R.id.signInFragment) {
+                findNavController().navigate(R.id.action_signInFragment_to_signUpFragment)
+            }
         }
 
     }

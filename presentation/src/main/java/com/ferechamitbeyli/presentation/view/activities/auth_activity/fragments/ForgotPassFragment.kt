@@ -54,7 +54,9 @@ class ForgotPassFragment : BaseFragment<FragmentForgotPassBinding>() {
         }
 
         binding.forgotPassBackBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_forgotPassFragment_to_signInFragment)
+            if (findNavController().currentDestination?.id == R.id.forgotPassFragment) {
+                findNavController().navigate(R.id.action_forgotPassFragment_to_signInFragment)
+            }
         }
 
     }
@@ -121,7 +123,9 @@ class ForgotPassFragment : BaseFragment<FragmentForgotPassBinding>() {
                     /** NO-OP **/
                 }
                 is EventState.Success -> {
-                    findNavController().navigate(R.id.action_forgotPassFragment_to_signInFragment)
+                    if (findNavController().currentDestination?.id == R.id.forgotPassFragment) {
+                        findNavController().navigate(R.id.action_forgotPassFragment_to_signInFragment)
+                    }
                     Snackbar.make(
                         binding.root,
                         "Confirmation mail has sent to your email address.",

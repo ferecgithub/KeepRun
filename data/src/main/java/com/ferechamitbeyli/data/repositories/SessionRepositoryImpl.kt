@@ -13,22 +13,55 @@ class SessionRepositoryImpl @Inject constructor(
     private val sessionRemoteDataSource: SessionRemoteDataSource
 ) : SessionRepository {
 
+    /**
+     * Functions for fetching user identifier (uid) from FirebaseAuth and sign out
+     */
+    override suspend fun getCurrentUserIdentifier(): Flow<Resource<String>> =
+        sessionRemoteDataSource.getCurrentUserIdentifier()
+
+    override suspend fun signOut(): Flow<Resource<String>> = sessionRemoteDataSource.signOut()
+
+    /**
+     * Functions for fetching and saving from/to Firebase Realtime Database
+     */
+    override suspend fun getCurrentUserFromRemoteDB(identifier: String): Flow<Resource<User>> =
+        sessionRemoteDataSource.getCurrentUserFromRemoteDB(identifier)
+
+    override suspend fun getUserUidFromRemoteDB(): Flow<Resource<String>> =
+        sessionRemoteDataSource.getUserUidFromRemoteDB()
+
+    override suspend fun getUsernameFromRemoteDB(): Flow<Resource<String>> =
+        sessionRemoteDataSource.getUsernameFromRemoteDB()
+
+    override suspend fun getUserNotificationStateFromRemoteDB(): Flow<Resource<Boolean>> =
+        sessionRemoteDataSource.getUserNotificationStateFromRemoteDB()
+
+    override suspend fun getUserPhotoUrlFromRemoteDB(): Flow<Resource<String>> =
+        sessionRemoteDataSource.getUserPhotoUrlFromRemoteDB()
+
+    override suspend fun updateUserChangesToRemoteDB(user: User): Flow<Resource<String>> =
+        sessionRemoteDataSource.updateUserChangesToRemoteDB(user)
+
+    override suspend fun updateUsernameToRemoteDB(username: String): Flow<Resource<String>> =
+        sessionRemoteDataSource.updateUsernameToRemoteDB(username)
+
+    override suspend fun updateUserNotificationState(isNotificationEnabled: Boolean): Flow<Resource<String>> =
+        sessionRemoteDataSource.updateUserNotificationState(isNotificationEnabled)
+
+    /**
+     * Functions for fetching and saving from/to Jetpack DataStore
+     */
     override suspend fun getFirstUseState(): Flow<Resource<Boolean>> =
         sessionCacheDataSource.getFirstUseState()
 
-    override suspend fun storeFirstUseState(isFirstTime: Boolean) =
+    override suspend fun cacheFirstUseState(isFirstTime: Boolean) =
         sessionCacheDataSource.storeFirstUseState(isFirstTime)
 
     override suspend fun getInitialSetupState(): Flow<Resource<Boolean>> =
         sessionCacheDataSource.getInitialSetupState()
 
-    override suspend fun storeInitialSetupState(isInitialSetupDone: Boolean) =
+    override suspend fun cacheInitialSetupState(isInitialSetupDone: Boolean) =
         sessionCacheDataSource.storeInitialSetupState(isInitialSetupDone)
-
-    override suspend fun getCurrentUser(): Flow<Resource<User>> =
-        sessionRemoteDataSource.getCurrentUser()
-
-    override suspend fun signOut(): Flow<Resource<String>> = sessionRemoteDataSource.signOut()
 
     override suspend fun cacheUserAccount(
         userUid: String,
@@ -36,7 +69,13 @@ class SessionRepositoryImpl @Inject constructor(
         userEmail: String,
         userNotificationEnabled: Boolean,
         userPhotoUrl: String
-    ) = sessionCacheDataSource.cacheUserAccount(userUid, username, userEmail, userNotificationEnabled, userPhotoUrl)
+    ) = sessionCacheDataSource.cacheUserAccount(
+        userUid,
+        username,
+        userEmail,
+        userNotificationEnabled,
+        userPhotoUrl
+    )
 
     override suspend fun getUserUid(): Flow<Resource<String>> =
         sessionCacheDataSource.getUserUid()

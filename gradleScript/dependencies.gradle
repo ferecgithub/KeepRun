@@ -54,18 +54,20 @@ ext {
     ]
 
     // AppClasspath
-    build_gradle = '7.0.3'
+    build_gradle = "7.0.3"
     kotlin_gradle_plugin = "1.5.31"
     navigation_safe_args_gradle_plugin = "2.3.5"
     hilt_android_gradle_plugin = "2.38.1"
     google_services = "4.3.10"
+    secrets_gradle_plugin = "2.0.0"
 
     AppClasspath = [
             build_gradle: "com.android.tools.build:gradle:${build_gradle}",
             kotlin_gradle_plugin: "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_gradle_plugin}",
             navigation_safe_args_gradle_plugin: "androidx.navigation:navigation-safe-args-gradle-plugin:${navigation_safe_args_gradle_plugin}",
             hilt_android_gradle_plugin: "com.google.dagger:hilt-android-gradle-plugin:${hilt_android_gradle_plugin}",
-            google_services: "com.google.gms:google-services:${google_services}"
+            google_services: "com.google.gms:google-services:${google_services}",
+            secrets_gradle_plugin: "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:${secrets_gradle_plugin}"
     ]
 
     // Lifecycle

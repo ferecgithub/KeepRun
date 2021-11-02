@@ -272,7 +272,9 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                 }
                 is EventState.Success -> {
                     Snackbar.make(binding.root, it.message.toString(), Snackbar.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.action_signUpFragment_to_signInFragment)
+                    if (findNavController().currentDestination?.id == R.id.signUpFragment) {
+                        findNavController().navigate(R.id.action_signUpFragment_to_signInFragment)
+                    }
                 }
             }
         }

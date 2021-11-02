@@ -1,5 +1,8 @@
 package com.ferechamitbeyli.data.repositories.datasources.auth
 
+import com.ferechamitbeyli.data.remote.entities.mappers.UserDtoMapper
+import com.ferechamitbeyli.data.utils.Constants.FIREBASE_DB_REF
+import com.ferechamitbeyli.data.utils.Constants.USERS_TABLE_REF
 import com.ferechamitbeyli.domain.Resource
 import com.ferechamitbeyli.domain.dispatchers.CoroutineDispatchers
 import com.ferechamitbeyli.domain.entity.User
@@ -22,19 +25,45 @@ class AuthRemoteDBDataSourceImpl @Inject constructor(
     override suspend fun createUserInRemoteDB(user: User): Flow<Resource<String>> =
         flow<Resource<String>> {
 
-            val firebaseUsersDbRef =
-                FirebaseDatabase.getInstance("https://keeprun-c873e-default-rtdb.europe-west1.firebasedatabase.app").reference
-            firebaseUsersDbRef.child("Users").child(firebaseAuth.uid!!).setValue(user)
+            var onSuccessFlag: Boolean? = null
+
+            val currentUser = UserDtoMapper.mapFromDomainModel(user)
+
+            val firebaseRealtimeDbRef =
+                FirebaseDatabase.getInstance(FIREBASE_DB_REF).reference
+            firebaseRealtimeDbRef.child(USERS_TABLE_REF).child(firebaseAuth.uid!!)
+                .setValue(currentUser)
 
             val profileChangeRequest = UserProfileChangeRequest.Builder()
-                .setDisplayName(user.username)
+                .setDisplayName(currentUser.username)
                 .build()
 
             firebaseAuth.currentUser?.apply {
-                updateProfile(profileChangeRequest).await()
+
+                updateProfile(profileChangeRequest).addOnCompleteListener {
+                    onSuccessFlag = it.isSuccessful
+                }
                 sendEmailVerification().await()
+
+                if (onSuccessFlag == true) {
+                    emit(Resource.Success("User is successfully created."))
+                } else {
+                    emit(Resource.Error("An error occurred while creating the user."))
+                }
+
+                /*
+                updateProfile(profileChangeRequest).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        flow<Resource<String>> {
+                            sendEmailVerification().await()
+                            emit(Resource.Success("User is successfully created."))
+                        }
+                    }
+                }
+
+                 */
             }
-            emit(Resource.Success("User is successfully created."))
+
         }.catch {
             emit(Resource.Error(it.message.toString()))
         }.flowOn(coroutineDispatchers.io())
