@@ -1,7 +1,7 @@
 package com.ferechamitbeyli.presentation.view.activities.auth_activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.ferechamitbeyli.presentation.R

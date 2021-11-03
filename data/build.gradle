@@ -72,6 +72,8 @@ dependencies {
     api Firebase.firebase_auth_ktx
     api Firebase.firebase_database
     api Firebase.firebase_storage
+    implementation Firebase.firebase_crashlytics
+    implementation Firebase.firebase_analytics
 
     // Coroutines
     implementation Coroutines.kotlinx_coroutines_android

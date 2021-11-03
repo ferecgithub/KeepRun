@@ -81,7 +81,7 @@ dependencies {
     // Dagger Hilt
     implementation DaggerHilt.hilt_android
     implementation DaggerHilt.hilt_lifecycle_viewmodel
-    //kapt DaggerHilt.hilt_android_compiler_kapt
+    kapt DaggerHilt.hilt_android_compiler_kapt
     kapt DaggerHilt.hilt_compiler_kapt
 
     // Glide

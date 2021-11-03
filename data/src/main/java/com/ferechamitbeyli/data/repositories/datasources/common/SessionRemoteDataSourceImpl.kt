@@ -1,7 +1,6 @@
 package com.ferechamitbeyli.data.repositories.datasources.common
 
 import com.ferechamitbeyli.data.remote.entities.UserDto
-import com.ferechamitbeyli.data.remote.entities.mappers.UserDtoMapper
 import com.ferechamitbeyli.data.utils.Constants
 import com.ferechamitbeyli.domain.DomainMapper
 import com.ferechamitbeyli.domain.Resource
@@ -67,7 +66,7 @@ class SessionRemoteDataSourceImpl @Inject constructor(
                     userPhotoUrl
                 )
 
-                emit(Resource.Success(UserDtoMapper.mapToDomainModel(userDto)))
+                emit(Resource.Success(userDtoMapper.mapToDomainModel(userDto)))
             } else {
                 emit(Resource.Error("The value does not exists in database."))
             }
@@ -85,7 +84,8 @@ class SessionRemoteDataSourceImpl @Inject constructor(
                 .get().await()
 
         if (dataSnapshotOfUserEntry.exists()) {
-            val userUid = dataSnapshotOfUserEntry.child(Constants.USER_TABLE_UID_REF).value as String
+            val userUid =
+                dataSnapshotOfUserEntry.child(Constants.USER_TABLE_UID_REF).value as String
             emit(Resource.Success(userUid))
         } else {
             emit(Resource.Error("The value does not exists in database."))
@@ -105,7 +105,8 @@ class SessionRemoteDataSourceImpl @Inject constructor(
                     .get().await()
 
             if (dataSnapshotOfUserEntry.exists()) {
-                val username = dataSnapshotOfUserEntry.child(Constants.USER_TABLE_USERNAME_REF).value as String
+                val username =
+                    dataSnapshotOfUserEntry.child(Constants.USER_TABLE_USERNAME_REF).value as String
                 emit(Resource.Success(username))
             } else {
                 emit(Resource.Error("The value does not exists in database."))
@@ -125,7 +126,8 @@ class SessionRemoteDataSourceImpl @Inject constructor(
                     .get().await()
 
             if (dataSnapshotOfUserEntry.exists()) {
-                val isNotificationEnabled = dataSnapshotOfUserEntry.child(Constants.USER_TABLE_NOTIFICATION_ENABLE_REF).value as Boolean
+                val isNotificationEnabled =
+                    dataSnapshotOfUserEntry.child(Constants.USER_TABLE_NOTIFICATION_ENABLE_REF).value as Boolean
                 emit(Resource.Success(isNotificationEnabled))
             } else {
                 emit(Resource.Error("The value does not exists in database."))
@@ -145,7 +147,8 @@ class SessionRemoteDataSourceImpl @Inject constructor(
                     .get().await()
 
             if (dataSnapshotOfUserEntry.exists()) {
-                val photoUrl = dataSnapshotOfUserEntry.child(Constants.USER_TABLE_PHOTO_URL_REF).value as String
+                val photoUrl =
+                    dataSnapshotOfUserEntry.child(Constants.USER_TABLE_PHOTO_URL_REF).value as String
                 emit(Resource.Success(photoUrl))
             } else {
                 emit(Resource.Error("The value does not exists in database."))
@@ -160,12 +163,29 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
             var onSuccessFlag: Boolean? = null
 
-            val currentUser = UserDtoMapper.mapFromDomainModel(user)
+            val currentUser = userDtoMapper.mapFromDomainModel(user)
 
+            val mappedUser = mapOf(
+                "uid" to currentUser.uid,
+                "email" to currentUser.email,
+                "username" to currentUser.username,
+                "isNotificationEnable" to currentUser.isNotificationEnable,
+                "photoUrl" to currentUser.photoUrl
+            )
+
+            /*
             val firebaseUsersDbRef =
                 FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
                 firebaseUsersDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
                     .setValue(currentUser)
+
+
+             */
+
+            val firebaseUsersDbRef =
+                FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
+            firebaseUsersDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
+                .updateChildren(mappedUser).await()
 
             val profileChangeRequest = UserProfileChangeRequest.Builder()
                 .setDisplayName(currentUser.username)
@@ -192,10 +212,14 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
             var onSuccessFlag: Boolean? = null
 
+            val mappedUsername = mapOf(
+                "username" to username
+            )
+
             val firebaseRealtimeDbRef =
                 FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
-                firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                    .child(Constants.USER_TABLE_USERNAME_REF).setValue(username)
+            firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
+                .child(Constants.USER_TABLE_USERNAME_REF).updateChildren(mappedUsername).await()
 
             val profileChangeRequest = UserProfileChangeRequest.Builder()
                 .setDisplayName(username)
@@ -205,12 +229,12 @@ class SessionRemoteDataSourceImpl @Inject constructor(
                 updateProfile(profileChangeRequest).addOnCompleteListener {
                     onSuccessFlag = it.isSuccessful
                 }
+            }
 
-                if (onSuccessFlag == true) {
-                    emit(Resource.Success("Username is successfully updated."))
-                } else {
-                    emit(Resource.Error("An error occurred while updating the username."))
-                }
+            if (onSuccessFlag == true) {
+                emit(Resource.Success("Username is successfully updated."))
+            } else {
+                emit(Resource.Error("An error occurred while updating the username."))
             }
 
         }.catch {
@@ -220,15 +244,25 @@ class SessionRemoteDataSourceImpl @Inject constructor(
     override suspend fun updateUserNotificationState(isNotificationEnabled: Boolean): Flow<Resource<String>> =
         flow<Resource<String>> {
 
-            TODO("BURAYA BAK")
+            var onSuccessFlag: Boolean? = null
+
+            val mappedUserNotificationState = mapOf(
+                "isNotificationEnable" to isNotificationEnabled
+            )
 
             val firebaseRealtimeDbRef =
                 FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
-                firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                    .child(Constants.USER_TABLE_NOTIFICATION_ENABLE_REF)
-                    .setValue(isNotificationEnabled)
+            firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
+                .child(Constants.USER_TABLE_NOTIFICATION_ENABLE_REF)
+                .updateChildren(mappedUserNotificationState).addOnCompleteListener {
+                    onSuccessFlag = it.isSuccessful
+                }
 
-            emit(Resource.Success("Username is successfully updated."))
+            if (onSuccessFlag == true) {
+                emit(Resource.Success("Notification request is successfully updated."))
+            } else {
+                emit(Resource.Error("An error occurred while updating the notification request."))
+            }
 
         }.catch {
             emit(Resource.Error(it.message.toString()))

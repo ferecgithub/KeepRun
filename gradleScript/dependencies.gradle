@@ -59,6 +59,7 @@ ext {
     navigation_safe_args_gradle_plugin = "2.3.5"
     hilt_android_gradle_plugin = "2.38.1"
     google_services = "4.3.10"
+    firebase_crashlytics_gradle = "2.8.0"
     secrets_gradle_plugin = "2.0.0"
 
     AppClasspath = [
@@ -67,6 +68,7 @@ ext {
             navigation_safe_args_gradle_plugin: "androidx.navigation:navigation-safe-args-gradle-plugin:${navigation_safe_args_gradle_plugin}",
             hilt_android_gradle_plugin: "com.google.dagger:hilt-android-gradle-plugin:${hilt_android_gradle_plugin}",
             google_services: "com.google.gms:google-services:${google_services}",
+            firebase_crashlytics_gradle: "com.google.firebase:firebase-crashlytics-gradle:${firebase_crashlytics_gradle}",
             secrets_gradle_plugin: "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:${secrets_gradle_plugin}"
     ]
 
@@ -119,12 +121,16 @@ ext {
     firebase_auth_ktx = "21.0.1"
     firebase_database = "20.0.2"
     firebase_storage = "20.0.0"
+    firebase_crashlytics = "18.2.4"
+    firebase_analytics = "20.0.0"
 
     Firebase = [
             firebase_bom: "com.google.firebase:firebase-bom:${firebase_bom}",
             firebase_auth_ktx: "com.google.firebase:firebase-auth-ktx:${firebase_auth_ktx}",
             firebase_database: "com.google.firebase:firebase-database-ktx:${firebase_database}",
-            firebase_storage: "com.google.firebase:firebase-storage-ktx:${firebase_storage}"
+            firebase_storage: "com.google.firebase:firebase-storage-ktx:${firebase_storage}",
+            firebase_crashlytics: "com.google.firebase:firebase-crashlytics-ktx:${firebase_crashlytics}",
+            firebase_analytics: "com.google.firebase:firebase-analytics-ktx:${firebase_analytics}"
 
     ]
 
@@ -171,7 +177,7 @@ ext {
     DaggerHilt = [
             hilt_android: "com.google.dagger:hilt-android:${dagger_hilt}",
             hilt_lifecycle_viewmodel: "androidx.hilt:hilt-lifecycle-viewmodel:${hilt_lifecycle_viewmodel}",
-            //hilt_android_compiler_kapt: "com.google.dagger:hilt-android-compiler:${dagger_hilt}",
+            hilt_android_compiler_kapt: "com.google.dagger:hilt-android-compiler:${dagger_hilt}",
             hilt_compiler_kapt: "com.google.dagger:hilt-compiler:${hilt_compiler}"
     ]
 
