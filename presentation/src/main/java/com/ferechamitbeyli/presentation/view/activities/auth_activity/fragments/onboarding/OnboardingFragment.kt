@@ -65,12 +65,25 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding>() {
         }
     }
 
+    private fun getCurrentUserFromRemoteDB() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        viewModel.getCurrentUserFromRemoteDB()
+        viewModel.userFromRemoteDBFlow.collect { user ->
+            if (!user.email.isNullOrBlank()) {
+                if (viewModel.cacheCurrentUser(user).isCompleted) {
+                    requireActivity().startNewActivity(HomeActivity::class.java)
+                }
+            } else {
+                getFirstUseState()
+            }
+        }
+    }
+
 
     private fun getUserEmailFromCache() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
         viewModel.getUserEmailFromCache()
-        viewModel.userEmailFlow.collect {
-            if (it.isBlank()) {
-                getFirstUseState()
+        viewModel.userEmailFlow.collect { email ->
+            if (email.isBlank()) {
+                getCurrentUserFromRemoteDB()
             } else {
                 requireActivity().startNewActivity(HomeActivity::class.java)
             }

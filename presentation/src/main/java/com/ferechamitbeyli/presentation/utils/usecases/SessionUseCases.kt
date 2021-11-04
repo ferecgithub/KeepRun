@@ -35,6 +35,7 @@ data class SessionUseCases @Inject constructor(
     val getUserEmailUseCase: GetUserEmailUseCase,
     val getUsernameUseCase: GetUsernameUseCase,
     val getUserPhotoUrlUseCase: GetUserPhotoUrlUseCase,
+    val getUserNotificationStateUseCase: GetUserNotificationStateUseCase,
 
     val cacheFirstUseStateUseCase: CacheFirstUseStateUseCase,
     val cacheInitialSetupStateUseCase: CacheInitialSetupStateUseCase,

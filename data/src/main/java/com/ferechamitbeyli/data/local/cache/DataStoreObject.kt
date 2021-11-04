@@ -54,7 +54,7 @@ class DataStoreObject @Inject constructor(@ApplicationContext appContext: Contex
 
      */
 
-    suspend fun storeUserAccount(userUid: String, username: String, userEmail: String, isNotificationEnabled: Boolean, userPhotoUrl: String) {
+    suspend fun cacheUserAccount(userUid: String, username: String, userEmail: String, isNotificationEnabled: Boolean, userPhotoUrl: String) {
         keepRunDataStore.edit {
             it[userUidCached] = userUid
             it[usernameCached] = username
@@ -64,25 +64,37 @@ class DataStoreObject @Inject constructor(@ApplicationContext appContext: Contex
         }
     }
 
-    suspend fun storeFirstUseState(isFirstTime: Boolean) {
+    suspend fun cacheUsername(username: String) {
+        keepRunDataStore.edit {
+            it[usernameCached] = username
+        }
+    }
+
+    suspend fun cacheUserNotificationState(isNotificationEnabled: Boolean) {
+        keepRunDataStore.edit {
+            it[userNotificationEnableCached] = isNotificationEnabled
+        }
+    }
+
+    suspend fun cacheFirstUseState(isFirstTime: Boolean) {
         keepRunDataStore.edit {
             it[firstUseStateCached] = isFirstTime
         }
     }
 
-    suspend fun storeInitialSetupState(isInitialSetupDone: Boolean) {
+    suspend fun cacheInitialSetupState(isInitialSetupDone: Boolean) {
         keepRunDataStore.edit {
             it[initialSetupStateCached] = isInitialSetupDone
         }
     }
 
-    suspend fun storePermissionState(hasPermission: Boolean) {
+    suspend fun cachePermissionState(hasPermission: Boolean) {
         keepRunDataStore.edit {
             it[hasPermissionCached] = hasPermission
         }
     }
 
-    suspend fun storeWeight(weight: Float) {
+    suspend fun cacheWeight(weight: Float) {
         keepRunDataStore.edit {
             it[weightCached] = weight
         }

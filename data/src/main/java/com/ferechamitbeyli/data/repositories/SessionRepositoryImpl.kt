@@ -1,11 +1,14 @@
 package com.ferechamitbeyli.data.repositories
 
+import com.ferechamitbeyli.data.remote.entities.mappers.UserDtoMapper
 import com.ferechamitbeyli.domain.Resource
 import com.ferechamitbeyli.domain.entity.User
 import com.ferechamitbeyli.domain.repository.SessionRepository
 import com.ferechamitbeyli.domain.repository.datasources.common.SessionCacheDataSource
 import com.ferechamitbeyli.domain.repository.datasources.common.SessionRemoteDataSource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class SessionRepositoryImpl @Inject constructor(
@@ -40,13 +43,44 @@ class SessionRepositoryImpl @Inject constructor(
         sessionRemoteDataSource.getUserPhotoUrlFromRemoteDB()
 
     override suspend fun updateUserChangesToRemoteDB(user: User): Flow<Resource<String>> =
-        sessionRemoteDataSource.updateUserChangesToRemoteDB(user)
+        flow<Resource<String>> {
+
+            sessionRemoteDataSource.updateUserChangesToRemoteDB(user).collect {
+                it.data?.let { successMsg ->
+                    val mappedUser = UserDtoMapper.mapFromDomainModel(user)
+                    sessionCacheDataSource.cacheUserAccount(
+                        mappedUser.uid.toString(),
+                        mappedUser.username.toString(),
+                        mappedUser.email.toString(),
+                        mappedUser.isNotificationEnable,
+                        mappedUser.photoUrl.toString()
+                    )
+                    emit(Resource.Success(successMsg))
+                }
+            }
+        }
+
 
     override suspend fun updateUsernameToRemoteDB(username: String): Flow<Resource<String>> =
-        sessionRemoteDataSource.updateUsernameToRemoteDB(username)
+        flow<Resource<String>> {
+            sessionRemoteDataSource.updateUsernameToRemoteDB(username).collect {
+                it.data?.let { successMsg ->
+                    sessionCacheDataSource.cacheUsername(username)
+                    emit(Resource.Success(successMsg))
+                }
+            }
+        }
+
 
     override suspend fun updateUserNotificationState(isNotificationEnabled: Boolean): Flow<Resource<String>> =
-        sessionRemoteDataSource.updateUserNotificationState(isNotificationEnabled)
+        flow<Resource<String>> {
+            sessionRemoteDataSource.updateUserNotificationState(isNotificationEnabled).collect {
+                it.data?.let { successMsg ->
+                    sessionCacheDataSource.cacheUserNotificationState(isNotificationEnabled)
+                    emit(Resource.Success(successMsg))
+                }
+            }
+        }
 
     /**
      * Functions for fetching and saving from/to Jetpack DataStore
@@ -85,6 +119,9 @@ class SessionRepositoryImpl @Inject constructor(
 
     override suspend fun getUserEmail(): Flow<Resource<String>> =
         sessionCacheDataSource.getUserEmail()
+
+    override suspend fun getUserNotificationState(): Flow<Resource<Boolean>> =
+        sessionCacheDataSource.getUserNotificationState()
 
     override suspend fun getUserPhotoUrl(): Flow<Resource<String>> =
         sessionCacheDataSource.getUserPhotoUrl()

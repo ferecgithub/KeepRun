@@ -221,11 +221,13 @@ ext {
             squareup_logcat: "com.squareup.logcat:logcat:${squareup_logcat}"
     ]
 
-    // Timber
-    timber = "5.0.1"
 
-    Timber = [
-            timber: "com.jakewharton.timber:timber:${timber}"
+
+    // LeakCanary
+    leakcanary_android = "2.7"
+
+    LeakCanary = [
+            leakcanary_android: "com.squareup.leakcanary:leakcanary-android:${leakcanary_android}"
     ]
 
     // MPAndroidChart

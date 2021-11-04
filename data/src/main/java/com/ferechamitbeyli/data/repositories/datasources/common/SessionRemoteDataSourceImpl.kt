@@ -40,10 +40,12 @@ class SessionRemoteDataSourceImpl @Inject constructor(
     override suspend fun getCurrentUserFromRemoteDB(identifier: String): Flow<Resource<User>> =
         flow<Resource<User>> {
 
+            emit(Resource.Loading())
+
             val firebaseRealtimeDbRef =
                 FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
             val dataSnapshotOfUserEntry =
-                firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
+                firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(identifier)
                     .get().await()
 
             if (dataSnapshotOfUserEntry.exists()) {
@@ -77,6 +79,8 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getUserUidFromRemoteDB(): Flow<Resource<String>> = flow<Resource<String>> {
 
+        emit(Resource.Loading())
+
         val firebaseRealtimeDbRef =
             FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
         val dataSnapshotOfUserEntry =
@@ -97,6 +101,8 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getUsernameFromRemoteDB(): Flow<Resource<String>> =
         flow<Resource<String>> {
+
+            emit(Resource.Loading())
 
             val firebaseRealtimeDbRef =
                 FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
@@ -119,6 +125,8 @@ class SessionRemoteDataSourceImpl @Inject constructor(
     override suspend fun getUserNotificationStateFromRemoteDB(): Flow<Resource<Boolean>> =
         flow<Resource<Boolean>> {
 
+            emit(Resource.Loading())
+
             val firebaseRealtimeDbRef =
                 FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
             val dataSnapshotOfUserEntry =
@@ -139,6 +147,8 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getUserPhotoUrlFromRemoteDB(): Flow<Resource<String>> =
         flow<Resource<String>> {
+
+            emit(Resource.Loading())
 
             val firebaseRealtimeDbRef =
                 FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
@@ -161,6 +171,8 @@ class SessionRemoteDataSourceImpl @Inject constructor(
     override suspend fun updateUserChangesToRemoteDB(user: User): Flow<Resource<String>> =
         flow<Resource<String>> {
 
+            emit(Resource.Loading())
+
             var onSuccessFlag: Boolean? = null
 
             val currentUser = userDtoMapper.mapFromDomainModel(user)
@@ -172,15 +184,6 @@ class SessionRemoteDataSourceImpl @Inject constructor(
                 "isNotificationEnable" to currentUser.isNotificationEnable,
                 "photoUrl" to currentUser.photoUrl
             )
-
-            /*
-            val firebaseUsersDbRef =
-                FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
-                firebaseUsersDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                    .setValue(currentUser)
-
-
-             */
 
             val firebaseUsersDbRef =
                 FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
@@ -194,13 +197,14 @@ class SessionRemoteDataSourceImpl @Inject constructor(
             firebaseAuth.currentUser?.apply {
                 updateProfile(profileChangeRequest).addOnCompleteListener {
                     onSuccessFlag = it.isSuccessful
-                }
 
-                if (onSuccessFlag == true) {
-                    emit(Resource.Success("User is successfully updated."))
-                } else {
-                    emit(Resource.Error("An error occurred while updating the user."))
                 }
+            }
+
+            if (onSuccessFlag == true) {
+                emit(Resource.Success("User is successfully updated."))
+            } else {
+                emit(Resource.Error("An error occurred while updating the user."))
             }
 
         }.catch {
@@ -209,6 +213,8 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun updateUsernameToRemoteDB(username: String): Flow<Resource<String>> =
         flow<Resource<String>> {
+
+            emit(Resource.Loading())
 
             var onSuccessFlag: Boolean? = null
 
@@ -243,6 +249,8 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun updateUserNotificationState(isNotificationEnabled: Boolean): Flow<Resource<String>> =
         flow<Resource<String>> {
+
+            emit(Resource.Loading())
 
             var onSuccessFlag: Boolean? = null
 

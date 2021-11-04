@@ -1,13 +1,6 @@
 package com.ferechamitbeyli.presentation.utils.usecases
 
-import com.ferechamitbeyli.domain.usecase.run.InsertRunUseCase
-import com.ferechamitbeyli.domain.usecase.run.RemoveRunUseCase
-import com.ferechamitbeyli.domain.usecase.run.getallruns.*
-import com.ferechamitbeyli.domain.usecase.run.gettotal.AverageSpeedInKMHUseCase
-import com.ferechamitbeyli.domain.usecase.run.gettotal.DistanceInMetersUseCase
-import com.ferechamitbeyli.domain.usecase.run.gettotal.StepCountUseCase
-import javax.inject.Inject
-
+/*
 data class HomeUseCases @Inject constructor(
     val getAllRunsSortedByAverageSpeedUseCase: SortedByAverageSpeedUseCase,
     val getAllRunsSortedByCaloriesBurnedUseCase: SortedByCaloriesBurnedUseCase,
@@ -24,3 +17,5 @@ data class HomeUseCases @Inject constructor(
     val insertRunUseCase: InsertRunUseCase,
     val removeRunUseCase: RemoveRunUseCase
 )
+
+ */

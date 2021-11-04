@@ -43,6 +43,7 @@ interface SessionRepository {
     suspend fun getUserUid(): Flow<Resource<String>>
     suspend fun getUsername(): Flow<Resource<String>>
     suspend fun getUserEmail(): Flow<Resource<String>>
+    suspend fun getUserNotificationState() : Flow<Resource<Boolean>>
     suspend fun getUserPhotoUrl(): Flow<Resource<String>>
 
     suspend fun getInitialSetupState(): Flow<Resource<Boolean>>

@@ -17,7 +17,7 @@ class SessionCacheDataSourceImpl @Inject constructor(
         dataStoreObject.getFirstUseState().flowOn(coroutineDispatchers.io())
 
     override suspend fun storeFirstUseState(isFirstTime: Boolean) =
-        dataStoreObject.storeFirstUseState(isFirstTime)
+        dataStoreObject.cacheFirstUseState(isFirstTime)
 
     override suspend fun cacheUserAccount(
         userUid: String,
@@ -25,7 +25,18 @@ class SessionCacheDataSourceImpl @Inject constructor(
         userEmail: String,
         userNotificationEnabled: Boolean,
         userPhotoUrl: String
-    ) = dataStoreObject.storeUserAccount(userUid, username, userEmail, userNotificationEnabled, userPhotoUrl)
+    ) = dataStoreObject.cacheUserAccount(
+        userUid,
+        username,
+        userEmail,
+        userNotificationEnabled,
+        userPhotoUrl
+    )
+
+    override suspend fun cacheUsername(username: String) = dataStoreObject.cacheUsername(username)
+
+    override suspend fun cacheUserNotificationState(isNotificationEnabled: Boolean) =
+        dataStoreObject.cacheUserNotificationState(isNotificationEnabled)
 
     override suspend fun getUserUid(): Flow<Resource<String>> =
         dataStoreObject.getUserUid().flowOn(coroutineDispatchers.io())
@@ -36,6 +47,9 @@ class SessionCacheDataSourceImpl @Inject constructor(
     override suspend fun getUserEmail(): Flow<Resource<String>> =
         dataStoreObject.getUserEmail().flowOn(coroutineDispatchers.io())
 
+    override suspend fun getUserNotificationState(): Flow<Resource<Boolean>> =
+        dataStoreObject.getNotificationEnabled()
+
     override suspend fun getUserPhotoUrl(): Flow<Resource<String>> =
         dataStoreObject.getUserPhotoUrl().flowOn(coroutineDispatchers.io())
 
@@ -43,6 +57,6 @@ class SessionCacheDataSourceImpl @Inject constructor(
         dataStoreObject.getInitialSetupState().flowOn(coroutineDispatchers.io())
 
     override suspend fun storeInitialSetupState(hasInitialSetupDone: Boolean) =
-        dataStoreObject.storeInitialSetupState(hasInitialSetupDone)
+        dataStoreObject.cacheInitialSetupState(hasInitialSetupDone)
 
 }
