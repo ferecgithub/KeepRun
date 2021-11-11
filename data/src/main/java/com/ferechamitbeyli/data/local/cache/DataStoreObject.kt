@@ -12,7 +12,7 @@ import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_USERNAME
 import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_USER_EMAIL
 import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_USER_PHOTO_URL
 import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_USER_UID
-import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_WEIGHT
+import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_USER_WEIGHT
 import com.ferechamitbeyli.data.utils.Constants.KEEPRUN_CACHE_NAME
 import com.ferechamitbeyli.domain.Resource
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -33,11 +33,11 @@ class DataStoreObject @Inject constructor(@ApplicationContext appContext: Contex
         val userUidCached = stringPreferencesKey(CACHE_KEY_FOR_USER_UID)
         val usernameCached = stringPreferencesKey(CACHE_KEY_FOR_USERNAME)
         val userEmailCached = stringPreferencesKey(CACHE_KEY_FOR_USER_EMAIL)
+        val userWeightCached = doublePreferencesKey(CACHE_KEY_FOR_USER_WEIGHT)
         val userNotificationEnableCached = booleanPreferencesKey(CACHE_KEY_FOR_NOTIFICATION_ENABLED)
         val userPhotoUrlCached = stringPreferencesKey(CACHE_KEY_FOR_USER_PHOTO_URL)
 
         /** Miscellaneous Information **/
-        val weightCached = floatPreferencesKey(CACHE_KEY_FOR_WEIGHT)
         val initialSetupStateCached = booleanPreferencesKey(CACHE_KEY_FOR_INITIAL_SETUP_DONE)
         val firstUseStateCached = booleanPreferencesKey(CACHE_KEY_FOR_FIRST_TIME_USE)
         val hasPermissionCached = booleanPreferencesKey(CACHE_KEY_FOR_HAS_PERMISSION)
@@ -54,11 +54,12 @@ class DataStoreObject @Inject constructor(@ApplicationContext appContext: Contex
 
      */
 
-    suspend fun cacheUserAccount(userUid: String, username: String, userEmail: String, isNotificationEnabled: Boolean, userPhotoUrl: String) {
+    suspend fun cacheUserAccount(userUid: String, username: String, userEmail: String, userWeight: Double, isNotificationEnabled: Boolean, userPhotoUrl: String) {
         keepRunDataStore.edit {
             it[userUidCached] = userUid
             it[usernameCached] = username
             it[userEmailCached] = userEmail
+            it[userWeightCached] = userWeight
             it[userNotificationEnableCached] = isNotificationEnabled
             it[userPhotoUrlCached] = userPhotoUrl
         }
@@ -88,15 +89,15 @@ class DataStoreObject @Inject constructor(@ApplicationContext appContext: Contex
         }
     }
 
-    suspend fun cachePermissionState(hasPermission: Boolean) {
+    suspend fun cacheUserWeight(weight: Double) {
         keepRunDataStore.edit {
-            it[hasPermissionCached] = hasPermission
+            it[userWeightCached] = weight
         }
     }
 
-    suspend fun cacheWeight(weight: Float) {
+    suspend fun cachePermissionState(hasPermission: Boolean) {
         keepRunDataStore.edit {
-            it[weightCached] = weight
+            it[hasPermissionCached] = hasPermission
         }
     }
 
@@ -131,7 +132,7 @@ class DataStoreObject @Inject constructor(@ApplicationContext appContext: Contex
     }
 
     fun getUserWeight() = keepRunDataStore.data.map {
-        Resource.Success(it[weightCached] ?: 80f)
+        Resource.Success(it[userWeightCached] ?: 0.0)
     }.catch {
         Resource.Error(it.toString(),null)
     }

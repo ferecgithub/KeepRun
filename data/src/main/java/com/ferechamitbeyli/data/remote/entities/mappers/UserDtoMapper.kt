@@ -10,6 +10,7 @@ object UserDtoMapper : DomainMapper<UserDto, User> {
         uid = model.uid,
         email = model.email,
         username = model.username,
+        weight = model.weight,
         isNotificationEnable = model.isNotificationEnable,
         photoUrl = model.photoUrl
     )
@@ -18,6 +19,7 @@ object UserDtoMapper : DomainMapper<UserDto, User> {
         uid = domainModel.uid,
         email = domainModel.email,
         username = domainModel.username,
+        weight = domainModel.weight,
         isNotificationEnable = domainModel.isNotificationEnable,
         photoUrl = domainModel.photoUrl
     )

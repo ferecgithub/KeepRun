@@ -9,23 +9,67 @@
         android:id="@+id/trackingFragment"
         android:name="com.ferechamitbeyli.presentation.view.activities.home_activity.fragments.TrackingFragment"
         android:label="fragment_tracking"
-        tools:layout="@layout/fragment_tracking" />
+        tools:layout="@layout/fragment_tracking">
+        <action
+            android:id="@+id/action_trackingFragment_to_runsFragment"
+            app:destination="@id/runsFragment" />
+        <action
+            android:id="@+id/action_trackingFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_trackingFragment_to_statisticsFragment"
+            app:destination="@id/statisticsFragment" />
+        <action
+            android:id="@+id/action_trackingFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
+    </fragment>
     <fragment
         android:id="@+id/initialFragment"
         android:name="com.ferechamitbeyli.presentation.view.activities.home_activity.fragments.InitialFragment"
         android:label="fragment_initial"
-        tools:layout="@layout/fragment_initial" >
+        tools:layout="@layout/fragment_initial">
         <action
             android:id="@+id/action_initialFragment_to_runsFragment"
-            app:destination="@id/runsFragment" />
+            app:destination="@id/runsFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popUpTo="@id/runsFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/runsFragment"
         android:name="com.ferechamitbeyli.presentation.view.activities.home_activity.fragments.RunsFragment"
         android:label="fragment_runs"
-        tools:layout="@layout/fragment_runs" >
+        tools:layout="@layout/fragment_runs">
         <action
             android:id="@+id/action_runsFragment_to_trackingFragment"
+            app:destination="@id/trackingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.ferechamitbeyli.presentation.view.activities.home_activity.fragments.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_settingsFragment_to_trackingFragment"
+            app:destination="@id/trackingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/statisticsFragment"
+        android:name="com.ferechamitbeyli.presentation.view.activities.home_activity.fragments.StatisticsFragment"
+        android:label="fragment_statistics"
+        tools:layout="@layout/fragment_statistics">
+        <action
+            android:id="@+id/action_statisticsFragment_to_trackingFragment"
+            app:destination="@id/trackingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.ferechamitbeyli.presentation.view.activities.home_activity.fragments.AboutFragment"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about">
+        <action
+            android:id="@+id/action_aboutFragment_to_trackingFragment"
             app:destination="@id/trackingFragment" />
     </fragment>
 </navigation>

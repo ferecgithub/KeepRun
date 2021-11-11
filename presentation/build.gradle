@@ -54,8 +54,13 @@ dependencies {
     implementation AndroidX.legacy_support_v4
     implementation AndroidX.core_ktx
 
-    // Google Libs
+    // Material Library
     implementation Google.material
+
+    // Play Services
+    implementation PlayServices.play_services_location
+    implementation PlayServices.play_services_maps
+    implementation PlayServices.kotlinx_coroutines_play_services
 
     // Lifecycle
     implementation Lifecycle.lifecycle_viewmodel_ktx

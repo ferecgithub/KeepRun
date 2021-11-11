@@ -14,7 +14,7 @@
     <color name="lightGrey">#F9F9F9</color>
     <color name="darkGreen">#488B49</color>
     <color name="orange">#EA920F</color>
-    <color name="darkBlue">#5083B9</color>
+    <color name="darkGrey">#646464</color>
 
     <!-- Text Colors -->
     <color name="passiveText">#DFDFDF</color>

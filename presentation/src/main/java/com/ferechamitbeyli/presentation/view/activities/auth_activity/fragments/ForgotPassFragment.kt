@@ -28,7 +28,6 @@ class ForgotPassFragment : BaseFragment<FragmentForgotPassBinding>() {
     private val viewModel: AuthViewModel by viewModels()
 
     private var validEmailFlag: Boolean = false
-    private var internetConnectionFlag: Boolean = false
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
@@ -45,6 +44,11 @@ class ForgotPassFragment : BaseFragment<FragmentForgotPassBinding>() {
 
         addTextChangeListenersToFields()
 
+        setupOnClickListeners()
+
+    }
+
+    private fun setupOnClickListeners() {
         binding.forgotPassSendBtn.setOnClickListener {
             if (validEmailFlag and internetConnectionFlag) {
                 viewModel.sendPasswordResetEmail(binding.forgotPassEmailEt.text.toString())
@@ -54,11 +58,14 @@ class ForgotPassFragment : BaseFragment<FragmentForgotPassBinding>() {
         }
 
         binding.forgotPassBackBtn.setOnClickListener {
-            if (findNavController().currentDestination?.id == R.id.forgotPassFragment) {
-                findNavController().navigate(R.id.action_forgotPassFragment_to_signInFragment)
-            }
+            navigateToSignInFragment()
         }
+    }
 
+    private fun navigateToSignInFragment() {
+        if (findNavController().currentDestination?.id == R.id.forgotPassFragment) {
+            findNavController().navigate(R.id.action_forgotPassFragment_to_signInFragment)
+        }
     }
 
     private fun enableSendButtonIfAllValid(emailFlag: Boolean) {
@@ -123,9 +130,7 @@ class ForgotPassFragment : BaseFragment<FragmentForgotPassBinding>() {
                     /** NO-OP **/
                 }
                 is EventState.Success -> {
-                    if (findNavController().currentDestination?.id == R.id.forgotPassFragment) {
-                        findNavController().navigate(R.id.action_forgotPassFragment_to_signInFragment)
-                    }
+                    navigateToSignInFragment()
                     Snackbar.make(
                         binding.root,
                         "Confirmation mail has sent to your email address.",
@@ -137,7 +142,8 @@ class ForgotPassFragment : BaseFragment<FragmentForgotPassBinding>() {
     }
 
     private fun checkInternetConnection() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        val snackBar = Snackbar.make(binding.root, "No Internet Connection", Snackbar.LENGTH_INDEFINITE)
+        val snackBar =
+            Snackbar.make(binding.root, "No Internet Connection", Snackbar.LENGTH_INDEFINITE)
         viewModel.networkState.collect {
             if (it) {
                 internetConnectionFlag = true

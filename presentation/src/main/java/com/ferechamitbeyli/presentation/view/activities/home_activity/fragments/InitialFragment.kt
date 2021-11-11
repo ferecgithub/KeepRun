@@ -4,19 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.ferechamitbeyli.presentation.R
 import com.ferechamitbeyli.presentation.databinding.FragmentInitialBinding
 import com.ferechamitbeyli.presentation.view.base.BaseFragment
-import com.ferechamitbeyli.presentation.viewmodel.activities.home_activity.HomeViewModel
+import com.ferechamitbeyli.presentation.viewmodel.activities.home_activity.fragments.InitialViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
-import logcat.logcat
 
 @AndroidEntryPoint
 class InitialFragment : BaseFragment<FragmentInitialBinding>() {
 
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: InitialViewModel by viewModels()
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
@@ -26,99 +30,83 @@ class InitialFragment : BaseFragment<FragmentInitialBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        checkInternetConnection()
+
+        hideBottomNavigationViewIfCurrentFragmentIsInitialFragment()
+
+        checkRemoteDBForWeightValue()
+
+        setupOnClickListeners()
+
+    }
+
+    private fun setupOnClickListeners() {
+        binding.submitWeightBtn.setOnClickListener {
+            viewModel.saveWeightInformation(binding.initialWeightEt.text.toString().toDouble())
+            navigateToRunsFragment()
+        }
+    }
+
+    private fun checkRemoteDBForWeightValue() =
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            getUserMailFromCache()
-            getUserUidFromCache()
-            getUsernameFromCache()
-            getUserNotificationStateFromCache()
-            getUserPhotoUrlFromCache()
-        }
-    }
-
-    private suspend fun getUserUidFromCache() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.getUserUidFromCache()
-        viewModel.userUidFlow.collectLatest {
-            logcat("FEREC") { "USERUID $it" }
-        }
-    }
-
-    private suspend fun getUserMailFromCache() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.getUserMailFromCache()
-        viewModel.userMailFlow.collectLatest {
-            logcat("FEREC") { "FEREC USERMAIL $it" }
-        }
-    }
-
-    private suspend fun getUsernameFromCache() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.getUsernameFromCache()
-        viewModel.usernameFlow.collectLatest {
-            logcat("FEREC") { "FEREC USERNAME $it" }
-        }
-    }
-
-    private suspend fun getUserNotificationStateFromCache() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.getUserNotificationStateFromCache()
-        viewModel.userNotificationStateFlow.collectLatest {
-            logcat("FEREC") { "USERNOTIFICATION ${it.toString()}" }
-        }
-    }
-
-    private suspend fun getUserPhotoUrlFromCache() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.getUserPhotoUrlFromCache()
-        viewModel.userPhotoUrlFlow.collectLatest {
-            logcat("FEREC") { "FEREC USERPHOTOURL $it" }
-        }
-    }
-
-
-
-
-
-    /*
-    private fun getCurrentUser() {
-        viewModel.getCurrentUser()
-    }
-
-    private fun listenToChannel() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.allEventsFlow.collect { event ->
-                    when(event){
-                        is AuthViewModel.AllEvents.Message ->{
-                            Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
-                        }
-                    }
+            viewModel.getUserWeightFromRemoteDB().collectLatest {
+                Toast.makeText(requireContext(), "AGIRLIK : $it", Toast.LENGTH_SHORT).show()
+                if (it != 0.0 && !it.isNaN()) {
+                    navigateToRunsFragment()
+                } else {
+                    getUsernameFromRemoteDB()
                 }
+            }
+            /*
+            viewModel.userWeightFlow.collectLatest {
+                logcat("AGIRLIK") { "DEĞERI = $it" }
+                if (it != 0.0 && !it.isNaN()) {
+                    navigateToRunsFragment()
+                } else {
+                    getUsernameFromRemoteDB()
+                }
+            }
+
+             */
+
+        }
+
+    private fun navigateToRunsFragment() {
+        if (findNavController().currentDestination?.id == R.id.initialFragment) {
+            findNavController().navigate(R.id.action_initialFragment_to_runsFragment)
+        }
+    }
+
+    private fun getUsernameFromRemoteDB() =
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.getUsernameFromRemoteDB().collectLatest {
+                if (it.isNotBlank()) {
+                    Toast.makeText(requireContext(), "USERNAME : $it", Toast.LENGTH_SHORT).show()
+                    binding.welcomeUsernameTv.text = it
+                } else {
+                    Toast.makeText(requireContext(), "USERNAME is BLANK : $it", Toast.LENGTH_SHORT).show()
+                }
+
+            }
+            /*
+            viewModel.usernameFlow.collectLatest {
+                binding.welcomeUsernameTv.text = it
+            }
+
+             */
+        }
+
+    private fun checkInternetConnection() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        val snackBar =
+            Snackbar.make(binding.root, "No Internet Connection", Snackbar.LENGTH_INDEFINITE)
+        viewModel.networkState.collect {
+            if (it) {
+                internetConnectionFlag = true
+                snackBar.dismiss()
+            } else {
+                internetConnectionFlag = false
+                snackBar.show()
             }
         }
     }
-
-    /*
-    private fun registerObserver() {
-        viewModel.currentUser.observe(viewLifecycleOwner,{ user ->
-            user?.let {
-                binding
-                binding?.apply{
-                    welcomeTxt.text = "welcome ${it.email}"
-                    signinButton.text = "sign out"
-                    signinButton.setOnClickListener {
-                        viewModel.signOut()
-                    }
-                }
-            }?: binding?.apply {
-                welcomeTxt.isVisible = false
-                signinButton.text = "sign in"
-                signinButton.setOnClickListener {
-                    findNavController().navigate(R.id.action_homeFragment_to_signInFragment)
-                }
-            }
-        })
-    }
-
-     */
-
-
-
-     */
-
 }

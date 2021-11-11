@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -32,7 +33,6 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
     private var validEmailFlag: Boolean = false
     private var validPasswordFlag: Boolean = false
     private var validConfirmPasswordFlag: Boolean = false
-    private var internetConnectionFlag: Boolean = false
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
@@ -41,6 +41,8 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setSpannableTextColorOfSignIn()
 
         checkInternetConnection()
 
@@ -53,6 +55,12 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
         )
 
         addTextChangeListenersToFields()
+
+        setupOnClickListeners()
+
+    }
+
+    private fun setupOnClickListeners() {
 
         binding.signUpBtn.setOnClickListener {
             if (validUsernameFlag and validEmailFlag and validPasswordFlag and validConfirmPasswordFlag and internetConnectionFlag) {
@@ -67,9 +75,24 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
         }
 
         binding.signUpToSignInTv.setOnClickListener {
-            findNavController().navigate(R.id.action_signUpFragment_to_signInFragment)
+            navigateToSignInFragment()
         }
 
+    }
+
+    private fun navigateToSignInFragment() {
+        if (findNavController().currentDestination?.id == R.id.signUpFragment) {
+            findNavController().navigate(R.id.action_signUpFragment_to_signInFragment)
+        }
+    }
+
+    private fun setSpannableTextColorOfSignIn() {
+        setSpannableTextColor(
+            binding.signUpToSignInTv,
+            resources.getString(R.string.already_have_acc),
+            resources.getString(R.string.sign_in),
+            ContextCompat.getColor(requireContext(), R.color.darkGreen)
+        )
     }
 
     private fun enableSignUpButtonIfAllValid(
@@ -107,7 +130,6 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
         }
 
         binding.signUpPasswordEt.addTextChangedListener {
-            logcat { "SIGNUPPASS : ${it.toString()}" }
             viewModel.validateBeforeSignUp(
                 binding.signUpUsernameEt.text.toString(),
                 binding.signUpEmailEt.text.toString(),
@@ -118,7 +140,6 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
         }
 
         binding.signUpPassAgainEt.addTextChangedListener {
-            logcat { "CONFIRMPASS : ${it.toString()}" }
             viewModel.validateBeforeSignUp(
                 binding.signUpUsernameEt.text.toString(),
                 binding.signUpEmailEt.text.toString(),

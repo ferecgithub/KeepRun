@@ -15,9 +15,17 @@ class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setupLayout()
+
+        setupNavigationComponents()
+    }
+
+    private fun setupLayout() {
         setTheme(R.style.Theme_KeepRun)
         setContentView(R.layout.activity_auth)
+    }
 
+    private fun setupNavigationComponents() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.auth_fcv)
                 as NavHostFragment
         navController = navHostFragment.navController

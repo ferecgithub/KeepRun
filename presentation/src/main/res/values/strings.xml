@@ -14,6 +14,15 @@
         Let’s burn some calories and get fit!
     </string>
 
+    <string-array name="sorting_options">
+        <item>Date</item>
+        <item>Run time</item>
+        <item>Distance</item>
+        <item>Average speed</item>
+        <item>Calories burned</item>
+        <item>Steps count</item>
+    </string-array>
+
     <string name="get_started">Get Started</string>
     <string name="welcome_w_exclamation">Welcome!</string>
     <string name="welcome">Welcome</string>
@@ -21,8 +30,8 @@
     <string name="enter_your_email">Enter your email</string>
     <string name="enter_your_password">Enter your password</string>
     <string name="forgot_your_password">Forgot your password?</string>
-    <string name="do_not_have_acc">Don\'t have an account? <font color='#488B49'>Sign Up</font></string>
-    <string name="already_have_acc">Already have an account? <font color='#488B49'>Sign In</font></string>
+    <string name="do_not_have_acc">Don\'t have an account? Sign Up</string>
+    <string name="already_have_acc">Already have an account? Sign In</string>
     <string name="welcome_onboard">Welcome Onboard!</string>
     <string name="sign_up">Sign Up</string>
     <string name="enter_your_username">Enter your user name</string>
@@ -32,8 +41,6 @@
     <string name="please_enter_your_email">Please enter your email.</string>
     <string name="send">Send</string>
     <string name="back">Back</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="fields_cant_be_empty">Fields can not be empty.</string>
     <string name="username_too_long">Username is too long</string>
     <string name="please_enter_matches_pass">Please enter a matched password</string>
@@ -43,4 +50,28 @@
     <string name="enter_your_weight">Enter your weight</string>
     <string name="submit">Submit</string>
     <string name="we_need_this_for_calculation_of_calories_burned">We need this for calculation of calories burned.</string>
+    <string name="runs">Runs</string>
+    <string name="statistics">Statistics</string>
+    <string name="runs_tab">Runs tab</string>
+    <string name="statistics_tab">Statistics tab</string>
+    <string name="settings">Settings</string>
+    <string name="settings_tab">Settings tab</string>
+    <string name="logout">Logout</string>
+    <string name="logout_button">Logout button</string>
+    <string name="start_a_run">Start a run</string>
+    <string name="recorded_runs">Recorded Runs</string>
+    <string name="sorted_by">Sorted by</string>
+    <string name="start_run">Start Run</string>
+    <string name="start_run_tab">Start run tab</string>
+    <string name="about_tab">About tab</string>
+    <string name="about">About</string>
+    <string name="about_content">KeepRun is a running application that aims for its users to make it such a healthy habit. \n\nThis application is designed and developed by Ferec Hamitbeyli. \n\nFor your further questions, feedbacks, and business inquiries, please send me an email. \n\nferechamitbeyli@gmail.com</string>
+    <string name="your_statistics">Your Statistics</string>
+    <string name="timer_start_value">00:00:00:00</string>
+    <string name="pause">Pause</string>
+    <string name="start">Start</string>
+    <string name="finish">Finish</string>
+    <string name="map_view_for_you_to_track_the_route">Map view for you to track the route</string>
+    <string name="finish_the_run">Finish the run</string>
+    <string name="pause_the_run">Pause the run</string>
 </resources>

@@ -1,9 +1,9 @@
 package com.ferechamitbeyli.data.repositories.datasources.home
 
 import com.ferechamitbeyli.data.local.db.RunDao
+import com.ferechamitbeyli.data.local.entities.RunEntity
 import com.ferechamitbeyli.domain.entity.Run
 import com.ferechamitbeyli.domain.repository.datasources.home.RunLocalDataSource
-import com.ferechamitbeyli.data.local.entities.RunEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -40,7 +40,7 @@ class RunLocalDataSourceImpl @Inject constructor(
 
     override suspend fun getTotalDistanceInMeters(): Flow<Int> = runDao.getTotalDistanceInMeters()
 
-    override suspend fun getTotalAverageSpeedInKMH(): Flow<Float> = runDao.getTotalAverageSpeedInKMH()
+    override suspend fun getTotalAverageSpeedInKMH(): Flow<Double> = runDao.getTotalAverageSpeedInKMH()
 
     override suspend fun getTotalStepCount(): Flow<Int> = runDao.getTotalStepCount()
 

@@ -4,6 +4,7 @@
     <item android:state_focused="true"
         android:drawable="@drawable/ic_mail_focused" />
 
+
     <item android:state_focused="false"
         android:drawable="@drawable/ic_mail" />
 

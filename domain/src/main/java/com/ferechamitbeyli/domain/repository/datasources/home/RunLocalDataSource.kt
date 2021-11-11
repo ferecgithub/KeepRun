@@ -18,6 +18,6 @@ interface RunLocalDataSource {
     suspend fun getTotalTimeInMillis(): Flow<Long>
     suspend fun getTotalCaloriesBurned(): Flow<Int>
     suspend fun getTotalDistanceInMeters(): Flow<Int>
-    suspend fun getTotalAverageSpeedInKMH(): Flow<Float>
+    suspend fun getTotalAverageSpeedInKMH(): Flow<Double>
     suspend fun getTotalStepCount(): Flow<Int>
 }

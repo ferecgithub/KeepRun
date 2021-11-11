@@ -13,9 +13,9 @@ object Constants {
     const val CACHE_KEY_FOR_USER_UID = "user_uid"
     const val CACHE_KEY_FOR_USERNAME = "user_name"
     const val CACHE_KEY_FOR_USER_EMAIL = "user_email"
+    const val CACHE_KEY_FOR_USER_WEIGHT = "user_weight"
     const val CACHE_KEY_FOR_NOTIFICATION_ENABLED = "notification_enabled"
     const val CACHE_KEY_FOR_USER_PHOTO_URL = "user_photo_url"
-    const val CACHE_KEY_FOR_WEIGHT = "user_weight"
     const val CACHE_KEY_FOR_FIRST_TIME_USE = "is_first_use"
     const val CACHE_KEY_FOR_INITIAL_SETUP_DONE = "initial_setup_done"
     const val CACHE_KEY_FOR_HAS_PERMISSION = "has_permission"
@@ -53,6 +53,7 @@ object Constants {
     const val USER_TABLE_UID_REF = "uid"
     const val USER_TABLE_USERNAME_REF = "username"
     const val USER_TABLE_EMAIL_REF = "email"
+    const val USER_TABLE_WEIGHT_REF = "weight"
     const val USER_TABLE_NOTIFICATION_ENABLE_REF = "notificationEnable"
     const val USER_TABLE_PHOTO_URL_REF = "photoUrl"
 

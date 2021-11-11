@@ -1,10 +1,10 @@
 package com.ferechamitbeyli.presentation.view.activities.home_activity.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
 import com.ferechamitbeyli.presentation.R
 import com.ferechamitbeyli.presentation.databinding.FragmentRunsBinding
@@ -24,5 +24,19 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        hideBottomNavigationViewIfCurrentFragmentIsInitialFragment()
+    }
+
+    private fun adjustSortingSpinner() {
+        val sortingOptions = resources.getStringArray(R.array.sorting_options)
+        val arrayAdapter =
+            ArrayAdapter(requireContext(), R.layout.runs_sort_spinner_item, sortingOptions)
+        binding.runsSortSp.setAdapter(arrayAdapter)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        adjustSortingSpinner()
     }
 }

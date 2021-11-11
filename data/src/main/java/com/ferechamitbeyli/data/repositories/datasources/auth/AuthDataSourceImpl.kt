@@ -8,6 +8,7 @@ import com.ferechamitbeyli.domain.entity.User
 import com.ferechamitbeyli.domain.repository.datasources.auth.AuthDataSource
 import com.ferechamitbeyli.domain.repository.datasources.auth.AuthRemoteDBDataSource
 import com.ferechamitbeyli.domain.repository.datasources.common.SessionCacheDataSource
+import com.ferechamitbeyli.domain.repository.datasources.common.SessionRemoteDataSource
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -16,6 +17,7 @@ import javax.inject.Inject
 
 class AuthDataSourceImpl @Inject constructor(
     private val sessionCacheDataSource: SessionCacheDataSource,
+    private val sessionRemoteDataSource: SessionRemoteDataSource,
     private val authRemoteDBDataSource: AuthRemoteDBDataSource,
     private val userDtoMapper: DomainMapper<UserDto, User>,
     private val firebaseAuth: FirebaseAuth,
@@ -33,8 +35,12 @@ class AuthDataSourceImpl @Inject constructor(
         data.user?.let { user ->
 
             val userModel = UserDto(
-                user.uid, email, username, true, ""
+                uid = user.uid,
+                email = email,
+                username = username,
+                photoUrl = ""
             )
+
             authRemoteDBDataSource.createUserInRemoteDB(userDtoMapper.mapToDomainModel(userModel))
                 .catch { dbError ->
                     emit(Resource.Error(dbError.message.toString()))
@@ -59,13 +65,30 @@ class AuthDataSourceImpl @Inject constructor(
         emit(Resource.Loading())
 
         val data = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+
+        var notificationStateFromRemoteDB: Boolean = false
+        var weightFromRemoteDB: Double = 0.0
+
+        sessionRemoteDataSource.getUserWeightFromRemoteDB().collect {
+            it.data?.let { weight ->
+                weightFromRemoteDB = weight
+            }
+        }
+
+        sessionRemoteDataSource.getUserNotificationStateFromRemoteDB().collect {
+            it.data?.let { notificationState ->
+                notificationStateFromRemoteDB = notificationState
+            }
+        }
+
         data?.let {
             if (firebaseAuth.currentUser?.isEmailVerified!!) {
                 sessionCacheDataSource.cacheUserAccount(
                     data.user?.uid.toString(),
                     data.user?.displayName.toString(),
                     data.user?.email.toString(),
-                    true,
+                    weightFromRemoteDB,
+                    notificationStateFromRemoteDB,
                     data.user?.photoUrl.toString()
                 )
                 emit(Resource.Success("Login is successful."))

@@ -68,6 +68,7 @@ class AppModule {
     @Provides
     fun provideAuthDataSource(@ApplicationContext appContext: Context): AuthDataSource = AuthDataSourceImpl(
         provideSessionCacheDataSource(appContext),
+        provideSessionRemoteDataSource(),
         provideAuthRemoteDBDataSource(),
         provideUserDtoMapper(),
         provideFirebaseAuth(),

@@ -41,7 +41,7 @@ interface RunDao {
     fun getTotalDistanceInMeters(): Flow<Int>
 
     @Query("SELECT AVG(avg_speed_in_kmh) FROM runs")
-    fun getTotalAverageSpeedInKMH(): Flow<Float>
+    fun getTotalAverageSpeedInKMH(): Flow<Double>
 
     @Query("SELECT SUM(steps) FROM runs")
     fun getTotalStepCount(): Flow<Int>

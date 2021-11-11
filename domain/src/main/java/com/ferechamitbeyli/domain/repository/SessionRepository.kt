@@ -19,12 +19,15 @@ interface SessionRepository {
     suspend fun getCurrentUserFromRemoteDB(identifier: String) : Flow<Resource<User>>
     suspend fun getUserUidFromRemoteDB() : Flow<Resource<String>>
     suspend fun getUsernameFromRemoteDB() : Flow<Resource<String>>
+    suspend fun getUserEmailFromRemoteDB() : Flow<Resource<String>>
+    suspend fun getUserWeightFromRemoteDB() : Flow<Resource<Double>>
     suspend fun getUserNotificationStateFromRemoteDB() : Flow<Resource<Boolean>>
     suspend fun getUserPhotoUrlFromRemoteDB() : Flow<Resource<String>>
 
     suspend fun updateUserChangesToRemoteDB(user: User) : Flow<Resource<String>>
     suspend fun updateUsernameToRemoteDB(username: String) : Flow<Resource<String>>
     suspend fun updateUserNotificationState(isNotificationEnabled: Boolean) : Flow<Resource<String>>
+    suspend fun updateUserWeightToRemoteDB(weight: Double) : Flow<Resource<String>>
 
 
     /**
@@ -33,19 +36,26 @@ interface SessionRepository {
     suspend fun getFirstUseState(): Flow<Resource<Boolean>>
     suspend fun cacheFirstUseState(isFirstTime: Boolean)
 
+    suspend fun getInitialSetupState(): Flow<Resource<Boolean>>
+    suspend fun cacheInitialSetupState(isInitialSetupDone: Boolean)
+
     suspend fun cacheUserAccount(
         userUid: String,
         username: String,
         userEmail: String,
+        userWeight: Double,
         userNotificationEnabled: Boolean,
         userPhotoUrl: String
     )
+
+    suspend fun cacheUsername(username: String)
+    suspend fun cacheUserNotificationState(isNotificationEnabled: Boolean)
+    suspend fun cacheUserWeight(weight: Double)
+
     suspend fun getUserUid(): Flow<Resource<String>>
     suspend fun getUsername(): Flow<Resource<String>>
     suspend fun getUserEmail(): Flow<Resource<String>>
+    suspend fun getUserWeight() : Flow<Resource<Double>>
     suspend fun getUserNotificationState() : Flow<Resource<Boolean>>
     suspend fun getUserPhotoUrl(): Flow<Resource<String>>
-
-    suspend fun getInitialSetupState(): Flow<Resource<Boolean>>
-    suspend fun cacheInitialSetupState(isInitialSetupDone: Boolean)
 }

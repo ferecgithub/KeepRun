@@ -9,6 +9,7 @@ object UserToUIMapper : DomainMapper<UserUIModel, User> {
         uid = model.uid,
         email = model.email,
         username = model.username,
+        weight = model.weight,
         isNotificationEnable = model.isNotificationEnable,
         photoUrl = model.photoUrl
     )
@@ -17,6 +18,7 @@ object UserToUIMapper : DomainMapper<UserUIModel, User> {
         uid = domainModel.uid,
         email = domainModel.email,
         username = domainModel.username,
+        weight = domainModel.weight,
         isNotificationEnable = domainModel.isNotificationEnable,
         photoUrl = domainModel.photoUrl
     )

@@ -135,6 +135,7 @@ class OnboardingViewModel @Inject constructor(
             user.uid.toString(),
             user.username.toString(),
             user.email.toString(),
+            user.weight,
             user.isNotificationEnable,
             "" //user.photoUrl.toString()
         )

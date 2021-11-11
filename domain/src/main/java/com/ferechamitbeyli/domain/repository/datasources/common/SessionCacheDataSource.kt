@@ -11,16 +11,19 @@ interface SessionCacheDataSource {
         userUid: String,
         username: String,
         userEmail: String,
+        userWeight: Double,
         userNotificationEnabled: Boolean,
         userPhotoUrl: String
     )
 
     suspend fun cacheUsername(username: String)
     suspend fun cacheUserNotificationState(isNotificationEnabled: Boolean)
+    suspend fun cacheUserWeight(weight: Double)
 
     suspend fun getUserUid(): Flow<Resource<String>>
     suspend fun getUsername(): Flow<Resource<String>>
     suspend fun getUserEmail(): Flow<Resource<String>>
+    suspend fun getUserWeight() : Flow<Resource<Double>>
     suspend fun getUserNotificationState() : Flow<Resource<Boolean>>
     suspend fun getUserPhotoUrl(): Flow<Resource<String>>
 

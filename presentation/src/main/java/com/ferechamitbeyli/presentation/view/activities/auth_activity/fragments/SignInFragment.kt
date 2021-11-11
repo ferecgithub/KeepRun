@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -32,7 +33,6 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>() {
 
     private var validEmailFlag: Boolean = false
     private var validPasswordFlag: Boolean = false
-    private var internetConnectionFlag: Boolean = false
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
@@ -42,6 +42,8 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setSpannableTextColorOfSignUp()
+
         checkInternetConnection()
 
         // Disable Sign In Button for Validation
@@ -49,6 +51,11 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>() {
 
         addTextChangeListenersToFields()
 
+        setupOnClickListeners()
+
+    }
+
+    private fun setupOnClickListeners() {
         binding.signInBtn.setOnClickListener {
             if (validEmailFlag and validPasswordFlag and internetConnectionFlag) {
                 viewModel.signInUser(
@@ -61,17 +68,33 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>() {
         }
 
         binding.forgotPassTv.setOnClickListener {
-            if (findNavController().currentDestination?.id == R.id.signInFragment) {
-                findNavController().navigate(R.id.action_signInFragment_to_forgotPassFragment)
-            }
+            navigateToForgotPassFragment()
         }
 
-        binding.signUpTv.setOnClickListener {
-            if (findNavController().currentDestination?.id == R.id.signInFragment) {
-                findNavController().navigate(R.id.action_signInFragment_to_signUpFragment)
-            }
+        binding.signInToSignUpTv.setOnClickListener {
+            navigateToSignUpFragment()
         }
+    }
 
+    private fun navigateToForgotPassFragment() {
+        if (findNavController().currentDestination?.id == R.id.signInFragment) {
+            findNavController().navigate(R.id.action_signInFragment_to_forgotPassFragment)
+        }
+    }
+
+    private fun navigateToSignUpFragment() {
+        if (findNavController().currentDestination?.id == R.id.signInFragment) {
+            findNavController().navigate(R.id.action_signInFragment_to_signUpFragment)
+        }
+    }
+
+    private fun setSpannableTextColorOfSignUp() {
+        setSpannableTextColor(
+            binding.signInToSignUpTv,
+            resources.getString(R.string.do_not_have_acc),
+            resources.getString(R.string.sign_up),
+            ContextCompat.getColor(requireContext(), R.color.darkGreen)
+        )
     }
 
     private fun enableSignInButtonIfAllValid(emailFlag: Boolean, passwordFlag: Boolean) {
@@ -171,7 +194,8 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>() {
 
 
     private fun checkInternetConnection() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        val snackBar = Snackbar.make(binding.root, "No Internet Connection", Snackbar.LENGTH_INDEFINITE)
+        val snackBar =
+            Snackbar.make(binding.root, "No Internet Connection", Snackbar.LENGTH_INDEFINITE)
         viewModel.networkState.collect {
             if (it) {
                 internetConnectionFlag = true
@@ -181,12 +205,6 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>() {
                 snackBar.show()
             }
         }
-        /*
-        viewModel.networkState.collect {
-
-        }
-
-         */
     }
 
 

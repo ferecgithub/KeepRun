@@ -46,7 +46,26 @@ class HomeViewModel @Inject constructor(
         sessionUseCases.getUsernameUseCase.invoke().collect {
             when (it) {
                 is Resource.Success -> {
-                    _usernameFlow.emit(it.data.toString())
+                    _usernameFlow.emit(capitalizeFirstLetter(it.data.toString()))
+                }
+                is Resource.Error -> {
+                    /** NO-OP **/
+                }
+                is Resource.Loading -> {
+                    /** NO-OP **/
+                }
+            }
+        }
+    }
+
+    private var _userWeightFlow = MutableStateFlow<Double>(0.0)
+    val userWeightFlow: StateFlow<Double> = _userWeightFlow
+
+    fun getUserWeightFromRemoteDB() = ioScope.launch {
+        sessionUseCases.getUserWeightFromRemoteDBUseCase.invoke().collect {
+            when (it) {
+                is Resource.Success -> {
+                    it.data?.let { weight -> _userWeightFlow.emit(weight) }
                 }
                 is Resource.Error -> {
                     /** NO-OP **/
@@ -84,7 +103,11 @@ class HomeViewModel @Inject constructor(
         sessionUseCases.getUserNotificationStateUseCase.invoke().collect {
             when (it) {
                 is Resource.Success -> {
-                    _userNotificationStateFlow.emit(it.data!!)
+                    it.data?.let { notificationState ->
+                        _userNotificationStateFlow.emit(
+                            notificationState
+                        )
+                    }
                 }
                 is Resource.Error -> {
                     /** NO-OP **/

@@ -11,7 +11,7 @@ data class RunEntity(
     var timestamp: Long = 0L,
 
     @ColumnInfo(name = "avg_speed_in_kmh")
-    var avgSpeedInKMH: Float = 0f,
+    var avgSpeedInKMH: Double = 0.0,
 
     @ColumnInfo(name = "distance_in_meters")
     var distanceInMeters: Int = 0,

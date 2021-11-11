@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/runsFragment"
+        android:contentDescription="@string/runs_tab"
+        android:icon="@drawable/custom_runs_tab_icon"
+        android:title="@string/runs" />
+
+    <item
+        android:id="@+id/statisticsFragment"
+        android:contentDescription="@string/statistics_tab"
+        android:icon="@drawable/custom_statistics_tab_icon"
+        android:title="@string/statistics" />
+
+    <item
+        android:id="@+id/start_run_placeholder_item"
+        android:enabled="false"
+        android:title="" />
+
+    <item
+        android:id="@+id/settingsFragment"
+        android:contentDescription="@string/settings_tab"
+        android:icon="@drawable/custom_settings_tab_icon"
+        android:title="@string/settings" />
+
+    <item
+        android:id="@+id/aboutFragment"
+        android:contentDescription="@string/about_tab"
+        android:icon="@drawable/custom_about_tab_icon"
+        android:title="@string/about" />
+
+</menu>

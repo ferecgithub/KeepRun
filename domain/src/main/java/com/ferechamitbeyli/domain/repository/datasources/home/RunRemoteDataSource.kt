@@ -16,7 +16,7 @@ interface RunRemoteDataSource {
     suspend fun getTotalTimeInMillisFromRemote(): Flow<Long>
     suspend fun getTotalCaloriesBurnedFromRemote(): Flow<Int>
     suspend fun getTotalDistanceInMetersFromRemote(): Flow<Int>
-    suspend fun getTotalAverageSpeedInKMHFromRemote(): Flow<Float>
+    suspend fun getTotalAverageSpeedInKMHFromRemote(): Flow<Double>
     suspend fun getTotalStepCountFromRemote(): Flow<Int>
 
 

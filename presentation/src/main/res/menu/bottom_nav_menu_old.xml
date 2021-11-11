@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/runs_tab_item"
+        android:contentDescription="@string/runs_tab"
+        android:icon="@drawable/custom_runs_tab_icon"
+        android:title="@string/runs" />
+
+    <item
+        android:id="@+id/statistics_tab_item"
+        android:contentDescription="@string/statistics_tab"
+        android:icon="@drawable/custom_statistics_tab_icon"
+        android:title="@string/statistics" />
+
+    <item
+        android:id="@+id/start_run_tab_item"
+        android:contentDescription="@string/start_run_tab"
+        android:enabled="false"
+        android:icon="@drawable/custom_add_run_icon"
+        android:title="@string/start_run" />
+
+    <item
+        android:id="@+id/settings_tab_item"
+        android:contentDescription="@string/settings_tab"
+        android:icon="@drawable/custom_settings_tab_icon"
+        android:title="@string/settings" />
+
+    <item
+        android:id="@+id/logout_item"
+        android:contentDescription="@string/logout_button"
+        android:icon="@drawable/ic_logout"
+        android:title="@string/logout" />
+
+</menu>

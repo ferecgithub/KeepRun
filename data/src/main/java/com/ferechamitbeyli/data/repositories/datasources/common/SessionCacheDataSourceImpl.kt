@@ -23,12 +23,14 @@ class SessionCacheDataSourceImpl @Inject constructor(
         userUid: String,
         username: String,
         userEmail: String,
+        userWeight: Double,
         userNotificationEnabled: Boolean,
         userPhotoUrl: String
     ) = dataStoreObject.cacheUserAccount(
         userUid,
         username,
         userEmail,
+        userWeight,
         userNotificationEnabled,
         userPhotoUrl
     )
@@ -38,6 +40,8 @@ class SessionCacheDataSourceImpl @Inject constructor(
     override suspend fun cacheUserNotificationState(isNotificationEnabled: Boolean) =
         dataStoreObject.cacheUserNotificationState(isNotificationEnabled)
 
+    override suspend fun cacheUserWeight(weight: Double) = dataStoreObject.cacheUserWeight(weight)
+
     override suspend fun getUserUid(): Flow<Resource<String>> =
         dataStoreObject.getUserUid().flowOn(coroutineDispatchers.io())
 
@@ -46,6 +50,9 @@ class SessionCacheDataSourceImpl @Inject constructor(
 
     override suspend fun getUserEmail(): Flow<Resource<String>> =
         dataStoreObject.getUserEmail().flowOn(coroutineDispatchers.io())
+
+    override suspend fun getUserWeight(): Flow<Resource<Double>> =
+        dataStoreObject.getUserWeight().flowOn(coroutineDispatchers.io())
 
     override suspend fun getUserNotificationState(): Flow<Resource<Boolean>> =
         dataStoreObject.getNotificationEnabled()

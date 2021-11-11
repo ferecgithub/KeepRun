@@ -2,22 +2,19 @@ package com.ferechamitbeyli.presentation.viewmodel.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
-import androidx.lifecycle.viewModelScope
 import com.ferechamitbeyli.domain.dispatchers.CoroutineDispatchers
 import com.ferechamitbeyli.presentation.utils.helpers.NetworkConnectionTracker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 open class BaseViewModel @Inject constructor(
     networkConnectionTracker: NetworkConnectionTracker,
     coroutineDispatchers: CoroutineDispatchers
-) :
-    ViewModel() {
+) : ViewModel() {
 
     protected val uiScope = CoroutineScope(
         coroutineDispatchers.ui() + SupervisorJob()
@@ -38,5 +35,15 @@ open class BaseViewModel @Inject constructor(
         uiScope.coroutineContext.cancelChildren()
         ioScope.coroutineContext.cancelChildren()
         defaultScope.coroutineContext.cancelChildren()
+    }
+
+    fun capitalizeFirstLetter(
+        string: String,
+        delimiter: String = " ",
+        separator: String = " "
+    ): String {
+        return string.split(delimiter).joinToString(separator = separator) {
+            it.lowercase().replaceFirstChar { char -> char.titlecase() }
+        }
     }
 }

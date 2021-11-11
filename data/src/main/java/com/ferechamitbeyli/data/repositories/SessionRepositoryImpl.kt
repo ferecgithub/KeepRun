@@ -36,6 +36,12 @@ class SessionRepositoryImpl @Inject constructor(
     override suspend fun getUsernameFromRemoteDB(): Flow<Resource<String>> =
         sessionRemoteDataSource.getUsernameFromRemoteDB()
 
+    override suspend fun getUserEmailFromRemoteDB(): Flow<Resource<String>> =
+        sessionRemoteDataSource.getUserEmailFromRemoteDB()
+
+    override suspend fun getUserWeightFromRemoteDB(): Flow<Resource<Double>> =
+        sessionRemoteDataSource.getUserWeightFromRemoteDB()
+
     override suspend fun getUserNotificationStateFromRemoteDB(): Flow<Resource<Boolean>> =
         sessionRemoteDataSource.getUserNotificationStateFromRemoteDB()
 
@@ -52,6 +58,7 @@ class SessionRepositoryImpl @Inject constructor(
                         mappedUser.uid.toString(),
                         mappedUser.username.toString(),
                         mappedUser.email.toString(),
+                        mappedUser.weight,
                         mappedUser.isNotificationEnable,
                         mappedUser.photoUrl.toString()
                     )
@@ -82,6 +89,16 @@ class SessionRepositoryImpl @Inject constructor(
             }
         }
 
+    override suspend fun updateUserWeightToRemoteDB(weight: Double): Flow<Resource<String>> =
+        flow<Resource<String>> {
+            sessionRemoteDataSource.updateUserWeightToRemoteDB(weight).collect {
+                it.data?.let { successMsg ->
+                    sessionCacheDataSource.cacheUserWeight(weight)
+                    emit(Resource.Success(successMsg))
+                }
+            }
+        }
+
     /**
      * Functions for fetching and saving from/to Jetpack DataStore
      */
@@ -101,15 +118,26 @@ class SessionRepositoryImpl @Inject constructor(
         userUid: String,
         username: String,
         userEmail: String,
+        userWeight: Double,
         userNotificationEnabled: Boolean,
         userPhotoUrl: String
     ) = sessionCacheDataSource.cacheUserAccount(
         userUid,
         username,
         userEmail,
+        userWeight,
         userNotificationEnabled,
         userPhotoUrl
     )
+
+    override suspend fun cacheUsername(username: String) =
+        sessionCacheDataSource.cacheUsername(username)
+
+    override suspend fun cacheUserNotificationState(isNotificationEnabled: Boolean) =
+        sessionCacheDataSource.cacheUserNotificationState(isNotificationEnabled)
+
+    override suspend fun cacheUserWeight(weight: Double) =
+        sessionCacheDataSource.cacheUserWeight(weight)
 
     override suspend fun getUserUid(): Flow<Resource<String>> =
         sessionCacheDataSource.getUserUid()
@@ -119,6 +147,9 @@ class SessionRepositoryImpl @Inject constructor(
 
     override suspend fun getUserEmail(): Flow<Resource<String>> =
         sessionCacheDataSource.getUserEmail()
+
+    override suspend fun getUserWeight(): Flow<Resource<Double>> =
+        sessionCacheDataSource.getUserWeight()
 
     override suspend fun getUserNotificationState(): Flow<Resource<Boolean>> =
         sessionCacheDataSource.getUserNotificationState()
