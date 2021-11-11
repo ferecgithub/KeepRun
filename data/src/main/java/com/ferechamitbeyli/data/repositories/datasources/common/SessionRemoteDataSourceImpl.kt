@@ -13,7 +13,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -41,54 +40,6 @@ class SessionRemoteDataSourceImpl @Inject constructor(
     }.catch {
         emit(Resource.Error(it.message.toString()))
     }.flowOn(coroutineDispatchers.io())
-
-
-    /*
-    override suspend fun getCurrentUserFromRemoteDB(identifier: String): Flow<Resource<User>> =
-        flow<Resource<User>> {
-
-            emit(Resource.Loading())
-
-            val firebaseRealtimeDbRef =
-                FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
-            val dataSnapshotOfUserEntry =
-                firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(identifier)
-                    .get().await()
-
-            if (dataSnapshotOfUserEntry.exists()) {
-                val userUid: String =
-                    dataSnapshotOfUserEntry.child(Constants.USER_TABLE_UID_REF).value as String
-                val username: String =
-                    dataSnapshotOfUserEntry.child(Constants.USER_TABLE_USERNAME_REF).value as String
-                val userEmail: String =
-                    dataSnapshotOfUserEntry.child(Constants.USER_TABLE_EMAIL_REF).value as String
-                val userWeight: Double =
-                    dataSnapshotOfUserEntry.child(Constants.USER_TABLE_WEIGHT_REF).value as Double
-                val userNotificationEnabled: Boolean =
-                    dataSnapshotOfUserEntry.child(Constants.USER_TABLE_NOTIFICATION_ENABLE_REF).value as Boolean
-                val userPhotoUrl: String =
-                    dataSnapshotOfUserEntry.child(Constants.USER_TABLE_PHOTO_URL_REF).value as String
-
-                val userDto = UserDto(
-                    userUid,
-                    userEmail,
-                    username,
-                    userWeight,
-                    userNotificationEnabled,
-                    userPhotoUrl
-                )
-
-                emit(Resource.Success(userDtoMapper.mapToDomainModel(userDto)))
-            } else {
-                emit(Resource.Error("The value does not exists in database."))
-            }
-
-        }.catch {
-            emit(Resource.Error(it.message.toString()))
-        }.flowOn(coroutineDispatchers.io())
-
-
-     */
 
     override suspend fun getCurrentUserFromRemoteDB(identifier: String): Flow<Resource<User>> =
         flow<Resource<User>> {
@@ -125,31 +76,6 @@ class SessionRemoteDataSourceImpl @Inject constructor(
         }.flowOn(coroutineDispatchers.io())
 
 
-    /*
-    override suspend fun getUserUidFromRemoteDB(): Flow<Resource<String>> = flow<Resource<String>> {
-
-        emit(Resource.Loading())
-
-        val firebaseRealtimeDbRef =
-            FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
-        val dataSnapshotOfUserEntry =
-            firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                .get().await()
-
-        if (dataSnapshotOfUserEntry.exists()) {
-            val userUid =
-                dataSnapshotOfUserEntry.child(Constants.USER_TABLE_UID_REF).value as String
-            emit(Resource.Success(userUid))
-        } else {
-            emit(Resource.Error("The value does not exists in database."))
-        }
-
-    }.catch {
-        emit(Resource.Error(it.message.toString()))
-    }.flowOn(coroutineDispatchers.io())
-
-     */
-
     override suspend fun getUserUidFromRemoteDB(): Flow<Resource<String>> = flow<Resource<String>> {
 
         emit(Resource.Loading())
@@ -159,8 +85,9 @@ class SessionRemoteDataSourceImpl @Inject constructor(
         val dataSnapshotOfUserUid =
             firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
                 .child(Constants.USER_TABLE_UID_REF)
-        var userUid: String? = null
+        val userUid: String = dataSnapshotOfUserUid.get().await().value.toString()
 
+        /*
         dataSnapshotOfUserUid.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 userUid = snapshot.value.toString()
@@ -173,42 +100,13 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
         })
 
-        if (userUid != null) {
-            emit(Resource.Success(userUid.toString()))
-        } else {
-            emit(Resource.Error("The value does not exists in database."))
-        }
+         */
+
+        emit(Resource.Success(userUid))
 
     }.catch {
         emit(Resource.Error(it.message.toString()))
     }.flowOn(coroutineDispatchers.io())
-
-    /*
-    override suspend fun getUserEmailFromRemoteDB(): Flow<Resource<String>> =
-        flow<Resource<String>> {
-
-            emit(Resource.Loading())
-
-            val firebaseRealtimeDbRef =
-                FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
-            val dataSnapshotOfUserEntry =
-                firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                    .get().await()
-
-            if (dataSnapshotOfUserEntry.exists()) {
-                val userEmail =
-                    dataSnapshotOfUserEntry.child(Constants.USER_TABLE_EMAIL_REF).value as String
-                emit(Resource.Success(userEmail))
-            } else {
-                emit(Resource.Error("The value does not exists in database."))
-            }
-
-        }.catch {
-            emit(Resource.Error(it.message.toString()))
-        }.flowOn(coroutineDispatchers.io())
-
-
-     */
 
     override suspend fun getUserEmailFromRemoteDB(): Flow<Resource<String>> =
         flow<Resource<String>> {
@@ -220,8 +118,9 @@ class SessionRemoteDataSourceImpl @Inject constructor(
             val dataSnapshotOfUserEmail =
                 firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
                     .child(Constants.USER_TABLE_EMAIL_REF)
-            var userEmail: String? = null
+            val userEmail: String = dataSnapshotOfUserEmail.get().await().value.toString()
 
+            /*
             dataSnapshotOfUserEmail.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     userEmail = snapshot.value.toString()
@@ -233,60 +132,13 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
             })
 
-            if (userEmail != null) {
-                emit(Resource.Success(userEmail.toString()))
-            } else {
-                emit(Resource.Error("The value does not exists in database."))
-            }
-
-        }.catch {
-            emit(Resource.Error(it.message.toString()))
-        }.flowOn(coroutineDispatchers.io())
-
-    /*
-    override suspend fun getUserWeightFromRemoteDB(): Flow<Resource<Double>> =
-        flow<Resource<Double>> {
-
-            var weight: Double? = null
-
-            emit(Resource.Loading())
-
-
-            val firebaseRealtimeDbRef =
-                FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
-            val dataSnapshotOfUserEntry =
-                firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                    .get().addOnSuccessListener {
-                        if (it.exists()) {
-                            weight =
-                                it.child(Constants.USER_TABLE_WEIGHT_REF).value.toString()
-                                    .toDouble()
-                        }
-                    }
-
-            if (weight != null) {
-                emit(Resource.Success(weight!!))
-                logcat("GETWEIGHT_SUCC") { "$weight" }
-            } else {
-                emit(Resource.Error("The value does not exists in database."))
-                logcat("GETWEIGHT_ERROR") { "" }
-            }
-            /*
-            if (dataSnapshotOfUserEntry.exists()) {
-                val userWeight: Float =
-                    dataSnapshotOfUserEntry.child(Constants.USER_TABLE_WEIGHT_REF).value as Float
-                emit(Resource.Success(userWeight))
-            } else {
-                emit(Resource.Error("The value does not exists in database."))
-            }
-
              */
 
+            emit(Resource.Success(userEmail.toString()))
+
         }.catch {
             emit(Resource.Error(it.message.toString()))
         }.flowOn(coroutineDispatchers.io())
-
-     */
 
     override suspend fun getUserWeightFromRemoteDB(): Flow<Resource<Double>> =
         flow<Resource<Double>> {
@@ -298,70 +150,13 @@ class SessionRemoteDataSourceImpl @Inject constructor(
             val dataSnapshotOfUserWeight =
                 firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
                     .child(Constants.USER_TABLE_WEIGHT_REF)
-            var weight: Double? = null
+            val weight: Double = dataSnapshotOfUserWeight.get().await().value.toString().toDouble()
 
-            dataSnapshotOfUserWeight.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    weight = snapshot.value.toString().toDouble()
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    /** NO-OP **/
-                }
-
-            })
-            //delay(800)
-            if (weight != null) {
-                emit(Resource.Success(weight!!))
-                logcat("GETWEIGHT_SUCC") { "$weight" }
-            } else {
-                emit(Resource.Error("The value does not exists in database."))
-                logcat("GETWEIGHT_ERROR") { "" }
-            }
+            emit(Resource.Success(weight))
 
         }.catch {
             emit(Resource.Error(it.message.toString()))
         }.flowOn(coroutineDispatchers.io())
-
-    /*
-    override suspend fun getUsernameFromRemoteDB(): Flow<Resource<String>> =
-        flow<Resource<String>> {
-
-            var username: String? = null
-
-            emit(Resource.Loading())
-
-            val firebaseRealtimeDbRef =
-                FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
-            val dataSnapshotOfUserEntry =
-                firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                    .get().addOnSuccessListener {
-                        if (it.exists()) {
-                            username =
-                                it.child(Constants.USER_TABLE_USERNAME_REF).value as String
-                        }
-                    }
-            if (!username.isNullOrBlank()) {
-                emit(Resource.Success(username.toString()))
-            } else {
-                emit(Resource.Error("The value does not exists in database."))
-            }
-            /*
-            if (dataSnapshotOfUserEntry.exists()) {
-                val username =
-                    dataSnapshotOfUserEntry.child(Constants.USER_TABLE_USERNAME_REF).value as String
-                emit(Resource.Success(username))
-            } else {
-                emit(Resource.Error("The value does not exists in database."))
-            }
-
-             */
-
-        }.catch {
-            emit(Resource.Error(it.message.toString()))
-        }.flowOn(coroutineDispatchers.io())
-
-     */
 
     override suspend fun getUsernameFromRemoteDB(): Flow<Resource<String>> =
         flow<Resource<String>> {
@@ -373,22 +168,11 @@ class SessionRemoteDataSourceImpl @Inject constructor(
             val dataSnapshotOfUsername =
                 firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
                     .child(Constants.USER_TABLE_USERNAME_REF)
-            var username: String? = null
+            val username: String = dataSnapshotOfUsername.get().await().value.toString()
 
-            dataSnapshotOfUsername.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    username = snapshot.value.toString()
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    /** NO-OP **/
-                }
-
-            })
-            delay(800)
-            if (!username.isNullOrBlank()) {
-                emit(Resource.Success(username.toString()))
-                logcat("USERNAME_SUCC") { "$username" }
+            if (username.isNotBlank()) {
+                emit(Resource.Success(username))
+                logcat("USERNAME_SUCC") { username }
             } else {
                 emit(Resource.Error("The value does not exists in database."))
                 logcat("USERNAME_ERR") { "" }
@@ -408,8 +192,9 @@ class SessionRemoteDataSourceImpl @Inject constructor(
             val dataSnapshotOfUserNotificationState =
                 firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
                     .child(Constants.USER_TABLE_NOTIFICATION_ENABLE_REF)
-            var notificationState: Boolean? = null
+            val notificationState: Boolean = dataSnapshotOfUserNotificationState.get().await().value.toString().toBoolean()
 
+            /*
             dataSnapshotOfUserNotificationState.addListenerForSingleValueEvent(object :
                 ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -422,67 +207,13 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
             })
 
-            if (notificationState != null) {
-                emit(Resource.Success(notificationState!!))
-            } else {
-                emit(Resource.Error("The value does not exists in database."))
-            }
+             */
+
+            emit(Resource.Success(notificationState!!))
 
         }.catch {
             emit(Resource.Error(it.message.toString()))
         }.flowOn(coroutineDispatchers.io())
-
-    /*
-    override suspend fun getUserNotificationStateFromRemoteDB(): Flow<Resource<Boolean>> =
-        flow<Resource<Boolean>> {
-
-            emit(Resource.Loading())
-
-            val firebaseRealtimeDbRef =
-                FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
-            val dataSnapshotOfUserEntry =
-                firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                    .get().await()
-
-            if (dataSnapshotOfUserEntry.exists()) {
-                val isNotificationEnabled =
-                    dataSnapshotOfUserEntry.child(Constants.USER_TABLE_NOTIFICATION_ENABLE_REF).value as Boolean
-                emit(Resource.Success(isNotificationEnabled))
-            } else {
-                emit(Resource.Error("The value does not exists in database."))
-            }
-
-        }.catch {
-            emit(Resource.Error(it.message.toString()))
-        }.flowOn(coroutineDispatchers.io())
-
-     */
-
-    /*
-    override suspend fun getUserPhotoUrlFromRemoteDB(): Flow<Resource<String>> =
-        flow<Resource<String>> {
-
-            emit(Resource.Loading())
-
-            val firebaseRealtimeDbRef =
-                FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
-            val dataSnapshotOfUserEntry =
-                firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                    .get().await()
-
-            if (dataSnapshotOfUserEntry.exists()) {
-                val photoUrl =
-                    dataSnapshotOfUserEntry.child(Constants.USER_TABLE_PHOTO_URL_REF).value as String
-                emit(Resource.Success(photoUrl))
-            } else {
-                emit(Resource.Error("The value does not exists in database."))
-            }
-
-        }.catch {
-            emit(Resource.Error(it.message.toString()))
-        }.flowOn(coroutineDispatchers.io())
-
-     */
 
     override suspend fun getUserPhotoUrlFromRemoteDB(): Flow<Resource<String>> =
         flow<Resource<String>> {
@@ -494,8 +225,9 @@ class SessionRemoteDataSourceImpl @Inject constructor(
             val dataSnapshotOfUserPhotoUrl =
                 firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
                     .child(Constants.USER_TABLE_PHOTO_URL_REF)
-            var userPhotoUrl: String? = null
+            val userPhotoUrl: String = dataSnapshotOfUserPhotoUrl.get().await().value.toString()
 
+            /*
             dataSnapshotOfUserPhotoUrl.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     userPhotoUrl = snapshot.value.toString()
@@ -507,11 +239,9 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
             })
 
-            if (userPhotoUrl != null) {
-                emit(Resource.Success(userPhotoUrl.toString()))
-            } else {
-                emit(Resource.Error("The value does not exists in database."))
-            }
+             */
+
+            emit(Resource.Success(userPhotoUrl.toString()))
 
         }.catch {
             emit(Resource.Error(it.message.toString()))

@@ -34,11 +34,10 @@ class InitialViewModel @Inject constructor(
     fun getUsernameFromRemoteDB() = flow<String> {
         sessionUseCases.getUsernameFromRemoteDBUseCaseUseCase.invoke().collect {
             when (it) {
-
                 is Resource.Success -> {
+                    it.data?.let { username -> emit(capitalizeFirstLetter(username)) }
                     logcat("USERNAME_SUCCESS") { it.data.toString() }
                     println("USERNAME_SUCCESS ${it.data.toString()} ")
-                   emit(capitalizeFirstLetter(it.data.toString()))
                 }
                 is Resource.Error -> {
                     logcat("USERNAME_ERROR") { "USERNAME_ERROR" }
@@ -117,8 +116,6 @@ class InitialViewModel @Inject constructor(
             when (it) {
                 is Resource.Success -> {
                     it.data?.let { weight -> emit(weight) }
-                    logcat("AGIRLIK_BE") { it.data.toString() }
-                    println("AGIRLIK_BE ${it.data.toString()}")
                 }
                 is Resource.Error -> {
                     /** NO-OP **/
@@ -146,7 +143,6 @@ class InitialViewModel @Inject constructor(
                 }
             }
         }
-
 
 
     }

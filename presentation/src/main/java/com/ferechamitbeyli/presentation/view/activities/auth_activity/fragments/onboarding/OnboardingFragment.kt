@@ -20,7 +20,8 @@ import com.ferechamitbeyli.presentation.view.base.BaseFragment
 import com.ferechamitbeyli.presentation.viewmodel.activities.auth_activity.fragments.onboarding.OnboardingViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import logcat.logcat
 
 @AndroidEntryPoint
 class OnboardingFragment : BaseFragment<FragmentOnboardingBinding>() {
@@ -40,7 +41,7 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding>() {
     }
 
     private fun listenOnboardingEventChannel() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.onboardingEventsFlow.collect {
+        viewModel.onboardingEventsFlow.collectLatest {
             when (it) {
                 is EventState.Error -> {
                     Snackbar.make(binding.root, it.message, Snackbar.LENGTH_LONG).show()
@@ -54,8 +55,8 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding>() {
     }
 
     private fun getFirstUseState() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.getFirstUseState()
-        viewModel.firstUseState.collect {
+        viewModel.getFirstUseState().collectLatest {
+            logcat("FIRST USE") {"First use : $it"}
             if (it) {
                 setupPager()
             } else {
@@ -65,25 +66,12 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding>() {
         }
     }
 
-    private fun getCurrentUserFromRemoteDB() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.getCurrentUserFromRemoteDB()
-        viewModel.userFromRemoteDBFlow.collect { user ->
-            if (!user.email.isNullOrBlank()) {
-                if (viewModel.cacheCurrentUser(user).isCompleted) {
-                    requireActivity().startNewActivity(HomeActivity::class.java)
-                }
-            } else {
-                getFirstUseState()
-            }
-        }
-    }
-
 
     private fun getUserEmailFromCache() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.getUserEmailFromCache()
-        viewModel.userEmailFlow.collect { email ->
+        viewModel.getUserEmailFromCache().collectLatest { email ->
+            logcat("USER_EMAIL") {"User email is $email"}
             if (email.isBlank()) {
-                getCurrentUserFromRemoteDB()
+                getFirstUseState()
             } else {
                 requireActivity().startNewActivity(HomeActivity::class.java)
             }

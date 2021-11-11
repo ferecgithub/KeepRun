@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -50,25 +49,12 @@ class InitialFragment : BaseFragment<FragmentInitialBinding>() {
     private fun checkRemoteDBForWeightValue() =
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.getUserWeightFromRemoteDB().collectLatest {
-                Toast.makeText(requireContext(), "AGIRLIK : $it", Toast.LENGTH_SHORT).show()
-                if (it != 0.0 && !it.isNaN()) {
+                if (it != 0.0) {
                     navigateToRunsFragment()
                 } else {
                     getUsernameFromRemoteDB()
                 }
             }
-            /*
-            viewModel.userWeightFlow.collectLatest {
-                logcat("AGIRLIK") { "DEĞERI = $it" }
-                if (it != 0.0 && !it.isNaN()) {
-                    navigateToRunsFragment()
-                } else {
-                    getUsernameFromRemoteDB()
-                }
-            }
-
-             */
-
         }
 
     private fun navigateToRunsFragment() {
@@ -80,20 +66,8 @@ class InitialFragment : BaseFragment<FragmentInitialBinding>() {
     private fun getUsernameFromRemoteDB() =
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.getUsernameFromRemoteDB().collectLatest {
-                if (it.isNotBlank()) {
-                    Toast.makeText(requireContext(), "USERNAME : $it", Toast.LENGTH_SHORT).show()
-                    binding.welcomeUsernameTv.text = it
-                } else {
-                    Toast.makeText(requireContext(), "USERNAME is BLANK : $it", Toast.LENGTH_SHORT).show()
-                }
-
-            }
-            /*
-            viewModel.usernameFlow.collectLatest {
                 binding.welcomeUsernameTv.text = it
             }
-
-             */
         }
 
     private fun checkInternetConnection() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
