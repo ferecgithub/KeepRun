@@ -67,7 +67,6 @@
         app:boxBackgroundMode="filled"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
-        app:errorEnabled="true"
         app:layout_constraintBottom_toBottomOf="@id/horizontal65_gl"
         app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
         app:layout_constraintStart_toStartOf="@id/vertical1_gl"

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/lightGrey"
+    android:padding="8dp">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/itemDateIcon_iv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/itemTimeIcon_iv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_date" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/itemDate_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="@id/itemDateIcon_iv"
+        app:layout_constraintStart_toStartOf="@id/itemDateIcon_iv"
+        app:layout_constraintTop_toBottomOf="@id/itemDateIcon_iv"
+        tools:text="10.10.2020" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/itemTimeIcon_iv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/itemDistanceIcon_iv"
+        app:layout_constraintStart_toEndOf="@+id/itemDateIcon_iv"
+        app:layout_constraintTop_toTopOf="@id/itemDateIcon_iv"
+        app:srcCompat="@drawable/ic_time" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/itemTime_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/itemTimeIcon_iv"
+        app:layout_constraintStart_toStartOf="@id/itemTimeIcon_iv"
+        app:layout_constraintTop_toTopOf="@id/itemDate_tv"
+        tools:text="24:60:60" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/itemDistanceIcon_iv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/itemDateIcon_iv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/itemTimeIcon_iv"
+        app:layout_constraintTop_toTopOf="@id/itemDateIcon_iv"
+        app:srcCompat="@drawable/ic_distance" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/itemDistance_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/itemDistanceIcon_iv"
+        app:layout_constraintStart_toStartOf="@id/itemDistanceIcon_iv"
+        app:layout_constraintTop_toTopOf="@id/itemDate_tv"
+        tools:text="2.56km" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/itemRunRouteGradient_iv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:elevation="1dp"
+        app:layout_constraintBottom_toBottomOf="@id/itemRunRoute1_iv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/itemRunRoute1_iv"
+        app:srcCompat="@drawable/white_gradient_background" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/itemRunRoute1_iv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemDate_tv"
+        app:srcCompat="@drawable/placeholder_route_small" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/itemRunHiddenLayout_cl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="@id/itemRunBottomLine_v"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemRunRoute1_iv">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/itemRunRoute2_iv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/placeholder_route_small" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/itemSpeedIcon_iv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/itemCaloriesIcon_iv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/itemRunRoute2_iv"
+            app:srcCompat="@drawable/ic_speed" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/itemSpeed_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/itemSpeedIcon_iv"
+            app:layout_constraintStart_toStartOf="@id/itemSpeedIcon_iv"
+            app:layout_constraintTop_toBottomOf="@id/itemSpeedIcon_iv"
+            tools:text="15.7km/h" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/itemCaloriesIcon_iv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@+id/itemStepsIcon_iv"
+            app:layout_constraintStart_toEndOf="@+id/itemSpeedIcon_iv"
+            app:layout_constraintTop_toTopOf="@id/itemSpeedIcon_iv"
+            app:srcCompat="@drawable/ic_calories" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/itemCalories_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/itemCaloriesIcon_iv"
+            app:layout_constraintStart_toStartOf="@id/itemCaloriesIcon_iv"
+            app:layout_constraintTop_toTopOf="@id/itemSpeed_tv"
+            tools:text="25kcal" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/itemStepsIcon_iv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/itemCaloriesIcon_iv"
+            app:layout_constraintTop_toTopOf="@+id/itemSpeedIcon_iv"
+            app:srcCompat="@drawable/ic_step" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/itemSteps_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/itemStepsIcon_iv"
+            app:layout_constraintStart_toStartOf="@id/itemStepsIcon_iv"
+            app:layout_constraintTop_toTopOf="@id/itemSpeed_tv"
+            tools:text="10000steps" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/itemRunBottomLine_v"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/hintText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

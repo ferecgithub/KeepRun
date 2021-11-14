@@ -33,7 +33,7 @@ class InitialFragment : BaseFragment<FragmentInitialBinding>() {
 
         hideBottomNavigationViewIfCurrentFragmentIsInitialFragment()
 
-        checkRemoteDBForWeightValue()
+        checkCacheForWeightValue()
 
         setupOnClickListeners()
 
@@ -46,10 +46,22 @@ class InitialFragment : BaseFragment<FragmentInitialBinding>() {
         }
     }
 
-    private fun checkRemoteDBForWeightValue() =
+    private fun checkCacheForWeightValue() =
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.getUserWeightFromCache().collectLatest {
+                if (it != 0.0) {
+                    navigateToRunsFragment()
+                } else {
+                    checkRemoteDBFromWeightValue()
+                }
+            }
+        }
+
+    private fun checkRemoteDBFromWeightValue() =
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.getUserWeightFromRemoteDB().collectLatest {
                 if (it != 0.0) {
+                    viewModel.saveWeightInformation(it)
                     navigateToRunsFragment()
                 } else {
                     getUsernameFromRemoteDB()

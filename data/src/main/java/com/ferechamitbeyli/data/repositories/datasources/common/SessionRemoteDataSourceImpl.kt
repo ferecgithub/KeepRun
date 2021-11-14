@@ -56,7 +56,6 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
                 override fun onDataChange(snapshot: DataSnapshot) {
                     currentUser = snapshot.getValue(UserDto::class.java)!!
-
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -87,21 +86,6 @@ class SessionRemoteDataSourceImpl @Inject constructor(
                 .child(Constants.USER_TABLE_UID_REF)
         val userUid: String = dataSnapshotOfUserUid.get().await().value.toString()
 
-        /*
-        dataSnapshotOfUserUid.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                userUid = snapshot.value.toString()
-                logcat("USERID_REMOTEDB") { userUid.toString() }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                /** NO-OP **/
-            }
-
-        })
-
-         */
-
         emit(Resource.Success(userUid))
 
     }.catch {
@@ -120,21 +104,7 @@ class SessionRemoteDataSourceImpl @Inject constructor(
                     .child(Constants.USER_TABLE_EMAIL_REF)
             val userEmail: String = dataSnapshotOfUserEmail.get().await().value.toString()
 
-            /*
-            dataSnapshotOfUserEmail.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    userEmail = snapshot.value.toString()
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    /** NO-OP **/
-                }
-
-            })
-
-             */
-
-            emit(Resource.Success(userEmail.toString()))
+            emit(Resource.Success(userEmail))
 
         }.catch {
             emit(Resource.Error(it.message.toString()))
@@ -192,24 +162,10 @@ class SessionRemoteDataSourceImpl @Inject constructor(
             val dataSnapshotOfUserNotificationState =
                 firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
                     .child(Constants.USER_TABLE_NOTIFICATION_ENABLE_REF)
-            val notificationState: Boolean = dataSnapshotOfUserNotificationState.get().await().value.toString().toBoolean()
+            val notificationState: Boolean =
+                dataSnapshotOfUserNotificationState.get().await().value.toString().toBoolean()
 
-            /*
-            dataSnapshotOfUserNotificationState.addListenerForSingleValueEvent(object :
-                ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    notificationState = snapshot.value.toString().toBoolean()
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    /** NO-OP **/
-                }
-
-            })
-
-             */
-
-            emit(Resource.Success(notificationState!!))
+            emit(Resource.Success(notificationState))
 
         }.catch {
             emit(Resource.Error(it.message.toString()))
@@ -227,21 +183,7 @@ class SessionRemoteDataSourceImpl @Inject constructor(
                     .child(Constants.USER_TABLE_PHOTO_URL_REF)
             val userPhotoUrl: String = dataSnapshotOfUserPhotoUrl.get().await().value.toString()
 
-            /*
-            dataSnapshotOfUserPhotoUrl.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    userPhotoUrl = snapshot.value.toString()
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    /** NO-OP **/
-                }
-
-            })
-
-             */
-
-            emit(Resource.Success(userPhotoUrl.toString()))
+            emit(Resource.Success(userPhotoUrl))
 
         }.catch {
             emit(Resource.Error(it.message.toString()))

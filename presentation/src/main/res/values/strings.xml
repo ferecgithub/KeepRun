@@ -54,7 +54,6 @@
     <string name="statistics">Statistics</string>
     <string name="runs_tab">Runs tab</string>
     <string name="statistics_tab">Statistics tab</string>
-    <string name="settings">Settings</string>
     <string name="settings_tab">Settings tab</string>
     <string name="logout">Logout</string>
     <string name="logout_button">Logout button</string>
@@ -74,4 +73,17 @@
     <string name="map_view_for_you_to_track_the_route">Map view for you to track the route</string>
     <string name="finish_the_run">Finish the run</string>
     <string name="pause_the_run">Pause the run</string>
+    <string name="account">Account</string>
+    <string name="settings">Settings</string>
+    <string name="application">Application</string>
+    <string name="save">Save</string>
+    <string name="sort_runs_by">Sort runs by</string>
+    <string name="logout_confirmation">Logout Confirmation</string>
+    <string name="logout_text">Are you sure you want to log out now?</string>
+    <string name="confirm_logout">Confirm logout</string>
+    <string name="cancel_logout">Cancel logout</string>
+    <string name="cancel_run_text">Are you sure you want to cancel current run?</string>
+    <string name="confirm_cancelling_the_run">Confirm cancelling the run</string>
+    <string name="confirm_cancelling_current_run">Confirm cancelling current run</string>
+    <string name="abort_cancelling_current_run">Abort cancelling current run</string>
 </resources>

@@ -1,9 +1,301 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lightGrey"
     tools:context=".view.activities.home_activity.fragments.SettingsFragment">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:fontFamily="@font/montserrat_regular"
+        android:text="@string/settings"
+        android:textSize="@dimen/paragraph2"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal1_gl"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/horizontal1_gl">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/accountTitle_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="@string/account"
+                android:textColor="@color/normalText"
+                android:textSize="@dimen/paragraph"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/settingsUsername_til"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:enabled="false"
+                android:gravity="center"
+                app:boxBackgroundMode="filled"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
+                app:layout_constraintStart_toStartOf="@id/vertical1_gl"
+                app:layout_constraintTop_toBottomOf="@+id/accountTitle_tv">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/settingsUsername_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_bg"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:gravity="center"
+                    android:inputType="textPersonName"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:textColorHint="@color/hintText"
+                    android:textSize="@dimen/paragraph"
+                    tools:hint="Username" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/settingsEmail_til"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:enabled="false"
+                android:gravity="center"
+                app:boxBackgroundMode="filled"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
+                app:layout_constraintStart_toStartOf="@id/vertical1_gl"
+                app:layout_constraintTop_toBottomOf="@id/settingsUsername_til">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/settingsEmail_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_bg"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:gravity="center"
+                    android:inputType="textEmailAddress"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:textColorHint="@color/hintText"
+                    android:textSize="@dimen/paragraph"
+                    tools:hint="Email address" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/settingsPassword_til"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                app:boxBackgroundMode="filled"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
+                app:layout_constraintStart_toStartOf="@id/vertical1_gl"
+                app:layout_constraintTop_toBottomOf="@id/settingsEmail_til"
+                app:passwordToggleEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/settingsPassword_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_bg"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:gravity="center"
+                    android:hint="@string/enter_a_password"
+                    android:inputType="textPassword"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:textColorHint="@color/hintText"
+                    android:textSize="@dimen/paragraph" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/settingsPassAgain_til"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                app:boxBackgroundMode="filled"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
+                app:layout_constraintStart_toStartOf="@id/vertical1_gl"
+                app:layout_constraintTop_toBottomOf="@id/settingsPassword_til"
+                app:passwordToggleEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/settingsPassAgain_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_bg"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:gravity="center"
+                    android:hint="@string/confirm_password"
+                    android:inputType="textPassword"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:textColorHint="@color/hintText"
+                    android:textSize="@dimen/paragraph" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/applicationTitle_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="@string/application"
+                android:textColor="@color/normalText"
+                android:textSize="@dimen/paragraph"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/settingsPassAgain_til" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/notificationState_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/montserrat_medium"
+                android:textColor="@color/normalText"
+                android:textSize="@dimen/paragraph"
+                app:layout_constraintStart_toStartOf="@id/vertical1_gl"
+                app:layout_constraintTop_toBottomOf="@id/applicationTitle_tv"
+                tools:text="Notifications enabled" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/notificationState_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:thumb="@drawable/thumb_selector"
+                app:layout_constraintBottom_toBottomOf="@id/notificationState_tv"
+                app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
+                app:layout_constraintStart_toEndOf="@id/notificationState_tv"
+                app:layout_constraintTop_toTopOf="@id/notificationState_tv"
+                app:track="@drawable/track_selector" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/settingsWeight_til"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                app:boxBackgroundMode="filled"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
+                app:layout_constraintStart_toStartOf="@id/vertical1_gl"
+                app:layout_constraintTop_toBottomOf="@id/notificationState_tv">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/settingsWeight_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_bg"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:gravity="center"
+                    android:hint="@string/enter_your_weight"
+                    android:inputType="numberDecimal"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:textColor="@color/normalText"
+                    android:textColorHint="@color/hintText" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/settingsSave_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/btn_background"
+                android:fontFamily="@font/montserrat_bold"
+                android:gravity="center"
+                android:text="@string/save"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/title3"
+                app:backgroundTint="@null"
+                app:layout_constraintEnd_toStartOf="@+id/vertical9_gl"
+                app:layout_constraintStart_toStartOf="@+id/vertical1_gl"
+                app:layout_constraintTop_toBottomOf="@id/settingsWeight_til" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/settingsLogout_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/btn_warning_background"
+                android:fontFamily="@font/montserrat_bold"
+                android:gravity="center"
+                android:text="@string/logout"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/title3"
+                app:backgroundTint="@null"
+                app:layout_constraintEnd_toStartOf="@+id/vertical9_gl"
+                app:layout_constraintStart_toStartOf="@+id/vertical1_gl"
+                app:layout_constraintTop_toBottomOf="@id/settingsSave_btn" />
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/vertical1_gl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.1" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/vertical9_gl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.9" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/settingsLogout_btn" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal1_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

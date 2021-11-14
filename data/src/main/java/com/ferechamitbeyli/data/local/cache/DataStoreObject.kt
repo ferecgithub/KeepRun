@@ -101,6 +101,25 @@ class DataStoreObject @Inject constructor(@ApplicationContext appContext: Contex
         }
     }
 
+    suspend fun resetCachedUser() {
+        keepRunDataStore.edit {
+            it[userUidCached] = ""
+            it[usernameCached] = ""
+            it[userEmailCached] = ""
+            it[userWeightCached] = 0.0
+            it[userNotificationEnableCached] = true
+            it[userPhotoUrlCached] = ""
+        }
+    }
+
+    suspend fun resetCachedStates() {
+        keepRunDataStore.edit {
+            it[initialSetupStateCached] = false
+            it[firstUseStateCached] = true
+            it[hasPermissionCached] = false
+        }
+    }
+
     fun getUserUid() = keepRunDataStore.data.map {
         Resource.Success(it[userUidCached] ?: "")
     }.catch {

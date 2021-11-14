@@ -10,4 +10,8 @@
     <dimen name="onboardingButtonHeight">85dp</dimen>
     <dimen name="onboardingButtonWidth">85dp</dimen>
 
+    <dimen name="switch_padding">-1dp</dimen>
+    <dimen name="switch_radius">24dp</dimen>
+    <dimen name="switch_size">24dp</dimen>
+
 </resources>

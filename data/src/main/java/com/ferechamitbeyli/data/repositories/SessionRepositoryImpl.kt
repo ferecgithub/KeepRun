@@ -139,6 +139,10 @@ class SessionRepositoryImpl @Inject constructor(
     override suspend fun cacheUserWeight(weight: Double) =
         sessionCacheDataSource.cacheUserWeight(weight)
 
+    override suspend fun resetCachedUser() = sessionCacheDataSource.resetCachedUser()
+
+    override suspend fun resetCachedStates() = sessionCacheDataSource.resetCachedStates()
+
     override suspend fun getUserUid(): Flow<Resource<String>> =
         sessionCacheDataSource.getUserUid()
 

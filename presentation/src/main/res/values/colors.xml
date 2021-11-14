@@ -15,6 +15,7 @@
     <color name="darkGreen">#488B49</color>
     <color name="orange">#EA920F</color>
     <color name="darkGrey">#646464</color>
+    <color name="red">#EB5757</color>
 
     <!-- Text Colors -->
     <color name="passiveText">#DFDFDF</color>

@@ -6,8 +6,6 @@ import com.ferechamitbeyli.presentation.utils.helpers.NetworkConnectionTracker
 import com.ferechamitbeyli.presentation.utils.usecases.SessionUseCases
 import com.ferechamitbeyli.presentation.viewmodel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
@@ -27,9 +25,6 @@ class InitialViewModel @Inject constructor(
     val initialEventsFlow: SharedFlow<EventState> = _initialEventsFlow
 
      */
-
-    private var _usernameFlow = MutableStateFlow<String>("")
-    val usernameFlow: StateFlow<String> = _usernameFlow
 
     fun getUsernameFromRemoteDB() = flow<String> {
         sessionUseCases.getUsernameFromRemoteDBUseCaseUseCase.invoke().collect {
@@ -51,68 +46,24 @@ class InitialViewModel @Inject constructor(
         }
     }
 
-    /*
-    fun getUsernameFromRemoteDB() = ioScope.launch {
-        sessionUseCases.getUsernameFromRemoteDBUseCaseUseCase.invoke().collect {
-            when (it) {
-                is Resource.Success -> {
-                    _usernameFlow.emit(capitalizeFirstLetter(it.data.toString()))
-                }
-                is Resource.Error -> {
-                    /** NO-OP **/
-                }
-                is Resource.Loading -> {
-                    /** NO-OP **/
-                }
-            }
-        }
-    }
-
-     */
-
-    /*
-    fun getUsernameFromCache() = ioScope.launch {
-        sessionUseCases.getUsernameUseCase.invoke().collect {
-            when (it) {
-                is Resource.Success -> {
-                    _usernameFlow.emit(capitalizeFirstLetter(it.data.toString()))
-                }
-                is Resource.Error -> {
-                    /** NO-OP **/
-                }
-                is Resource.Loading -> {
-                    /** NO-OP **/
-                }
-            }
-        }
-    }
-
-     */
-
-    private var _userWeightFlow = MutableStateFlow<Double>(0.0)
-    val userWeightFlow: StateFlow<Double> = _userWeightFlow
-
-    /*
-    fun getUserWeightFromRemoteDB() = ioScope.launch {
-        sessionUseCases.getUserWeightFromRemoteDBUseCase.invoke().collect {
-            when (it) {
-                is Resource.Success -> {
-                    it.data?.let { weight -> _userWeightFlow.emit(weight) }
-                }
-                is Resource.Error -> {
-                    /** NO-OP **/
-                }
-                is Resource.Loading -> {
-                    /** NO-OP **/
-                }
-            }
-        }
-    }
-
-     */
-
     fun getUserWeightFromRemoteDB() = flow<Double> {
         sessionUseCases.getUserWeightFromRemoteDBUseCase.invoke().collect {
+            when (it) {
+                is Resource.Success -> {
+                    it.data?.let { weight -> emit(weight) }
+                }
+                is Resource.Error -> {
+                    /** NO-OP **/
+                }
+                is Resource.Loading -> {
+                    /** NO-OP **/
+                }
+            }
+        }
+    }
+
+    fun getUserWeightFromCache() = flow<Double> {
+        sessionUseCases.getUserWeightUseCase.invoke().collect {
             when (it) {
                 is Resource.Success -> {
                     it.data?.let { weight -> emit(weight) }
@@ -143,8 +94,6 @@ class InitialViewModel @Inject constructor(
                 }
             }
         }
-
-
     }
 
 }

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_bg">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/cancelRunConfirmation_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="center"
+        android:text="@string/confirm_cancelling_the_run"
+        android:textSize="@dimen/title3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/cancelRunText_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:fontFamily="@font/montserrat_regular"
+        android:gravity="center"
+        android:text="@string/cancel_run_text"
+        android:textSize="@dimen/paragraph2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cancelRunConfirmation_tv" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/cancelRunConfirm_btn"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@drawable/btn_background"
+        android:contentDescription="@string/confirm_cancelling_current_run"
+        android:src="@drawable/ic_tick"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/vertical4_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical1_gl"
+        app:layout_constraintTop_toBottomOf="@id/cancelRunText_tv" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/cancelRunAbort_btn"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/btn_warning_background"
+        android:contentDescription="@string/abort_cancelling_current_run"
+        android:src="@drawable/ic_cross"
+        app:layout_constraintBottom_toBottomOf="@+id/cancelRunConfirm_btn"
+        app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
+        app:layout_constraintStart_toStartOf="@+id/vertical6_gl"
+        app:layout_constraintTop_toTopOf="@+id/cancelRunConfirm_btn" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical1_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical4_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical6_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.6" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical9_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,6 +27,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
 
+
     private fun setupLayout() {
         setTheme(R.style.Theme_KeepRun)
         _binding = ActivityHomeBinding.inflate(layoutInflater)
@@ -38,6 +39,7 @@ class HomeActivity : AppCompatActivity() {
                 as NavHostFragment
         navController = navHostFragment.navController
         binding.homeBnv.setupWithNavController(navController)
+        binding.homeBnv.setOnItemReselectedListener { /** NO-OP **/ }
     }
 
     private fun adjustBottomNavigationView() {

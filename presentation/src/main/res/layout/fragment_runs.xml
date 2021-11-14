@@ -40,9 +40,11 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/runsList_rv"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="8dp"
+        tools:listitem="@layout/item_run_layout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

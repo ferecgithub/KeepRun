@@ -89,9 +89,14 @@ dependencies {
     kapt DaggerHilt.hilt_android_compiler_kapt
     kapt DaggerHilt.hilt_compiler_kapt
 
+    /*
     // Glide
     implementation Glide.glide
     kapt Glide.glide_compiler_kapt
+     */
+
+    // Coil
+    implementation Coil.coil
 
     // EasyPermissions
     implementation EasyPermissions.easy_permissions

@@ -41,6 +41,9 @@ class SessionCacheDataSourceImpl @Inject constructor(
         dataStoreObject.cacheUserNotificationState(isNotificationEnabled)
 
     override suspend fun cacheUserWeight(weight: Double) = dataStoreObject.cacheUserWeight(weight)
+    override suspend fun resetCachedUser() = dataStoreObject.resetCachedUser()
+
+    override suspend fun resetCachedStates() = dataStoreObject.resetCachedStates()
 
     override suspend fun getUserUid(): Flow<Resource<String>> =
         dataStoreObject.getUserUid().flowOn(coroutineDispatchers.io())

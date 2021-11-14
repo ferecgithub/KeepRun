@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.ferechamitbeyli.presentation.R
 import com.ferechamitbeyli.presentation.databinding.FragmentRunsBinding
+import com.ferechamitbeyli.presentation.view.activities.home_activity.adapters.RunsAdapter
 import com.ferechamitbeyli.presentation.view.base.BaseFragment
 import com.ferechamitbeyli.presentation.viewmodel.activities.home_activity.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,6 +19,8 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
 
     private val viewModel: HomeViewModel by viewModels()
 
+    private lateinit var runsAdapter: RunsAdapter
+
     override fun getFragmentBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -25,6 +29,7 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupRecyclerView()
         hideBottomNavigationViewIfCurrentFragmentIsInitialFragment()
     }
 
@@ -33,6 +38,12 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
         val arrayAdapter =
             ArrayAdapter(requireContext(), R.layout.runs_sort_spinner_item, sortingOptions)
         binding.runsSortSp.setAdapter(arrayAdapter)
+    }
+
+    private fun setupRecyclerView() = binding.runsListRv.apply {
+        runsAdapter = RunsAdapter()
+        adapter = runsAdapter
+        layoutManager = LinearLayoutManager(requireContext())
     }
 
     override fun onResume() {
