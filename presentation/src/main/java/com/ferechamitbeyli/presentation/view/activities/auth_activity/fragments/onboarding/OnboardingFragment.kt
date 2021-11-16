@@ -40,27 +40,40 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding>() {
         listenOnboardingEventChannel()
     }
 
-    private fun listenOnboardingEventChannel() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.onboardingEventsFlow.collectLatest {
-            when (it) {
-                is EventState.Error -> {
-                    Snackbar.make(binding.root, it.message, Snackbar.LENGTH_LONG).show()
-                }
-                else -> {
-                    /** NO-OP **/
+    private fun listenOnboardingEventChannel() =
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.onboardingEventsFlow.collectLatest {
+                when (it) {
+                    is EventState.Error -> {
+                        Snackbar.make(binding.root, it.message, Snackbar.LENGTH_LONG).show()
+                    }
+                    else -> {
+                        /** NO-OP **/
+                    }
                 }
             }
+
         }
 
+    private fun navigateToSignInFragment() {
+        if (findNavController().currentDestination?.id == R.id.onboardingFragment) {
+            findNavController().navigate(R.id.action_onboardingFragment_to_signInFragment)
+        }
+    }
+
+    private fun navigateToHomeActivity() {
+        if (findNavController().currentDestination?.id == R.id.onboardingFragment) {
+            requireActivity().startNewActivity(HomeActivity::class.java)
+        }
     }
 
     private fun getFirstUseState() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
         viewModel.getFirstUseState().collectLatest {
-            logcat("FIRST USE") {"First use : $it"}
+            logcat("FIRST USE") { "First use : $it" }
             if (it) {
                 setupPager()
             } else {
-                findNavController().navigate(R.id.action_onboardingFragment_to_signInFragment)
+                navigateToSignInFragment()
                 hideKeyboard()
             }
         }
@@ -69,11 +82,10 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding>() {
 
     private fun getUserEmailFromCache() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
         viewModel.getUserEmailFromCache().collectLatest { email ->
-            logcat("USER_EMAIL") {"User email is $email"}
             if (email.isBlank()) {
                 getFirstUseState()
             } else {
-                requireActivity().startNewActivity(HomeActivity::class.java)
+                navigateToHomeActivity()
             }
         }
     }

@@ -29,6 +29,8 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        clearFocusFromSpinner()
+
         setupRecyclerView()
         hideBottomNavigationViewIfCurrentFragmentIsInitialFragment()
     }
@@ -44,6 +46,10 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
         runsAdapter = RunsAdapter()
         adapter = runsAdapter
         layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun clearFocusFromSpinner() {
+        binding.runsSortSp.clearFocus()
     }
 
     override fun onResume() {

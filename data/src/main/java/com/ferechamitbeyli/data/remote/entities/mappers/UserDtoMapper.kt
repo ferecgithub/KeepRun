@@ -7,7 +7,6 @@ import com.ferechamitbeyli.domain.entity.User
 object UserDtoMapper : DomainMapper<UserDto, User> {
 
     override fun mapToDomainModel(model: UserDto): User = User(
-        uid = model.uid,
         email = model.email,
         username = model.username,
         weight = model.weight,
@@ -16,7 +15,6 @@ object UserDtoMapper : DomainMapper<UserDto, User> {
     )
 
     override fun mapFromDomainModel(domainModel: User): UserDto = UserDto(
-        uid = domainModel.uid,
         email = domainModel.email,
         username = domainModel.username,
         weight = domainModel.weight,

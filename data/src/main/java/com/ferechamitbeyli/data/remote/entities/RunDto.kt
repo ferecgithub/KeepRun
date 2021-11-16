@@ -1,6 +1,6 @@
-package com.ferechamitbeyli.domain.entity
+package com.ferechamitbeyli.data.remote.entities
 
-data class Run(
+data class RunDto(
     val imageUrl: String? = null,
     val timestamp: Long = 0L,
     val avgSpeedInKMH: Double = 0.0,
@@ -9,4 +9,5 @@ data class Run(
     val caloriesBurned: Int = 0,
     val steps: Int = 0,
     val id: Long = 0L
-)
+) {
+}

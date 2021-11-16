@@ -50,14 +50,28 @@ object Constants {
     const val FIREBASE_DB_REF = "https://keeprun-c873e-default-rtdb.europe-west1.firebasedatabase.app"
     const val USERS_TABLE_REF = "Users"
 
-    const val USER_TABLE_UID_REF = "uid"
-    const val USER_TABLE_USERNAME_REF = "username"
-    const val USER_TABLE_EMAIL_REF = "email"
-    const val USER_TABLE_WEIGHT_REF = "weight"
-    const val USER_TABLE_NOTIFICATION_ENABLE_REF = "notificationEnable"
-    const val USER_TABLE_PHOTO_URL_REF = "photoUrl"
+    const val USERS_TABLE_UID_REF = "uid"
+    const val USERS_TABLE_USERNAME_REF = "username"
+    const val USERS_TABLE_EMAIL_REF = "email"
+    const val USERS_TABLE_WEIGHT_REF = "weight"
+    const val USERS_TABLE_NOTIFICATION_ENABLE_REF = "notificationEnable"
+    const val USERS_TABLE_PHOTO_URL_REF = "photoUrl"
 
     const val RUNS_TABLE_REF = "Runs"
+
+    const val RUNS_TABLE_IMAGE_URL_REF = "imageUrl"
+    const val RUNS_TABLE_TIMESTAMP_REF = "timestamp"
+    const val RUNS_TABLE_AVG_SPEED_KMH_REF = "avgSpeedInKMH"
+    const val RUNS_TABLE_DISTANCE_METERS_REF = "distanceInMeters"
+    const val RUNS_TABLE_TIME_MILLIS_REF = "timeInMillis"
+    const val RUNS_TABLE_CALORIES_BURNED_REF = "caloriesBurned"
+    const val RUNS_TABLE_STEPS_REF = "steps"
+
+    // Firebase Storage
+    const val FIREBASE_STORAGE_REF = "gs://keeprun-c873e.appspot.com"
+    const val USERS_STORAGE_REF = "Users"
+    const val RUNS_STORAGE_REF = "Runs"
+
 
 
 

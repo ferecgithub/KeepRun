@@ -28,12 +28,16 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>() {
 
     private fun showCancelRunDialog() {
         val customDialog = Dialog(requireContext())
-        customDialog.window?.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        customDialog.window?.setLayout(
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
         customDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         customDialog.window?.attributes?.windowAnimations = android.R.style.Animation_Dialog
         customDialog.setCancelable(false)
 
-        val bindingCancelRun : CancelRunDialogBinding = CancelRunDialogBinding.inflate(layoutInflater)
+        val bindingCancelRun: CancelRunDialogBinding =
+            CancelRunDialogBinding.inflate(layoutInflater)
         customDialog.setContentView(bindingCancelRun.root)
         bindingCancelRun.cancelRunConfirmBtn.setOnClickListener {
 
@@ -41,8 +45,8 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>() {
         bindingCancelRun.cancelRunAbortBtn.setOnClickListener {
 
         }
+        customDialog.show()
     }
-
 
 
 }

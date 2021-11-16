@@ -7,26 +7,26 @@ import com.ferechamitbeyli.domain.entity.Run
 
 @Entity(tableName = "runs")
 data class RunEntity(
-    var imageUrl: String? = null,
-    var timestamp: Long = 0L,
+    val imageUrl: String? = null,
+    val timestamp: Long = 0L,
 
     @ColumnInfo(name = "avg_speed_in_kmh")
-    var avgSpeedInKMH: Double = 0.0,
+    val avgSpeedInKMH: Double = 0.0,
 
     @ColumnInfo(name = "distance_in_meters")
-    var distanceInMeters: Int = 0,
+    val distanceInMeters: Int = 0,
 
     @ColumnInfo(name = "time_in_millis")
-    var timeInMillis: Long = 0L,
+    val timeInMillis: Long = 0L,
 
     @ColumnInfo(name = "calories_burned")
-    var caloriesBurned: Int = 0,
+    val caloriesBurned: Int = 0,
 
     @ColumnInfo(name = "steps")
-    var steps: Int = 0,
+    val steps: Int = 0,
 
     @PrimaryKey(autoGenerate = true)
-    var id: Long = 0L
+    val id: Long = 0L
 ) {
     companion object {
         fun fromRun(run: Run)

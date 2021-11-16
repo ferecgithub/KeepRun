@@ -86,4 +86,6 @@
     <string name="confirm_cancelling_the_run">Confirm cancelling the run</string>
     <string name="confirm_cancelling_current_run">Confirm cancelling current run</string>
     <string name="abort_cancelling_current_run">Abort cancelling current run</string>
+    <string name="notifications_enabled">Notifications enabled</string>
+    <string name="notifications_disabled">Notifications disabled</string>
 </resources>

@@ -12,7 +12,6 @@ import com.ferechamitbeyli.presentation.R
 import com.ferechamitbeyli.presentation.databinding.FragmentThirdOnboardingBinding
 import com.ferechamitbeyli.presentation.utils.helpers.AnimationHelperFunctions.setImageDrawableWithAnimation
 import com.ferechamitbeyli.presentation.view.base.BaseFragment
-import com.ferechamitbeyli.presentation.viewmodel.activities.auth_activity.AuthViewModel
 import com.ferechamitbeyli.presentation.viewmodel.activities.auth_activity.fragments.onboarding.OnboardingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -44,13 +43,23 @@ class ThirdOnboardingFragment : BaseFragment<FragmentThirdOnboardingBinding>() {
             }
         }
 
+        setupOnClickListeners()
+
+    }
+
+    private fun setupOnClickListeners() {
         binding.getStartedBtn.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
                 viewModel.storeFirstUseState(true)
-                findNavController().navigate(R.id.action_onboardingFragment_to_signInFragment)
+                navigateToSignInFragment()
             }
         }
+    }
 
+    private fun navigateToSignInFragment() {
+        if (findNavController().currentDestination?.id == R.id.onboardingFragment) {
+            findNavController().navigate(R.id.action_onboardingFragment_to_signInFragment)
+        }
     }
 
 

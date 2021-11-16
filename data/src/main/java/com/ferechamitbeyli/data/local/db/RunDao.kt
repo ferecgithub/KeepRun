@@ -10,8 +10,14 @@ interface RunDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(runEntity: RunEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMultiple(vararg runEntity: RunEntity)
+
     @Delete
     suspend fun remove(runEntity: RunEntity)
+
+    @Query("DELETE FROM runs")
+    suspend fun removeAll()
 
     @Query("SELECT * FROM runs ORDER BY timestamp DESC")
     fun getAllRunsSortedByDate(): Flow<List<RunEntity>>

@@ -6,30 +6,48 @@ import com.ferechamitbeyli.data.local.cache.DataStoreObject
 import com.ferechamitbeyli.data.local.db.DatabaseService
 import com.ferechamitbeyli.data.local.entities.RunEntity
 import com.ferechamitbeyli.data.local.entities.mappers.RunEntityMapper
+import com.ferechamitbeyli.data.remote.entities.RunDto
 import com.ferechamitbeyli.data.remote.entities.UserDto
+import com.ferechamitbeyli.data.remote.entities.mappers.RunDtoMapper
+import com.ferechamitbeyli.data.remote.entities.mappers.RunDtoToEntityMapper
 import com.ferechamitbeyli.data.remote.entities.mappers.UserDtoMapper
 import com.ferechamitbeyli.data.repositories.AuthRepositoryImpl
+import com.ferechamitbeyli.data.repositories.RunRepositoryImpl
 import com.ferechamitbeyli.data.repositories.SessionRepositoryImpl
 import com.ferechamitbeyli.data.repositories.datasources.auth.AuthDataSourceImpl
 import com.ferechamitbeyli.data.repositories.datasources.auth.AuthRemoteDBDataSourceImpl
 import com.ferechamitbeyli.data.repositories.datasources.common.SessionCacheDataSourceImpl
 import com.ferechamitbeyli.data.repositories.datasources.common.SessionRemoteDataSourceImpl
+import com.ferechamitbeyli.data.repositories.datasources.home.RunLocalDataSourceImpl
+import com.ferechamitbeyli.data.repositories.datasources.home.RunRemoteDBDataSourceImpl
 import com.ferechamitbeyli.data.utils.Constants
+import com.ferechamitbeyli.data.utils.Constants.FIREBASE_DB_REF
+import com.ferechamitbeyli.data.utils.Constants.FIREBASE_STORAGE_REF
+import com.ferechamitbeyli.data.utils.EntityMapper
 import com.ferechamitbeyli.domain.DomainMapper
 import com.ferechamitbeyli.domain.dispatchers.CoroutineDispatchers
 import com.ferechamitbeyli.domain.dispatchers.CoroutineDispatchersImpl
 import com.ferechamitbeyli.domain.entity.Run
 import com.ferechamitbeyli.domain.entity.User
 import com.ferechamitbeyli.domain.repository.AuthRepository
+import com.ferechamitbeyli.domain.repository.RunRepository
 import com.ferechamitbeyli.domain.repository.SessionRepository
 import com.ferechamitbeyli.domain.repository.datasources.auth.AuthDataSource
 import com.ferechamitbeyli.domain.repository.datasources.auth.AuthRemoteDBDataSource
 import com.ferechamitbeyli.domain.repository.datasources.common.SessionCacheDataSource
 import com.ferechamitbeyli.domain.repository.datasources.common.SessionRemoteDataSource
+import com.ferechamitbeyli.domain.repository.datasources.home.RunLocalDataSource
+import com.ferechamitbeyli.domain.repository.datasources.home.RunRemoteDataSource
+import com.ferechamitbeyli.presentation.uimodels.RunUIModel
 import com.ferechamitbeyli.presentation.uimodels.UserUIModel
+import com.ferechamitbeyli.presentation.uimodels.mappers.RunToUIMapper
 import com.ferechamitbeyli.presentation.uimodels.mappers.UserToUIMapper
 import com.ferechamitbeyli.presentation.utils.helpers.NetworkConnectionTracker
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -66,19 +84,25 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideAuthDataSource(@ApplicationContext appContext: Context): AuthDataSource = AuthDataSourceImpl(
-        provideSessionCacheDataSource(appContext),
-        provideSessionRemoteDataSource(),
-        provideAuthRemoteDBDataSource(),
-        provideUserDtoMapper(),
-        provideFirebaseAuth(),
-        provideCoroutineDispatchers()
-    )
+    fun provideAuthDataSource(@ApplicationContext appContext: Context): AuthDataSource =
+        AuthDataSourceImpl(
+            provideSessionCacheDataSource(appContext),
+            provideSessionRemoteDataSource(),
+            provideAuthRemoteDBDataSource(),
+            provideUserDtoMapper(),
+            provideFirebaseAuth(),
+            provideCoroutineDispatchers()
+        )
 
     @Singleton
     @Provides
     fun provideAuthRemoteDBDataSource(): AuthRemoteDBDataSource =
-        AuthRemoteDBDataSourceImpl(provideFirebaseAuth(), provideCoroutineDispatchers())
+        AuthRemoteDBDataSourceImpl(
+            provideFirebaseAuth(),
+            provideFirebaseDatabaseReference(),
+            provideUserDtoMapper(),
+            provideCoroutineDispatchers()
+        )
 
     @Singleton
     @Provides
@@ -93,6 +117,7 @@ class AppModule {
     fun provideSessionRemoteDataSource(): SessionRemoteDataSource =
         SessionRemoteDataSourceImpl(
             provideFirebaseAuth(),
+            provideFirebaseDatabaseReference(),
             provideUserDtoMapper(),
             provideCoroutineDispatchers()
         )
@@ -103,8 +128,10 @@ class AppModule {
     @Provides
     fun provideSessionRepository(@ApplicationContext appContext: Context): SessionRepository =
         SessionRepositoryImpl(
+            provideFirebaseAuth(),
             provideSessionCacheDataSource(appContext),
-            provideSessionRemoteDataSource()
+            provideSessionRemoteDataSource(),
+            provideCoroutineDispatchers()
         )
 
     @Singleton
@@ -129,10 +156,55 @@ class AppModule {
     fun provideUserToUIMapper(): DomainMapper<UserUIModel, User> =
         UserToUIMapper
 
+    @Singleton
+    @Provides
+    fun provideRunToUIMapper(): DomainMapper<RunUIModel, Run> =
+        RunToUIMapper
+
+    @Singleton
+    @Provides
+    fun provideRunDtoMapper(): DomainMapper<RunDto, Run> =
+        RunDtoMapper
+
+    @Singleton
+    @Provides
+    fun provideRunDtoToEntityMapper(): EntityMapper<RunDto, RunEntity> =
+        RunDtoToEntityMapper
+
     /** Data Sources **/
+
+    @Singleton
+    @Provides
+    fun provideRunLocalDataSource(@ApplicationContext appContext: Context): RunLocalDataSource =
+        RunLocalDataSourceImpl(
+            provideRunDao(provideRunDatabase(appContext)),
+            provideRunEntityMapper(),
+            provideCoroutineDispatchers()
+        )
+
+    @Singleton
+    @Provides
+    fun provideRunRemoteDataSource(@ApplicationContext appContext: Context): RunRemoteDataSource =
+        RunRemoteDBDataSourceImpl(
+            provideRunDao(provideRunDatabase(appContext)),
+            provideFirebaseAuth(),
+            provideFirebaseDatabaseReference(),
+            provideFirebaseStorageReference(),
+            provideRunDtoMapper(),
+            provideRunDtoToEntityMapper(),
+            provideCoroutineDispatchers()
+        )
 
     /** Repositories **/
 
+    @Singleton
+    @Provides
+    fun provideRunRepository(@ApplicationContext appContext: Context): RunRepository =
+        RunRepositoryImpl(
+            provideRunLocalDataSource(appContext),
+            provideRunRemoteDataSource(appContext),
+            provideCoroutineDispatchers()
+        )
 
     /** -------------------- End of Home provide functions -------------------- **/
 
@@ -141,8 +213,8 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideNetworkConnectionTracker(@ApplicationContext appContext: Context): NetworkConnectionTracker = NetworkConnectionTracker(appContext)
-
+    fun provideNetworkConnectionTracker(@ApplicationContext appContext: Context): NetworkConnectionTracker =
+        NetworkConnectionTracker(appContext)
 
 
     /** Retrofit provide functions **/
@@ -174,5 +246,17 @@ class AppModule {
     fun provideDataStoreObject(@ApplicationContext appContext: Context): DataStoreObject =
         DataStoreObject(appContext)
 
+    /** Firebase Realtime DB provide functions **/
 
+    @Singleton
+    @Provides
+    fun provideFirebaseDatabaseReference(): DatabaseReference =
+        FirebaseDatabase.getInstance(FIREBASE_DB_REF).reference
+
+    /** Firebase Storage provide functions **/
+
+    @Singleton
+    @Provides
+    fun provideFirebaseStorageReference(): StorageReference =
+        FirebaseStorage.getInstance(FIREBASE_STORAGE_REF).reference
 }

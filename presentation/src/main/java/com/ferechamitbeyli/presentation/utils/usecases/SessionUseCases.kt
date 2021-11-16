@@ -44,5 +44,8 @@ data class SessionUseCases @Inject constructor(
     val cacheFirstUseStateUseCase: CacheFirstUseStateUseCase,
     val cacheInitialSetupStateUseCase: CacheInitialSetupStateUseCase,
     val cacheUserAccountUseCase: CacheUserAccountUseCase,
-    val cacheUserWeightUseCase: CacheUserWeightUseCase
+    val cacheUserWeightUseCase: CacheUserWeightUseCase,
+
+    val resetCachedUserUseCase: ResetCachedUserUseCase,
+    val resetCachedStatesUseCase: ResetCachedStatesUseCase
 )

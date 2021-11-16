@@ -11,7 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -23,12 +23,16 @@ import javax.inject.Inject
 
 class SessionRemoteDataSourceImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
+    private val databaseReference: DatabaseReference,
     private var userDtoMapper: DomainMapper<UserDto, User>,
     private val coroutineDispatchers: CoroutineDispatchers
 ) : SessionRemoteDataSource {
 
     override suspend fun getCurrentUserIdentifier(): Flow<Resource<String>> =
         flow<Resource<String>> {
+
+            emit(Resource.Loading())
+
             emit(Resource.Success(firebaseAuth.currentUser?.uid.toString()))
         }.catch {
             emit(Resource.Error(it.message.toString()))
@@ -36,6 +40,7 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun signOut(): Flow<Resource<String>> = flow<Resource<String>> {
         firebaseAuth.signOut()
+        emit(Resource.Loading())
         emit(Resource.Success("Successfully signed out."))
     }.catch {
         emit(Resource.Error(it.message.toString()))
@@ -46,16 +51,16 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
             emit(Resource.Loading())
 
-            val firebaseRealtimeDbRef =
-                FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
             val dataSnapshotOfUserEntry =
-                firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(identifier)
+                databaseReference.child(Constants.USERS_TABLE_REF).child(identifier)
             var currentUser: UserDto? = null
 
             dataSnapshotOfUserEntry.addListenerForSingleValueEvent(object : ValueEventListener {
 
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    currentUser = snapshot.getValue(UserDto::class.java)!!
+                    if (snapshot.exists()) {
+                        currentUser = snapshot.getValue(UserDto::class.java)!!
+                    }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -79,11 +84,9 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
         emit(Resource.Loading())
 
-        val firebaseRealtimeDbRef =
-            FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
         val dataSnapshotOfUserUid =
-            firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                .child(Constants.USER_TABLE_UID_REF)
+            databaseReference.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
+                .child(Constants.USERS_TABLE_UID_REF)
         val userUid: String = dataSnapshotOfUserUid.get().await().value.toString()
 
         emit(Resource.Success(userUid))
@@ -97,11 +100,14 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
             emit(Resource.Loading())
 
+            /*
             val firebaseRealtimeDbRef =
-                FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
+                FirebaseDatabase.getInstance(FIREBASE_DB_REF).reference
+
+             */
             val dataSnapshotOfUserEmail =
-                firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                    .child(Constants.USER_TABLE_EMAIL_REF)
+                databaseReference.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
+                    .child(Constants.USERS_TABLE_EMAIL_REF)
             val userEmail: String = dataSnapshotOfUserEmail.get().await().value.toString()
 
             emit(Resource.Success(userEmail))
@@ -115,11 +121,9 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
             emit(Resource.Loading())
 
-            val firebaseRealtimeDbRef =
-                FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
             val dataSnapshotOfUserWeight =
-                firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                    .child(Constants.USER_TABLE_WEIGHT_REF)
+                databaseReference.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
+                    .child(Constants.USERS_TABLE_WEIGHT_REF)
             val weight: Double = dataSnapshotOfUserWeight.get().await().value.toString().toDouble()
 
             emit(Resource.Success(weight))
@@ -133,11 +137,9 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
             emit(Resource.Loading())
 
-            val firebaseRealtimeDbRef =
-                FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
             val dataSnapshotOfUsername =
-                firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                    .child(Constants.USER_TABLE_USERNAME_REF)
+                databaseReference.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
+                    .child(Constants.USERS_TABLE_USERNAME_REF)
             val username: String = dataSnapshotOfUsername.get().await().value.toString()
 
             if (username.isNotBlank()) {
@@ -157,11 +159,9 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
             emit(Resource.Loading())
 
-            val firebaseRealtimeDbRef =
-                FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
             val dataSnapshotOfUserNotificationState =
-                firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                    .child(Constants.USER_TABLE_NOTIFICATION_ENABLE_REF)
+                databaseReference.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
+                    .child(Constants.USERS_TABLE_NOTIFICATION_ENABLE_REF)
             val notificationState: Boolean =
                 dataSnapshotOfUserNotificationState.get().await().value.toString().toBoolean()
 
@@ -176,11 +176,9 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
             emit(Resource.Loading())
 
-            val firebaseRealtimeDbRef =
-                FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
             val dataSnapshotOfUserPhotoUrl =
-                firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                    .child(Constants.USER_TABLE_PHOTO_URL_REF)
+                databaseReference.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
+                    .child(Constants.USERS_TABLE_PHOTO_URL_REF)
             val userPhotoUrl: String = dataSnapshotOfUserPhotoUrl.get().await().value.toString()
 
             emit(Resource.Success(userPhotoUrl))
@@ -199,16 +197,14 @@ class SessionRemoteDataSourceImpl @Inject constructor(
             val currentUser = userDtoMapper.mapFromDomainModel(user)
 
             val mappedUser = mapOf(
-                Constants.USER_TABLE_UID_REF to currentUser.uid,
-                Constants.USER_TABLE_EMAIL_REF to currentUser.email,
-                Constants.USER_TABLE_USERNAME_REF to currentUser.username,
-                Constants.USER_TABLE_NOTIFICATION_ENABLE_REF to currentUser.isNotificationEnable,
-                Constants.USER_TABLE_PHOTO_URL_REF to currentUser.photoUrl
+                Constants.USERS_TABLE_UID_REF to firebaseAuth.currentUser?.uid.toString(),
+                Constants.USERS_TABLE_EMAIL_REF to currentUser.email,
+                Constants.USERS_TABLE_USERNAME_REF to currentUser.username,
+                Constants.USERS_TABLE_NOTIFICATION_ENABLE_REF to currentUser.isNotificationEnable,
+                Constants.USERS_TABLE_PHOTO_URL_REF to currentUser.photoUrl
             )
 
-            val firebaseUsersDbRef =
-                FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
-            firebaseUsersDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
+            databaseReference.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
                 .updateChildren(mappedUser).await()
 
             val profileChangeRequest = UserProfileChangeRequest.Builder()
@@ -240,13 +236,11 @@ class SessionRemoteDataSourceImpl @Inject constructor(
             var onSuccessFlag: Boolean? = null
 
             val mappedUsername = mapOf(
-                Constants.USER_TABLE_USERNAME_REF to username
+                Constants.USERS_TABLE_USERNAME_REF to username
             )
 
-            val firebaseRealtimeDbRef =
-                FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
-            firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                .child(Constants.USER_TABLE_USERNAME_REF).updateChildren(mappedUsername).await()
+            databaseReference.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
+                .child(Constants.USERS_TABLE_USERNAME_REF).updateChildren(mappedUsername).await()
 
             val profileChangeRequest = UserProfileChangeRequest.Builder()
                 .setDisplayName(username)
@@ -276,13 +270,11 @@ class SessionRemoteDataSourceImpl @Inject constructor(
             var onSuccessFlag: Boolean? = null
 
             val mappedUserNotificationState = mapOf(
-                Constants.USER_TABLE_NOTIFICATION_ENABLE_REF to isNotificationEnabled
+                Constants.USERS_TABLE_NOTIFICATION_ENABLE_REF to isNotificationEnabled
             )
 
-            val firebaseRealtimeDbRef =
-                FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
-            firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                .child(Constants.USER_TABLE_NOTIFICATION_ENABLE_REF)
+            databaseReference.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
+                .child(Constants.USERS_TABLE_NOTIFICATION_ENABLE_REF)
                 .updateChildren(mappedUserNotificationState).addOnCompleteListener {
                     onSuccessFlag = it.isSuccessful
                 }
@@ -304,12 +296,10 @@ class SessionRemoteDataSourceImpl @Inject constructor(
             var onSuccessFlag: Boolean? = null
 
             val mappedUserWeight = mapOf(
-                Constants.USER_TABLE_WEIGHT_REF to weight
+                Constants.USERS_TABLE_WEIGHT_REF to weight
             )
 
-            val firebaseRealtimeDbRef =
-                FirebaseDatabase.getInstance(Constants.FIREBASE_DB_REF).reference
-            firebaseRealtimeDbRef.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
+            databaseReference.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
                 //.child(Constants.USER_TABLE_WEIGHT_REF)
                 .updateChildren(mappedUserWeight).addOnCompleteListener {
                     onSuccessFlag = it.isSuccessful

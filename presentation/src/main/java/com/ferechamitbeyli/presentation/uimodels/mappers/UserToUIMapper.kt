@@ -6,7 +6,6 @@ import com.ferechamitbeyli.presentation.uimodels.UserUIModel
 
 object UserToUIMapper : DomainMapper<UserUIModel, User> {
     override fun mapToDomainModel(model: UserUIModel): User = User(
-        uid = model.uid,
         email = model.email,
         username = model.username,
         weight = model.weight,
@@ -15,7 +14,6 @@ object UserToUIMapper : DomainMapper<UserUIModel, User> {
     )
 
     override fun mapFromDomainModel(domainModel: User): UserUIModel = UserUIModel(
-        uid = domainModel.uid,
         email = domainModel.email,
         username = domainModel.username,
         weight = domainModel.weight,

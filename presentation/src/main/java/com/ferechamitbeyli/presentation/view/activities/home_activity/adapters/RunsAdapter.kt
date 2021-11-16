@@ -44,14 +44,16 @@ class RunsAdapter : RecyclerView.Adapter<RunsAdapter.RunsViewHolder>() {
 
         holder.binding.apply {
 
-            val firstImagePart = run.image?.let { splitBitmap(it, 0) }
-            val secondImagePart = run.image?.let { splitBitmap(it, 1) }
+            val firstImagePart = run.image?.let { splitBitmap(it, 1) }
+            val secondImagePart = run.image?.let { splitBitmap(it, 2) }
 
             itemRunRoute1Iv.load(firstImagePart) {
                 crossfade(true)
+                crossfade(300)
             }
             itemRunRoute2Iv.load(secondImagePart) {
                 crossfade(true)
+                crossfade(300)
             }
 
             val calendar = Calendar.getInstance().apply {

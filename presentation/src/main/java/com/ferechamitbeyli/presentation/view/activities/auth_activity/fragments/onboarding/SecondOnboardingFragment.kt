@@ -1,6 +1,5 @@
 package com.ferechamitbeyli.presentation.view.activities.auth_activity.fragments.onboarding
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +12,6 @@ import com.ferechamitbeyli.presentation.R
 import com.ferechamitbeyli.presentation.databinding.FragmentSecondOnboardingBinding
 import com.ferechamitbeyli.presentation.utils.helpers.AnimationHelperFunctions.setImageDrawableWithAnimation
 import com.ferechamitbeyli.presentation.view.base.BaseFragment
-import com.ferechamitbeyli.presentation.viewmodel.activities.auth_activity.AuthViewModel
 import com.ferechamitbeyli.presentation.viewmodel.activities.auth_activity.fragments.onboarding.OnboardingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -31,7 +29,7 @@ class SecondOnboardingFragment : BaseFragment<FragmentSecondOnboardingBinding>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewPager = requireActivity().findViewById<ViewPager2>(R.id.onboardingPager_vp2)
+        setupOnClickListeners()
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.currentPagerPosition.collect {
@@ -47,6 +45,10 @@ class SecondOnboardingFragment : BaseFragment<FragmentSecondOnboardingBinding>()
             }
         }
 
+    }
+
+    private fun setupOnClickListeners() {
+        val viewPager = requireActivity().findViewById<ViewPager2>(R.id.onboardingPager_vp2)
         binding.onboardingNextBtn.setOnClickListener {
             viewPager?.currentItem = 2
         }

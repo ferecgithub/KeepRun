@@ -1,5 +1,6 @@
 package com.ferechamitbeyli.presentation.view.base
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Spannable
 import android.text.style.ForegroundColorSpan
@@ -8,11 +9,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
+import coil.ImageLoader
+import coil.request.ImageRequest
+import coil.request.SuccessResult
+import coil.transform.BlurTransformation
 import com.ferechamitbeyli.presentation.R
+import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions
 import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.visible
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.async
 
 abstract class BaseFragment<B : ViewBinding> : Fragment() {
 
@@ -33,7 +41,12 @@ abstract class BaseFragment<B : ViewBinding> : Fragment() {
         return binding.root
     }
 
-    protected fun setSpannableTextColor(view: TextView, fulltext: String, subtext: String, color: Int) {
+    protected fun setSpannableTextColor(
+        view: TextView,
+        fulltext: String,
+        subtext: String,
+        color: Int
+    ) {
         view.setText(fulltext, TextView.BufferType.SPANNABLE)
         val str = view.text as Spannable
         val i = fulltext.indexOf(subtext)
@@ -46,7 +59,7 @@ abstract class BaseFragment<B : ViewBinding> : Fragment() {
     }
 
     fun hideBottomNavigationViewIfCurrentFragmentIsInitialFragment() {
-        if (findNavController().currentDestination?.id == R.id.initialFragment) {
+        if (findNavController().currentDestination?.id == R.id.initialFragment || findNavController().currentDestination?.id == R.id.trackingFragment) {
             requireActivity().findViewById<BottomNavigationView>(R.id.home_bab).visible(false)
             requireActivity().findViewById<BottomNavigationView>(R.id.home_bnv).visible(false)
             requireActivity().findViewById<BottomNavigationView>(R.id.add_run_fab).visible(false)
@@ -56,6 +69,17 @@ abstract class BaseFragment<B : ViewBinding> : Fragment() {
             requireActivity().findViewById<BottomNavigationView>(R.id.add_run_fab).visible(true)
         }
     }
+
+    suspend fun getBlurBackgroundDrawable(): Drawable =
+        viewLifecycleOwner.lifecycleScope.async {
+            val imageLoader = ImageLoader.Builder(requireContext())
+                .build()
+            val request = ImageRequest.Builder(requireContext())
+                .data(UIHelperFunctions.getScreenShot(requireActivity().findViewById(R.id.homeActivity_layout)))
+                .transformations(BlurTransformation(requireContext(), 15f))
+                .build()
+            return@async (imageLoader.execute(request) as SuccessResult).drawable
+        }.await()
 
     override fun onDestroy() {
         super.onDestroy()

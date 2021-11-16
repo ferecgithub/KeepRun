@@ -5,11 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
-
-
 
 
 class UIHelperFunctions {
@@ -27,7 +27,8 @@ class UIHelperFunctions {
         }
 
         fun Context.hideKeyboard(view: View) {
-            val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            val inputMethodManager =
+                getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
         }
 
@@ -40,22 +41,36 @@ class UIHelperFunctions {
             alpha = if (enabled) 1f else 0.5f
         }
 
-        fun splitBitmap(bitmap: Bitmap, check: Int): Bitmap? {
+        fun splitBitmap(bitmap: Bitmap, whichHalf: Int): Bitmap? {
             val bitmapOptions = BitmapFactory.Options()
             bitmapOptions.inTargetDensity = 1
             bitmap.density = Bitmap.DENSITY_NONE
             var top = 0
             var bottom = 0
-            val targetHeight = 0
-            if (check == 0) { // return 1st half of image
-                top = 0
-                bottom = bitmap.height / 2
-            } else { // return 2nd half of image
-                top = bitmap.height / 2 - 10
-                bottom = bitmap.height / 2 - 10
+            //val targetHeight = 0
+            when (whichHalf) {
+                1 -> { // return 1st half of image
+                    top = 0
+                    bottom = bitmap.height / 2
+                }
+                2 -> { // return 2nd half of image
+                    top = bitmap.height / 2 - 10
+                    bottom = bitmap.height / 2 - 10
+                }
             }
-            val fromHere = (bitmap.height * 0.5).toInt()
+            //val fromHere = (bitmap.height * 0.5).toInt()
             return Bitmap.createBitmap(bitmap, 0, top, bitmap.width, bottom)
+        }
+
+        fun getScreenShot(view: View): Bitmap {
+            val returnedBitmap =
+                Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(returnedBitmap)
+            val bgDrawable = view.background
+            if (bgDrawable != null) bgDrawable.draw(canvas)
+            else canvas.drawColor(Color.WHITE)
+            view.draw(canvas)
+            return returnedBitmap
         }
 
         /** Navigation Helper Functions **/

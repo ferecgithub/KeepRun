@@ -29,13 +29,13 @@ class AuthDataSourceImpl @Inject constructor(
         password: String,
         username: String
     ): Flow<Resource<String>> = flow<Resource<String>> {
+
         emit(Resource.Loading())
 
         val data = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
-        data.user?.let { user ->
+        data.user?.let {
 
             val userModel = UserDto(
-                uid = user.uid,
                 email = email,
                 username = username,
                 photoUrl = ""
@@ -44,7 +44,7 @@ class AuthDataSourceImpl @Inject constructor(
             authRemoteDBDataSource.createUserInRemoteDB(userDtoMapper.mapToDomainModel(userModel))
                 .catch { dbError ->
                     emit(Resource.Error(dbError.message.toString()))
-                }.collect{
+                }.collect {
                     if (it is Resource.Success) {
                         emit(Resource.Success(it.data.toString()))
                     } else {
@@ -53,7 +53,6 @@ class AuthDataSourceImpl @Inject constructor(
                 }
 
         }
-        //emit(Resource.Success("Sign up is successful."))
     }.catch {
         emit(Resource.Error(it.message.toString()))
     }.flowOn(coroutineDispatchers.io())
@@ -62,6 +61,7 @@ class AuthDataSourceImpl @Inject constructor(
         email: String,
         password: String
     ): Flow<Resource<String>> = flow<Resource<String>> {
+
         emit(Resource.Loading())
 
         val data = firebaseAuth.signInWithEmailAndPassword(email, password).await()
@@ -82,6 +82,7 @@ class AuthDataSourceImpl @Inject constructor(
         }
 
         data?.let {
+
             if (firebaseAuth.currentUser?.isEmailVerified!!) {
                 sessionCacheDataSource.cacheUserAccount(
                     data.user?.uid.toString(),
@@ -103,6 +104,7 @@ class AuthDataSourceImpl @Inject constructor(
 
     override suspend fun sendResetPassword(email: String): Flow<Resource<String>> =
         flow<Resource<String>> {
+
             emit(Resource.Loading())
 
             firebaseAuth.sendPasswordResetEmail(email).await()

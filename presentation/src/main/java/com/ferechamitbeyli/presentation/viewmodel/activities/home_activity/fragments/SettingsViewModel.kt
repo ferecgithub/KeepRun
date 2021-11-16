@@ -12,24 +12,17 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class InitialViewModel @Inject constructor(
+class SettingsViewModel @Inject constructor(
     private val sessionUseCases: SessionUseCases,
     networkConnectionTracker: NetworkConnectionTracker,
     coroutineDispatchers: CoroutineDispatchers
 ) : BaseViewModel(networkConnectionTracker, coroutineDispatchers) {
 
-
-    /*
-    private var _initialEventsFlow = MutableSharedFlow<EventState>()
-    val initialEventsFlow: SharedFlow<EventState> = _initialEventsFlow
-
-     */
-
-    fun getUsernameFromRemoteDB() = flow<String> {
-        sessionUseCases.getUsernameFromRemoteDBUseCaseUseCase.invoke().collect {
+    fun getUsernameFromCache() = flow<String> {
+        sessionUseCases.getUsernameUseCase.invoke().collect {
             when (it) {
                 is Resource.Success -> {
-                    it.data?.let { username -> emit(capitalizeFirstLetter(username)) }
+                    it.data?.let { username -> emit(username) }
                 }
                 is Resource.Error -> {
                     /** NO-OP **/
@@ -41,14 +34,15 @@ class InitialViewModel @Inject constructor(
         }
     }
 
-    fun getUserWeightFromRemoteDB() = flow<Double> {
-        sessionUseCases.getUserWeightFromRemoteDBUseCase.invoke().collect {
+    fun getUserEmailFromCache() = flow<String> {
+        sessionUseCases.getUserEmailUseCase.invoke().collect {
             when (it) {
                 is Resource.Success -> {
-                    it.data?.let { weight -> emit(weight) }
+                    it.data?.let { email -> emit(email) }
+                    println("EMAIL_CACHE_SUCCESS : ${it.data.toString()}")
                 }
                 is Resource.Error -> {
-                    /** NO-OP **/
+                    println("EMAIL_CACHE_ERROR")
                 }
                 is Resource.Loading -> {
                     /** NO-OP **/
@@ -62,9 +56,10 @@ class InitialViewModel @Inject constructor(
             when (it) {
                 is Resource.Success -> {
                     it.data?.let { weight -> emit(weight) }
+                    println("WEIGHT_CACHE_SUCCESS : ${it.data.toString()}")
                 }
                 is Resource.Error -> {
-                    /** NO-OP **/
+                    println("WEIGHT_CACHE_ERROR ")
                 }
                 is Resource.Loading -> {
                     /** NO-OP **/
@@ -73,16 +68,15 @@ class InitialViewModel @Inject constructor(
         }
     }
 
-    fun saveWeightInformation(weight: Double) = ioScope.launch {
-        sessionUseCases.updateUserWeightToRemoteDBUseCase.invoke(weight).collect {
+    fun getUserNotificationStateFromCache() = flow<Boolean> {
+        sessionUseCases.getUserNotificationStateUseCase.invoke().collect {
             when (it) {
                 is Resource.Success -> {
-                    it.data?.let {
-                        sessionUseCases.cacheUserWeightUseCase.invoke(weight)
-                    }
+                    it.data?.let { isEnabled -> emit(isEnabled) }
+                    println("NOTIFICATION_CACHE_SUCCESS : ${it.data.toString()}")
                 }
                 is Resource.Error -> {
-                    /** NO-OP **/
+                    println("NOTIFICATION_CACHE_ERROR")
                 }
                 is Resource.Loading -> {
                     /** NO-OP **/
@@ -91,4 +85,11 @@ class InitialViewModel @Inject constructor(
         }
     }
 
+    fun resetCachedUser() = ioScope.launch {
+        sessionUseCases.resetCachedUserUseCase.invoke()
+    }
+
+    fun logout() = ioScope.launch {
+        sessionUseCases.signOutUseCase.invoke()
+    }
 }
