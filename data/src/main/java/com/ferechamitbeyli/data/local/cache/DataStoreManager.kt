@@ -5,8 +5,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_FIRST_TIME_USE
-import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_HAS_PERMISSION
-import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_INITIAL_SETUP_DONE
+import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_HAS_ACTIVITY_RECOGNITION_PERMISSION
+import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_HAS_FINE_LOCATION_PERMISSION
 import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_NOTIFICATION_ENABLED
 import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_USERNAME
 import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_USER_EMAIL
@@ -14,9 +14,7 @@ import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_USER_PHOTO_URL
 import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_USER_UID
 import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_USER_WEIGHT
 import com.ferechamitbeyli.data.utils.Constants.KEEPRUN_CACHE_NAME
-import com.ferechamitbeyli.domain.Resource
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -24,7 +22,7 @@ import javax.inject.Singleton
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(KEEPRUN_CACHE_NAME)
 
 @Singleton
-class DataStoreObject @Inject constructor(@ApplicationContext appContext: Context) {
+class DataStoreManager @Inject constructor(@ApplicationContext appContext: Context) {
 
     private val keepRunDataStore = appContext.dataStore
 
@@ -38,23 +36,21 @@ class DataStoreObject @Inject constructor(@ApplicationContext appContext: Contex
         val userPhotoUrlCached = stringPreferencesKey(CACHE_KEY_FOR_USER_PHOTO_URL)
 
         /** Miscellaneous Information **/
-        val initialSetupStateCached = booleanPreferencesKey(CACHE_KEY_FOR_INITIAL_SETUP_DONE)
         val firstUseStateCached = booleanPreferencesKey(CACHE_KEY_FOR_FIRST_TIME_USE)
-        val hasPermissionCached = booleanPreferencesKey(CACHE_KEY_FOR_HAS_PERMISSION)
+        val hasFineLocationPermissionCached =
+            booleanPreferencesKey(CACHE_KEY_FOR_HAS_FINE_LOCATION_PERMISSION)
+        val hasActivityRecognitionPermissionCached =
+            booleanPreferencesKey(CACHE_KEY_FOR_HAS_ACTIVITY_RECOGNITION_PERMISSION)
     }
 
-    /*
-    suspend fun storeDetails(username: String, weight: Float, isFirstTime: Boolean) {
-        keepRunDataStore.edit {
-            it[usernameCached] = username
-            it[weightCached] = weight
-            it[firstUseStateCached] = isFirstTime
-        }
-    }
-
-     */
-
-    suspend fun cacheUserAccount(userUid: String, username: String, userEmail: String, userWeight: Double, isNotificationEnabled: Boolean, userPhotoUrl: String) {
+    suspend fun cacheUserAccount(
+        userUid: String,
+        username: String,
+        userEmail: String,
+        userWeight: Double,
+        isNotificationEnabled: Boolean,
+        userPhotoUrl: String
+    ) {
         keepRunDataStore.edit {
             it[userUidCached] = userUid
             it[usernameCached] = username
@@ -83,21 +79,21 @@ class DataStoreObject @Inject constructor(@ApplicationContext appContext: Contex
         }
     }
 
-    suspend fun cacheInitialSetupState(isInitialSetupDone: Boolean) {
-        keepRunDataStore.edit {
-            it[initialSetupStateCached] = isInitialSetupDone
-        }
-    }
-
     suspend fun cacheUserWeight(weight: Double) {
         keepRunDataStore.edit {
             it[userWeightCached] = weight
         }
     }
 
-    suspend fun cachePermissionState(hasPermission: Boolean) {
+    suspend fun cacheFineLocationPermissionState(hasPermission: Boolean) {
         keepRunDataStore.edit {
-            it[hasPermissionCached] = hasPermission
+            it[hasFineLocationPermissionCached] = hasPermission
+        }
+    }
+
+    suspend fun cacheActivityRecognitionPermissionState(hasPermission: Boolean) {
+        keepRunDataStore.edit {
+            it[hasActivityRecognitionPermissionCached] = hasPermission
         }
     }
 
@@ -114,64 +110,46 @@ class DataStoreObject @Inject constructor(@ApplicationContext appContext: Contex
 
     suspend fun resetCachedStates() {
         keepRunDataStore.edit {
-            it[initialSetupStateCached] = false
             it[firstUseStateCached] = true
-            it[hasPermissionCached] = false
+            it[hasFineLocationPermissionCached] = false
+            it[hasActivityRecognitionPermissionCached] = false
         }
     }
 
     fun getUserUid() = keepRunDataStore.data.map {
-        Resource.Success(it[userUidCached] ?: "")
-    }.catch {
-        Resource.Error(it.toString(),null)
+        it[userUidCached] ?: ""
     }
 
     fun getUsername() = keepRunDataStore.data.map {
-        Resource.Success(it[usernameCached] ?: "")
-    }.catch {
-        Resource.Error(it.toString(),null)
+        it[usernameCached] ?: ""
     }
 
     fun getUserEmail() = keepRunDataStore.data.map {
-        Resource.Success(it[userEmailCached] ?: "")
-    }.catch {
-        Resource.Error(it.toString(),null)
+        it[userEmailCached] ?: ""
     }
 
     fun getNotificationEnabled() = keepRunDataStore.data.map {
-        Resource.Success(it[userNotificationEnableCached] ?: true)
-    }.catch {
-        Resource.Error(it.toString(),null)
+        it[userNotificationEnableCached] ?: true
     }
 
     fun getUserPhotoUrl() = keepRunDataStore.data.map {
-        Resource.Success(it[userPhotoUrlCached] ?: "")
-    }.catch {
-        Resource.Error(it.toString(),null)
+        it[userPhotoUrlCached] ?: ""
     }
 
     fun getUserWeight() = keepRunDataStore.data.map {
-        Resource.Success(it[userWeightCached] ?: 0.0)
-    }.catch {
-        Resource.Error(it.toString(),null)
+        it[userWeightCached] ?: 0.0
     }
 
     fun getFirstUseState() = keepRunDataStore.data.map {
-        Resource.Success(it[firstUseStateCached] ?: true)
-    }.catch {
-        Resource.Error(it.toString(),null)
+        it[firstUseStateCached] ?: true
     }
 
-    fun getInitialSetupState() = keepRunDataStore.data.map {
-        Resource.Success(it[initialSetupStateCached] ?: false)
-    }.catch {
-        Resource.Error(it.toString(),null)
+    fun getFineLocationPermissionState() = keepRunDataStore.data.map {
+        it[hasFineLocationPermissionCached] ?: false
     }
 
-    fun getHasPermission() = keepRunDataStore.data.map {
-        Resource.Success(it[hasPermissionCached] ?: false)
-    }.catch {
-        Resource.Error(it.toString(),null)
+    fun getActivityRecognitionPermissionState() = keepRunDataStore.data.map {
+        it[hasActivityRecognitionPermissionCached] ?: false
     }
 
 }

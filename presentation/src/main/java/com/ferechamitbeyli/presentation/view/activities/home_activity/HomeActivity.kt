@@ -1,18 +1,24 @@
 package com.ferechamitbeyli.presentation.view.activities.home_activity
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.ferechamitbeyli.presentation.R
 import com.ferechamitbeyli.presentation.databinding.ActivityHomeBinding
+import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.startNewActivity
+import com.ferechamitbeyli.presentation.view.activities.auth_activity.AuthActivity
+import com.ferechamitbeyli.presentation.viewmodel.activities.home_activity.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
+
+    private val viewModel: HomeViewModel by viewModels()
 
     private var _binding: ActivityHomeBinding? = null
     val binding get() = _binding!!
@@ -25,8 +31,6 @@ class HomeActivity : AppCompatActivity() {
         adjustBottomNavigationView()
         setupNavigationComponents()
     }
-
-
 
     private fun setupLayout() {
         setTheme(R.style.Theme_KeepRun)
@@ -46,5 +50,11 @@ class HomeActivity : AppCompatActivity() {
         binding.homeBnv.background = null
         binding.homeBnv.menu.getItem(2).isEnabled = false
     }
+
+    private fun navigateToAuthActivity() {
+        startNewActivity(AuthActivity::class.java)
+    }
+
+
 
 }

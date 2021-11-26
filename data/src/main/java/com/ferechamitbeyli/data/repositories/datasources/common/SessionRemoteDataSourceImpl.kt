@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
-import logcat.logcat
 import javax.inject.Inject
 
 class SessionRemoteDataSourceImpl @Inject constructor(
@@ -31,28 +30,30 @@ class SessionRemoteDataSourceImpl @Inject constructor(
     override suspend fun getCurrentUserIdentifier(): Flow<Resource<String>> =
         flow<Resource<String>> {
 
-            emit(Resource.Loading())
-
             emit(Resource.Success(firebaseAuth.currentUser?.uid.toString()))
+
         }.catch {
             emit(Resource.Error(it.message.toString()))
         }.flowOn(coroutineDispatchers.io())
 
     override suspend fun signOut(): Flow<Resource<String>> = flow<Resource<String>> {
-        firebaseAuth.signOut()
-        emit(Resource.Loading())
-        emit(Resource.Success("Successfully signed out."))
+
+        firebaseAuth.signOut().also {
+            emit(Resource.Success("Successfully signed out."))
+        }
+
     }.catch {
         emit(Resource.Error(it.message.toString()))
     }.flowOn(coroutineDispatchers.io())
 
-    override suspend fun getCurrentUserFromRemoteDB(identifier: String): Flow<Resource<User>> =
+    override suspend fun getCurrentUserFromRemoteDB(): Flow<Resource<User>> =
         flow<Resource<User>> {
 
-            emit(Resource.Loading())
+            val currentUserUid = firebaseAuth.currentUser?.uid.toString()
 
             val dataSnapshotOfUserEntry =
-                databaseReference.child(Constants.USERS_TABLE_REF).child(identifier)
+                databaseReference.child(Constants.USERS_TABLE_REF).child(currentUserUid)
+
             var currentUser: UserDto? = null
 
             dataSnapshotOfUserEntry.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -82,14 +83,13 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getUserUidFromRemoteDB(): Flow<Resource<String>> = flow<Resource<String>> {
 
-        emit(Resource.Loading())
-
         val dataSnapshotOfUserUid =
             databaseReference.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
                 .child(Constants.USERS_TABLE_UID_REF)
-        val userUid: String = dataSnapshotOfUserUid.get().await().value.toString()
 
-        emit(Resource.Success(userUid))
+        dataSnapshotOfUserUid.get().await().value.toString().also {
+            emit(Resource.Success(it))
+        }
 
     }.catch {
         emit(Resource.Error(it.message.toString()))
@@ -98,19 +98,14 @@ class SessionRemoteDataSourceImpl @Inject constructor(
     override suspend fun getUserEmailFromRemoteDB(): Flow<Resource<String>> =
         flow<Resource<String>> {
 
-            emit(Resource.Loading())
-
-            /*
-            val firebaseRealtimeDbRef =
-                FirebaseDatabase.getInstance(FIREBASE_DB_REF).reference
-
-             */
             val dataSnapshotOfUserEmail =
                 databaseReference.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
                     .child(Constants.USERS_TABLE_EMAIL_REF)
-            val userEmail: String = dataSnapshotOfUserEmail.get().await().value.toString()
 
-            emit(Resource.Success(userEmail))
+            dataSnapshotOfUserEmail.get().await().value.toString().also {
+                emit(Resource.Success(it))
+            }
+
 
         }.catch {
             emit(Resource.Error(it.message.toString()))
@@ -119,14 +114,13 @@ class SessionRemoteDataSourceImpl @Inject constructor(
     override suspend fun getUserWeightFromRemoteDB(): Flow<Resource<Double>> =
         flow<Resource<Double>> {
 
-            emit(Resource.Loading())
-
             val dataSnapshotOfUserWeight =
                 databaseReference.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
                     .child(Constants.USERS_TABLE_WEIGHT_REF)
-            val weight: Double = dataSnapshotOfUserWeight.get().await().value.toString().toDouble()
 
-            emit(Resource.Success(weight))
+            dataSnapshotOfUserWeight.get().await().value.toString().toDouble().also {
+                emit(Resource.Success(it))
+            }
 
         }.catch {
             emit(Resource.Error(it.message.toString()))
@@ -135,19 +129,16 @@ class SessionRemoteDataSourceImpl @Inject constructor(
     override suspend fun getUsernameFromRemoteDB(): Flow<Resource<String>> =
         flow<Resource<String>> {
 
-            emit(Resource.Loading())
-
             val dataSnapshotOfUsername =
                 databaseReference.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
                     .child(Constants.USERS_TABLE_USERNAME_REF)
-            val username: String = dataSnapshotOfUsername.get().await().value.toString()
 
-            if (username.isNotBlank()) {
-                emit(Resource.Success(username))
-                logcat("USERNAME_SUCC") { username }
-            } else {
-                emit(Resource.Error("The value does not exists in database."))
-                logcat("USERNAME_ERR") { "" }
+            dataSnapshotOfUsername.get().await().value.toString().also { username ->
+                if (username.isNotBlank()) {
+                    emit(Resource.Success(username))
+                } else {
+                    emit(Resource.Error("The value does not exists in database."))
+                }
             }
 
         }.catch {
@@ -157,15 +148,13 @@ class SessionRemoteDataSourceImpl @Inject constructor(
     override suspend fun getUserNotificationStateFromRemoteDB(): Flow<Resource<Boolean>> =
         flow<Resource<Boolean>> {
 
-            emit(Resource.Loading())
-
             val dataSnapshotOfUserNotificationState =
                 databaseReference.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
                     .child(Constants.USERS_TABLE_NOTIFICATION_ENABLE_REF)
-            val notificationState: Boolean =
-                dataSnapshotOfUserNotificationState.get().await().value.toString().toBoolean()
 
-            emit(Resource.Success(notificationState))
+            dataSnapshotOfUserNotificationState.get().await().value.toString().toBoolean().also {
+                emit(Resource.Success(it))
+            }
 
         }.catch {
             emit(Resource.Error(it.message.toString()))
@@ -174,14 +163,13 @@ class SessionRemoteDataSourceImpl @Inject constructor(
     override suspend fun getUserPhotoUrlFromRemoteDB(): Flow<Resource<String>> =
         flow<Resource<String>> {
 
-            emit(Resource.Loading())
-
             val dataSnapshotOfUserPhotoUrl =
                 databaseReference.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
                     .child(Constants.USERS_TABLE_PHOTO_URL_REF)
-            val userPhotoUrl: String = dataSnapshotOfUserPhotoUrl.get().await().value.toString()
 
-            emit(Resource.Success(userPhotoUrl))
+            dataSnapshotOfUserPhotoUrl.get().await().value.toString().also {
+                emit(Resource.Success(it))
+            }
 
         }.catch {
             emit(Resource.Error(it.message.toString()))
@@ -189,8 +177,6 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun updateUserChangesToRemoteDB(user: User): Flow<Resource<String>> =
         flow<Resource<String>> {
-
-            emit(Resource.Loading())
 
             var onSuccessFlag: Boolean? = null
 
@@ -212,17 +198,19 @@ class SessionRemoteDataSourceImpl @Inject constructor(
                 .build()
 
             firebaseAuth.currentUser?.apply {
-                updateProfile(profileChangeRequest).addOnCompleteListener {
-                    onSuccessFlag = it.isSuccessful
-
+                updateProfile(profileChangeRequest).await().also {
+                    emit(Resource.Success("User is successfully updated."))
                 }
             }
 
+            /*
             if (onSuccessFlag == true) {
                 emit(Resource.Success("User is successfully updated."))
             } else {
                 emit(Resource.Error("An error occurred while updating the user."))
             }
+
+             */
 
         }.catch {
             emit(Resource.Error(it.message.toString()))
@@ -231,8 +219,6 @@ class SessionRemoteDataSourceImpl @Inject constructor(
     override suspend fun updateUsernameToRemoteDB(username: String): Flow<Resource<String>> =
         flow<Resource<String>> {
 
-            emit(Resource.Loading())
-
             var onSuccessFlag: Boolean? = null
 
             val mappedUsername = mapOf(
@@ -240,23 +226,27 @@ class SessionRemoteDataSourceImpl @Inject constructor(
             )
 
             databaseReference.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                .child(Constants.USERS_TABLE_USERNAME_REF).updateChildren(mappedUsername).await()
+                //.child(Constants.USERS_TABLE_USERNAME_REF)
+                .updateChildren(mappedUsername).await()
 
             val profileChangeRequest = UserProfileChangeRequest.Builder()
                 .setDisplayName(username)
                 .build()
 
             firebaseAuth.currentUser?.apply {
-                updateProfile(profileChangeRequest).addOnCompleteListener {
-                    onSuccessFlag = it.isSuccessful
+                updateProfile(profileChangeRequest).await().also {
+                    emit(Resource.Success("Username is successfully updated."))
                 }
             }
 
+            /*
             if (onSuccessFlag == true) {
                 emit(Resource.Success("Username is successfully updated."))
             } else {
                 emit(Resource.Error("An error occurred while updating the username."))
             }
+
+             */
 
         }.catch {
             emit(Resource.Error(it.message.toString()))
@@ -265,8 +255,6 @@ class SessionRemoteDataSourceImpl @Inject constructor(
     override suspend fun updateUserNotificationState(isNotificationEnabled: Boolean): Flow<Resource<String>> =
         flow<Resource<String>> {
 
-            emit(Resource.Loading())
-
             var onSuccessFlag: Boolean? = null
 
             val mappedUserNotificationState = mapOf(
@@ -274,16 +262,19 @@ class SessionRemoteDataSourceImpl @Inject constructor(
             )
 
             databaseReference.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                .child(Constants.USERS_TABLE_NOTIFICATION_ENABLE_REF)
-                .updateChildren(mappedUserNotificationState).addOnCompleteListener {
-                    onSuccessFlag = it.isSuccessful
+                //.child(Constants.USERS_TABLE_NOTIFICATION_ENABLE_REF)
+                .updateChildren(mappedUserNotificationState).await().also {
+                    emit(Resource.Success("Notification request is successfully updated."))
                 }
 
+            /*
             if (onSuccessFlag == true) {
                 emit(Resource.Success("Notification request is successfully updated."))
             } else {
                 emit(Resource.Error("An error occurred while updating the notification request."))
             }
+
+             */
 
         }.catch {
             emit(Resource.Error(it.message.toString()))
@@ -291,26 +282,37 @@ class SessionRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun updateUserWeightToRemoteDB(weight: Double): Flow<Resource<String>> =
         flow<Resource<String>> {
-            emit(Resource.Loading())
 
-            var onSuccessFlag: Boolean? = null
+            //var onSuccessFlag: Boolean? = null
 
             val mappedUserWeight = mapOf(
                 Constants.USERS_TABLE_WEIGHT_REF to weight
             )
 
             databaseReference.child(Constants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                //.child(Constants.USER_TABLE_WEIGHT_REF)
-                .updateChildren(mappedUserWeight).addOnCompleteListener {
-                    onSuccessFlag = it.isSuccessful
+                .updateChildren(mappedUserWeight).await().also {
+                    emit(Resource.Success("Notification request is successfully updated."))
                 }
 
+
+            /*
             if (onSuccessFlag == true) {
                 emit(Resource.Success("Notification request is successfully updated."))
             } else {
                 emit(Resource.Error("An error occurred while updating the notification request."))
             }
 
+             */
+
+        }.catch {
+            emit(Resource.Error(it.message.toString()))
+        }.flowOn(coroutineDispatchers.io())
+
+    override suspend fun updateUserPassword(password: String): Flow<Resource<String>> =
+        flow<Resource<String>> {
+            firebaseAuth.currentUser?.updatePassword(password)?.await().also {
+                emit(Resource.Success("Password is successfully changed."))
+            }
         }.catch {
             emit(Resource.Error(it.message.toString()))
         }.flowOn(coroutineDispatchers.io())

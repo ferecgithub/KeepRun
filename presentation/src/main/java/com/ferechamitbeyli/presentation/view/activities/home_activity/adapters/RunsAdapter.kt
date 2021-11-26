@@ -33,6 +33,13 @@ class RunsAdapter : RecyclerView.Adapter<RunsAdapter.RunsViewHolder>() {
 
     fun submitList(list: List<RunUIModel>) = differ.submitList(list)
 
+    fun checkIfListIsEmpty() : Boolean {
+        if (itemCount == 0) {
+            return true
+        }
+        return false
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RunsViewHolder =
         RunsViewHolder(
             ItemRunLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)

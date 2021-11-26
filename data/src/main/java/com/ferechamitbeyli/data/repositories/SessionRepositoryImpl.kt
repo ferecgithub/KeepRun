@@ -22,121 +22,353 @@ class SessionRepositoryImpl @Inject constructor(
      * Functions for fetching user identifier (uid) from FirebaseAuth and sign out
      */
     override suspend fun getCurrentUserIdentifier(): Flow<Resource<String>> =
-        sessionRemoteDataSource.getCurrentUserIdentifier()
-            .catch { Resource.Error(it.message.toString(), null) }
-            .flowOn(coroutineDispatchers.io())
+        flow<Resource<String>> {
 
-    override suspend fun signOut(): Flow<Resource<String>> = sessionRemoteDataSource.signOut()
-        .catch { Resource.Error(it.message.toString(), null) }
-        .flowOn(coroutineDispatchers.io())
+            sessionRemoteDataSource.getCurrentUserIdentifier()
+                .catch { emit(Resource.Error(it.message.toString(), null)) }
+                .flowOn(coroutineDispatchers.io())
+                .collect { identifierResponse ->
+
+                    emit(Resource.Loading())
+
+                    when (identifierResponse) {
+                        is Resource.Error -> {
+                            emit(Resource.Error(identifierResponse.message.toString()))
+                        }
+                        is Resource.Success -> {
+                            emit(Resource.Success(identifierResponse.data.toString()))
+                        }
+                        else -> {
+                            /** NO-OP **/
+                        }
+                    }
+                }
+        }
+
+    override suspend fun updateUserPassword(password: String): Flow<Resource<String>> =
+        flow<Resource<String>> {
+            sessionRemoteDataSource.updateUserPassword(password)
+                .catch { emit(Resource.Error(it.message.toString(), null)) }
+                .flowOn(coroutineDispatchers.io())
+                .collect { passwordResponse ->
+
+                    emit(Resource.Loading())
+
+                    when (passwordResponse) {
+                        is Resource.Error -> {
+                            emit(Resource.Error(passwordResponse.message.toString()))
+                        }
+                        is Resource.Success -> {
+                            emit(Resource.Success(passwordResponse.data.toString()))
+                        }
+                        else -> {
+                            /** NO-OP **/
+                        }
+                    }
+                }
+        }.catch {
+            emit(Resource.Error(it.message.toString()))
+        }.flowOn(coroutineDispatchers.io())
+
+
+    override suspend fun signOut(): Flow<Resource<String>> = flow<Resource<String>> {
+
+        sessionRemoteDataSource.signOut()
+            .catch { emit(Resource.Error(it.message.toString(), null)) }
+            .flowOn(coroutineDispatchers.io())
+            .collect { signOutResponse ->
+
+                emit(Resource.Loading())
+
+                when (signOutResponse) {
+                    is Resource.Error -> {
+                        emit(Resource.Error(signOutResponse.message.toString()))
+                    }
+                    is Resource.Success -> {
+
+                    }
+                    else -> {
+                        /** NO-OP **/
+                    }
+                }
+
+            }
+    }
+
 
     /**
      * Functions for fetching and saving from/to Firebase Realtime Database
      */
-    override suspend fun getCurrentUserFromRemoteDB(identifier: String): Flow<Resource<User>> =
-        sessionRemoteDataSource.getCurrentUserFromRemoteDB(identifier)
-            .catch { Resource.Error(it.message.toString(), null) }
+    override suspend fun getCurrentUserFromRemoteDB(): Flow<Resource<User>> = flow<Resource<User>> {
+
+        sessionRemoteDataSource.getCurrentUserFromRemoteDB()
+            .catch { emit(Resource.Error(it.message.toString(), null)) }
             .flowOn(coroutineDispatchers.io())
+            .collect { userResponse ->
+
+                emit(Resource.Loading())
+
+                when (userResponse) {
+                    is Resource.Error -> {
+                        emit(Resource.Error(userResponse.message.toString()))
+                    }
+                    is Resource.Success -> {
+                        userResponse.data?.let {
+                            val userDto = UserDtoMapper.mapFromDomainModel(it)
+                            sessionCacheDataSource.cacheUserAccount(
+                                userUid = firebaseAuth.currentUser?.uid.toString(),
+                                username = userDto.username.toString(),
+                                userEmail = userDto.email.toString(),
+                                userWeight = userDto.weight,
+                                userNotificationEnabled = userDto.isNotificationEnable,
+                                userPhotoUrl = userDto.photoUrl.toString()
+                            ).also {
+                                emit(Resource.Success(UserDtoMapper.mapToDomainModel(userDto)))
+                            }
+                        }
+                    }
+                    else -> {
+                        /** NO-OP **/
+                    }
+                }
+            }
+
+    }
+
 
     override suspend fun getUserUidFromRemoteDB(): Flow<Resource<String>> =
         sessionRemoteDataSource.getUserUidFromRemoteDB()
-            .catch { Resource.Error(it.message.toString(), null) }
+            .catch { emit(Resource.Error(it.message.toString(), null)) }
             .flowOn(coroutineDispatchers.io())
 
     override suspend fun getUsernameFromRemoteDB(): Flow<Resource<String>> =
-        sessionRemoteDataSource.getUsernameFromRemoteDB()
-            .catch { Resource.Error(it.message.toString(), null) }
-            .flowOn(coroutineDispatchers.io())
+        flow<Resource<String>> {
+            sessionRemoteDataSource.getUsernameFromRemoteDB()
+                .catch { emit(Resource.Error(it.message.toString(), null)) }
+                .flowOn(coroutineDispatchers.io())
+                .collect { usernameResponse ->
+
+                    emit(Resource.Loading())
+
+                    when (usernameResponse) {
+                        is Resource.Error -> {
+                            emit(Resource.Error(usernameResponse.message.toString()))
+                        }
+                        is Resource.Success -> {
+                            usernameResponse.data?.let { username ->
+                                sessionCacheDataSource.cacheUsername(username).also {
+                                    emit(Resource.Success(username))
+                                }
+                            }
+                        }
+                        else -> {
+                            /** NO-OP **/
+                        }
+                    }
+                }
+        }
+
 
     override suspend fun getUserEmailFromRemoteDB(): Flow<Resource<String>> =
         sessionRemoteDataSource.getUserEmailFromRemoteDB()
-            .catch { Resource.Error(it.message.toString(), null) }
-            .flowOn(coroutineDispatchers.io())
-
-    override suspend fun getUserWeightFromRemoteDB(): Flow<Resource<Double>> =
-        sessionRemoteDataSource.getUserWeightFromRemoteDB()
-            .catch { Resource.Error(it.message.toString(), null) }
-            .flowOn(coroutineDispatchers.io())
-
-    override suspend fun getUserNotificationStateFromRemoteDB(): Flow<Resource<Boolean>> =
-        sessionRemoteDataSource.getUserNotificationStateFromRemoteDB()
-            .catch { Resource.Error(it.message.toString(), null) }
+            .catch { emit(Resource.Error(it.message.toString(), null)) }
             .flowOn(coroutineDispatchers.io())
 
     override suspend fun getUserPhotoUrlFromRemoteDB(): Flow<Resource<String>> =
         sessionRemoteDataSource.getUserPhotoUrlFromRemoteDB()
-            .catch { Resource.Error(it.message.toString(), null) }
+            .catch { emit(Resource.Error(it.message.toString(), null)) }
             .flowOn(coroutineDispatchers.io())
+
+    override suspend fun getUserWeightFromRemoteDB(): Flow<Resource<Double>> =
+        flow<Resource<Double>> {
+            sessionRemoteDataSource.getUserWeightFromRemoteDB()
+                .catch { emit(Resource.Error(it.message.toString(), null)) }
+                .flowOn(coroutineDispatchers.io())
+                .collect { weightResponse ->
+
+                    emit(Resource.Loading())
+
+                    when (weightResponse) {
+                        is Resource.Error -> {
+                            emit(Resource.Error(weightResponse.message.toString()))
+                        }
+                        is Resource.Success -> {
+                            weightResponse.data?.let { weight ->
+                                sessionCacheDataSource.cacheUserWeight(weight).also {
+                                    emit(Resource.Success(weight))
+                                }
+                            }
+                        }
+                        else -> {
+                            /** NO-OP **/
+                        }
+                    }
+                }
+        }
+
+    override suspend fun getUserNotificationStateFromRemoteDB(): Flow<Resource<Boolean>> =
+        flow<Resource<Boolean>> {
+            sessionRemoteDataSource.getUserNotificationStateFromRemoteDB()
+                .catch { emit(Resource.Error(it.message.toString(), null)) }
+                .flowOn(coroutineDispatchers.io())
+                .collect { notificationStateResponse ->
+
+                    emit(Resource.Loading())
+
+                    when (notificationStateResponse) {
+                        is Resource.Error -> {
+                            emit(Resource.Error(notificationStateResponse.message.toString()))
+                        }
+                        is Resource.Success -> {
+                            notificationStateResponse.data?.let { notificationState ->
+                                sessionCacheDataSource.cacheUserNotificationState(notificationState)
+                                    .also {
+                                        emit(Resource.Success(notificationState))
+                                    }
+                            }
+                        }
+                        else -> {
+                            /** NO-OP **/
+                        }
+                    }
+
+                }
+        }
 
     override suspend fun updateUserChangesToRemoteDB(user: User): Flow<Resource<String>> =
         flow<Resource<String>> {
 
-            sessionRemoteDataSource.updateUserChangesToRemoteDB(user).collect {
-                it.data?.let { successMsg ->
-                    val mappedUser = UserDtoMapper.mapFromDomainModel(user)
-                    sessionCacheDataSource.cacheUserAccount(
-                        firebaseAuth.currentUser?.uid.toString(),
-                        mappedUser.username.toString(),
-                        mappedUser.email.toString(),
-                        mappedUser.weight,
-                        mappedUser.isNotificationEnable,
-                        mappedUser.photoUrl.toString()
-                    )
-                    emit(Resource.Success(successMsg))
+            sessionRemoteDataSource.updateUserChangesToRemoteDB(user)
+                .catch { emit(Resource.Error(it.message.toString(), null)) }
+                .flowOn(coroutineDispatchers.io())
+                .collect { updateResponse ->
+
+                    emit(Resource.Loading())
+
+                    when (updateResponse) {
+                        is Resource.Error -> {
+                            emit(Resource.Error(updateResponse.message.toString()))
+                        }
+                        is Resource.Success -> {
+                            updateResponse.data?.let { successMsg ->
+                                val mappedUser = UserDtoMapper.mapFromDomainModel(user)
+                                sessionCacheDataSource.cacheUserAccount(
+                                    firebaseAuth.currentUser?.uid.toString(),
+                                    mappedUser.username.toString(),
+                                    mappedUser.email.toString(),
+                                    mappedUser.weight,
+                                    mappedUser.isNotificationEnable,
+                                    mappedUser.photoUrl.toString()
+                                ).also {
+                                    emit(Resource.Success(successMsg))
+                                }
+
+                            }
+                        }
+                        else -> {
+                            /** NO-OP **/
+                        }
+                    }
                 }
-            }
-        }.catch { Resource.Error(it.message.toString(), null) }.flowOn(coroutineDispatchers.io())
+        }
 
 
     override suspend fun updateUsernameToRemoteDB(username: String): Flow<Resource<String>> =
         flow<Resource<String>> {
-            sessionRemoteDataSource.updateUsernameToRemoteDB(username).collect {
-                it.data?.let { successMsg ->
-                    sessionCacheDataSource.cacheUsername(username)
-                    emit(Resource.Success(successMsg))
+            sessionRemoteDataSource.updateUsernameToRemoteDB(username)
+                .catch { emit(Resource.Error(it.message.toString(), null)) }
+                .flowOn(coroutineDispatchers.io())
+                .collect { updateResponse ->
+
+                    emit(Resource.Loading())
+
+                    when (updateResponse) {
+                        is Resource.Error -> {
+                            emit(Resource.Error(updateResponse.message.toString()))
+                        }
+                        is Resource.Success -> {
+                            updateResponse.data?.let { successMsg ->
+                                sessionCacheDataSource.cacheUsername(username).also {
+                                    emit(Resource.Success(successMsg))
+                                }
+                            }
+                        }
+                        else -> {
+                            /** NO-OP **/
+                        }
+                    }
                 }
-            }
-        }.catch { Resource.Error(it.message.toString(), null) }.flowOn(coroutineDispatchers.io())
+        }
 
 
     override suspend fun updateUserNotificationState(isNotificationEnabled: Boolean): Flow<Resource<String>> =
         flow<Resource<String>> {
-            sessionRemoteDataSource.updateUserNotificationState(isNotificationEnabled).collect {
-                it.data?.let { successMsg ->
-                    sessionCacheDataSource.cacheUserNotificationState(isNotificationEnabled)
-                    emit(Resource.Success(successMsg))
+            sessionRemoteDataSource.updateUserNotificationState(isNotificationEnabled)
+                .catch { emit(Resource.Error(it.message.toString(), null)) }
+                .flowOn(coroutineDispatchers.io())
+                .collect { updateResponse ->
+
+                    emit(Resource.Loading())
+
+                    when (updateResponse) {
+                        is Resource.Error -> {
+                            emit(Resource.Error(updateResponse.message.toString()))
+                        }
+                        is Resource.Success -> {
+                            updateResponse.data?.let { successMsg ->
+                                sessionCacheDataSource.cacheUserNotificationState(
+                                    isNotificationEnabled
+                                )
+                                    .also {
+                                        emit(Resource.Success(successMsg))
+                                    }
+
+                            }
+                        }
+                        else -> {
+                            /** NO-OP **/
+                        }
+
+                    }
                 }
-            }
-        }.catch { Resource.Error(it.message.toString(), null) }.flowOn(coroutineDispatchers.io())
+        }
 
     override suspend fun updateUserWeightToRemoteDB(weight: Double): Flow<Resource<String>> =
         flow<Resource<String>> {
-            sessionRemoteDataSource.updateUserWeightToRemoteDB(weight).collect {
-                it.data?.let { successMsg ->
-                    sessionCacheDataSource.cacheUserWeight(weight)
-                    emit(Resource.Success(successMsg))
+            sessionRemoteDataSource.updateUserWeightToRemoteDB(weight)
+                .catch { emit(Resource.Error(it.message.toString(), null)) }
+                .flowOn(coroutineDispatchers.io())
+                .collect { updateResponse ->
+
+                    emit(Resource.Loading())
+
+                    when (updateResponse) {
+                        is Resource.Error -> {
+                            emit(Resource.Error(updateResponse.message.toString()))
+                        }
+                        is Resource.Success -> {
+                            updateResponse.data?.let { successMsg ->
+                                sessionCacheDataSource.cacheUserWeight(weight).also {
+                                    emit(Resource.Success(successMsg))
+                                }
+                            }
+                        }
+                        else -> {
+                            /** NO-OP **/
+                        }
+                    }
                 }
-            }
-        }.catch { Resource.Error(it.message.toString(), null) }.flowOn(coroutineDispatchers.io())
+        }
 
     /**
      * Functions for fetching and saving from/to Jetpack DataStore
      */
-    override suspend fun getFirstUseState(): Flow<Resource<Boolean>> =
+    override suspend fun getFirstUseState(): Flow<Boolean> =
         sessionCacheDataSource.getFirstUseState()
-            .catch { Resource.Error(it.message.toString(), null) }
             .flowOn(coroutineDispatchers.io())
 
     override suspend fun cacheFirstUseState(isFirstTime: Boolean) =
         sessionCacheDataSource.storeFirstUseState(isFirstTime)
-
-    override suspend fun getInitialSetupState(): Flow<Resource<Boolean>> =
-        sessionCacheDataSource.getInitialSetupState()
-            .catch { Resource.Error(it.message.toString(), null) }
-            .flowOn(coroutineDispatchers.io())
-
-    override suspend fun cacheInitialSetupState(isInitialSetupDone: Boolean) =
-        sessionCacheDataSource.storeInitialSetupState(isInitialSetupDone)
 
     override suspend fun cacheUserAccount(
         userUid: String,
@@ -163,37 +395,47 @@ class SessionRepositoryImpl @Inject constructor(
     override suspend fun cacheUserWeight(weight: Double) =
         sessionCacheDataSource.cacheUserWeight(weight)
 
-    override suspend fun resetCachedUser() = sessionCacheDataSource.resetCachedUser()
+    override suspend fun resetCachedUser() =
+        sessionCacheDataSource.resetCachedUser()
 
-    override suspend fun resetCachedStates() = sessionCacheDataSource.resetCachedStates()
+    override suspend fun resetCachedStates() =
+        sessionCacheDataSource.resetCachedStates()
 
-    override suspend fun getUserUid(): Flow<Resource<String>> =
+    override suspend fun getUserUid(): Flow<String> =
         sessionCacheDataSource.getUserUid()
-            .catch { Resource.Error(it.message.toString(), null) }
             .flowOn(coroutineDispatchers.io())
 
-    override suspend fun getUsername(): Flow<Resource<String>> =
+    override suspend fun getUsername(): Flow<String> =
         sessionCacheDataSource.getUsername()
-            .catch { Resource.Error(it.message.toString(), null) }
             .flowOn(coroutineDispatchers.io())
 
-    override suspend fun getUserEmail(): Flow<Resource<String>> =
+    override suspend fun getUserEmail(): Flow<String> =
         sessionCacheDataSource.getUserEmail()
-            .catch { Resource.Error(it.message.toString(), null) }
             .flowOn(coroutineDispatchers.io())
 
-    override suspend fun getUserWeight(): Flow<Resource<Double>> =
+    override suspend fun getUserWeight(): Flow<Double> =
         sessionCacheDataSource.getUserWeight()
-            .catch { Resource.Error(it.message.toString(), null) }
             .flowOn(coroutineDispatchers.io())
 
-    override suspend fun getUserNotificationState(): Flow<Resource<Boolean>> =
+    override suspend fun getUserNotificationState(): Flow<Boolean> =
         sessionCacheDataSource.getUserNotificationState()
-            .catch { Resource.Error(it.message.toString(), null) }
             .flowOn(coroutineDispatchers.io())
 
-    override suspend fun getUserPhotoUrl(): Flow<Resource<String>> =
+    override suspend fun getUserPhotoUrl(): Flow<String> =
         sessionCacheDataSource.getUserPhotoUrl()
-            .catch { Resource.Error(it.message.toString(), null) }
+            .flowOn(coroutineDispatchers.io())
+
+    override suspend fun cacheFineLocationPermissionState(hasPermission: Boolean) =
+        sessionCacheDataSource.cacheFineLocationPermissionState(hasPermission)
+
+    override suspend fun cacheActivityRecognitionPermissionState(hasPermission: Boolean) =
+        sessionCacheDataSource.cacheActivityRecognitionPermissionState(hasPermission)
+
+    override suspend fun getFineLocationPermissionState(): Flow<Boolean> =
+        sessionCacheDataSource.getFineLocationPermissionState()
+            .flowOn(coroutineDispatchers.io())
+
+    override suspend fun getActivityRecognitionPermissionState(): Flow<Boolean> =
+        sessionCacheDataSource.getActivityRecognitionPermissionState()
             .flowOn(coroutineDispatchers.io())
 }

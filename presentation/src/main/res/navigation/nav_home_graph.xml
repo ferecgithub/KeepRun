@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_home_graph"
-    app:startDestination="@id/initialFragment">
+    app:startDestination="@id/runsFragment">
 
     <fragment
         android:id="@+id/trackingFragment"
@@ -12,16 +12,11 @@
         tools:layout="@layout/fragment_tracking">
         <action
             android:id="@+id/action_trackingFragment_to_runsFragment"
-            app:destination="@id/runsFragment" />
-        <action
-            android:id="@+id/action_trackingFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
-        <action
-            android:id="@+id/action_trackingFragment_to_statisticsFragment"
-            app:destination="@id/statisticsFragment" />
-        <action
-            android:id="@+id/action_trackingFragment_to_aboutFragment"
-            app:destination="@id/aboutFragment" />
+            app:destination="@id/runsFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popUpTo="@id/runsFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/initialFragment"
@@ -43,7 +38,21 @@
         tools:layout="@layout/fragment_runs">
         <action
             android:id="@+id/action_runsFragment_to_trackingFragment"
-            app:destination="@id/trackingFragment" />
+            app:destination="@id/trackingFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popUpTo="@id/trackingFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_runsFragment_to_initialFragment"
+            app:destination="@id/initialFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popUpTo="@id/initialFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_runsFragment_to_locationPermissionFragment"
+            app:destination="@id/locationPermissionFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -52,7 +61,14 @@
         tools:layout="@layout/fragment_settings">
         <action
             android:id="@+id/action_settingsFragment_to_trackingFragment"
-            app:destination="@id/trackingFragment" />
+            app:destination="@id/trackingFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popUpTo="@id/trackingFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_settingsFragment_to_locationPermissionFragment"
+            app:destination="@id/locationPermissionFragment" />
     </fragment>
     <fragment
         android:id="@+id/statisticsFragment"
@@ -61,7 +77,14 @@
         tools:layout="@layout/fragment_statistics">
         <action
             android:id="@+id/action_statisticsFragment_to_trackingFragment"
-            app:destination="@id/trackingFragment" />
+            app:destination="@id/trackingFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popUpTo="@id/trackingFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_statisticsFragment_to_locationPermissionFragment"
+            app:destination="@id/locationPermissionFragment" />
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"
@@ -70,6 +93,60 @@
         tools:layout="@layout/fragment_about">
         <action
             android:id="@+id/action_aboutFragment_to_trackingFragment"
-            app:destination="@id/trackingFragment" />
+            app:destination="@id/trackingFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popUpTo="@id/trackingFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_aboutFragment_to_locationPermissionFragment"
+            app:destination="@id/locationPermissionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/locationPermissionFragment"
+        android:name="com.ferechamitbeyli.presentation.view.activities.home_activity.fragments.LocationPermissionFragment"
+        android:label="fragment_location_permission"
+        tools:layout="@layout/fragment_location_permission">
+        <action
+            android:id="@+id/action_locationPermissionFragment_to_activityRecognitionPermissionFragment"
+            app:destination="@id/activityRecognitionPermissionFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popUpTo="@id/activityRecognitionPermissionFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_locationPermissionFragment_to_trackingFragment"
+            app:destination="@id/trackingFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popUpTo="@id/trackingFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_locationPermissionFragment_to_runsFragment"
+            app:destination="@id/runsFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popUpTo="@id/runsFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/activityRecognitionPermissionFragment"
+        android:name="com.ferechamitbeyli.presentation.view.activities.home_activity.fragments.ActivityRecognitionPermissionFragment"
+        android:label="fragment_activity_recognition_permission"
+        tools:layout="@layout/fragment_activity_recognition_permission">
+        <action
+            android:id="@+id/action_activityRecognitionPermissionFragment_to_trackingFragment"
+            app:destination="@id/trackingFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popUpTo="@id/trackingFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_activityRecognitionPermissionFragment_to_runsFragment"
+            app:destination="@id/runsFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popUpTo="@id/runsFragment"
+            app:popUpToInclusive="false" />
     </fragment>
 </navigation>

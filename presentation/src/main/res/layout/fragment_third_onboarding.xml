@@ -11,34 +11,77 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="fitCenter"
-        app:layout_constraintTop_toBottomOf="@id/horizontal4_gl"
+        android:src="@drawable/onboarding_img3"
         app:layout_constraintBottom_toTopOf="@id/horizontal75_gl"
         app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
         app:layout_constraintStart_toStartOf="@id/vertical1_gl"
-        android:src="@drawable/onboarding_img3" />
+        app:layout_constraintTop_toBottomOf="@id/horizontal4_gl" />
 
     <include
         android:id="@+id/onboardingPagerIndicator_layout"
         layout="@layout/pager_indicator_layout"
-        app:layout_constraintStart_toStartOf="@id/vertical1_gl"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal4_gl"
         app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
-        app:layout_constraintTop_toTopOf="@id/horizontal3_gl"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal4_gl"/>
+        app:layout_constraintStart_toStartOf="@id/vertical1_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal3_gl" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/onboardingTitleTap1_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_regular"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/tap"
+        android:textColor="@color/normalText"
+        android:textSize="@dimen/paragraph2"
+        app:layout_constraintBottom_toTopOf="@+id/onboardingTitle_tv"
+        app:layout_constraintEnd_toStartOf="@+id/onboardingTitleTapImage_iv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/onboardingPagerIndicator_layout"
+        app:layout_constraintTop_toTopOf="@+id/horizontal1_gl" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/onboardingTitleTapImage_iv"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tint="@color/darkGreen"
+        app:layout_constraintBottom_toBottomOf="@+id/onboardingTitleTap1_tv"
+        app:layout_constraintEnd_toStartOf="@+id/onboardingTitleTap2_tv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/onboardingTitleTap1_tv"
+        app:layout_constraintTop_toTopOf="@+id/onboardingTitleTap1_tv"
+        app:srcCompat="@drawable/ic_add_run" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/onboardingTitleTap2_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_regular"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/to_start_a_run"
+        android:textColor="@color/normalText"
+        android:textSize="@dimen/paragraph2"
+        app:layout_constraintBottom_toBottomOf="@+id/onboardingTitleTap1_tv"
+        app:layout_constraintEnd_toStartOf="@+id/onboardingPagerIndicator_layout"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/onboardingTitleTapImage_iv"
+        app:layout_constraintTop_toTopOf="@+id/onboardingTitleTap1_tv" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/onboardingTitle_tv"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat_regular"
-        android:textColor="@color/normalText"
         android:gravity="center"
         android:padding="8dp"
+        android:text="@string/onboardingText3"
+        android:textColor="@color/normalText"
         android:textSize="@dimen/paragraph2"
         app:layout_constraintBottom_toTopOf="@id/horizontal3_gl"
-        app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
-        app:layout_constraintStart_toStartOf="@id/vertical1_gl"
-        app:layout_constraintTop_toTopOf="@id/horizontal1_gl"
-        android:text="@string/onboardingText3" />
+        app:layout_constraintEnd_toEndOf="@+id/vertical9_gl"
+        app:layout_constraintStart_toStartOf="@+id/vertical1_gl" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/getStarted_btn"
@@ -46,10 +89,10 @@
         android:layout_height="0dp"
         android:background="@drawable/btn_background"
         android:fontFamily="@font/montserrat_bold"
+        android:gravity="center"
         android:text="@string/get_started"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:gravity="center"
         android:textSize="@dimen/title3"
         app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="@+id/horizontal875_gl"

@@ -1,6 +1,5 @@
 package com.ferechamitbeyli.presentation.viewmodel.activities.auth_activity.fragments.onboarding
 
-import com.ferechamitbeyli.domain.Resource
 import com.ferechamitbeyli.domain.dispatchers.CoroutineDispatchers
 import com.ferechamitbeyli.presentation.utils.helpers.NetworkConnectionTracker
 import com.ferechamitbeyli.presentation.utils.states.EventState
@@ -33,7 +32,6 @@ class OnboardingViewModel @Inject constructor(
      * Data and functions related to detect if onboarding screen is finished or not
      */
 
-
     private var _onboardingEventsFlow = MutableSharedFlow<EventState>()
     val onboardingEventsFlow: SharedFlow<EventState> = _onboardingEventsFlow
 
@@ -42,22 +40,14 @@ class OnboardingViewModel @Inject constructor(
      * Checks and stores the first use state of the application in cache
      */
 
-    fun storeFirstUseState(isFinished: Boolean) =
+    fun storeFirstUseState(isFirstUse: Boolean) =
         ioScope.launch {
-            sessionUseCases.cacheFirstUseStateUseCase.invoke(isFinished)
+            sessionUseCases.cacheFirstUseStateUseCase.invoke(isFirstUse)
         }
 
     fun getFirstUseState() = flow<Boolean> {
         sessionUseCases.getFirstUseStateUseCase.invoke().collect {
-            when (it) {
-                is Resource.Success -> {
-                    it.data?.let { state -> emit(state) }
-                }
-                is Resource.Error -> {
-                    _onboardingEventsFlow.emit(EventState.Error(it.message.toString()))
-                }
-                is Resource.Loading -> _onboardingEventsFlow.emit(EventState.Loading())
-            }
+            emit(it)
         }
     }
 
@@ -67,16 +57,11 @@ class OnboardingViewModel @Inject constructor(
 
     fun getUserEmailFromCache() = flow<String> {
         sessionUseCases.getUserEmailUseCase.invoke().collect {
-            when (it) {
-                is Resource.Success -> {
-                    it.data?.let { email -> emit(email) }
-                }
-                is Resource.Error -> {
-                    _onboardingEventsFlow.emit(EventState.Error(it.message.toString()))
-                }
-                is Resource.Loading -> _onboardingEventsFlow.emit(EventState.Loading())
-            }
+            emit(it)
         }
     }
+
+
+
 
 }

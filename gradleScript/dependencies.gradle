@@ -27,9 +27,9 @@ ext {
     ]
 
     // AndroidX Core
-    appcompat = "1.3.1"
-    core_ktx = "1.6.0"
-    constraintlayout = '2.1.1'
+    appcompat = '1.4.0'
+    core_ktx = '1.7.0'
+    constraintlayout = '2.1.2'
     legacy_support_v4 = "1.0.0"
 
     AndroidX = [
@@ -40,7 +40,7 @@ ext {
     ]
 
     // Domain specific
-    kotlin_version = "1.5.31"
+    kotlin_version = '1.6.0'
 
     Domain = [
             kotlin_version: "org.jetbrains.kotlin:kotlin-stdlib:${kotlin_version}"
@@ -73,7 +73,7 @@ ext {
     ]
 
     // Lifecycle
-    lifecycle = "2.3.1"
+    lifecycle = '2.4.0'
 
     Lifecycle = [
             lifecycle_viewmodel_ktx: "androidx.lifecycle:lifecycle-viewmodel-ktx:${lifecycle}",
@@ -84,7 +84,7 @@ ext {
     ]
 
     // Navigation
-    navigation = '2.4.0-alpha10'
+    navigation = '2.4.0-beta02'
 
     Navigation = [
             navigation_fragment_ktx: "androidx.navigation:navigation-fragment-ktx:${navigation}",
@@ -93,8 +93,8 @@ ext {
     ]
 
     // Activity & Fragment KTX
-    fragment_ktx = "1.4.0-alpha10"
-    activity_ktx = "1.3.1"
+    fragment_ktx = '1.4.0'
+    activity_ktx = '1.4.0'
 
     ActivityFragmentKTX = [
             activity_ktx: "androidx.activity:activity-ktx:${activity_ktx}",
@@ -117,7 +117,7 @@ ext {
     ]
 
     // Firebase
-    firebase_bom = "28.4.2"
+    firebase_bom = '29.0.0'
     firebase_auth_ktx = "21.0.1"
     firebase_database = "20.0.2"
     firebase_storage = "20.0.0"
@@ -135,7 +135,7 @@ ext {
     ]
 
     // Coroutines
-    kotlinx_coroutines = "1.5.2-native-mt"
+    kotlinx_coroutines = "1.5.2"
 
     Coroutines = [
             kotlinx_coroutines_core: "org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinx_coroutines}",
@@ -153,7 +153,7 @@ ext {
     ]
 
     // OkHttp3
-    okhttp3_logging_interceptor = "5.0.0-alpha.2"
+    okhttp3_logging_interceptor = '5.0.0-alpha.3'
 
     OkHttp3 = [
             logging_interceptor: "com.squareup.okhttp3:logging-interceptor:${okhttp3_logging_interceptor}"
@@ -161,7 +161,7 @@ ext {
 
     // PlayServices
     play_services_location = "18.0.0"
-    play_services_maps = "17.0.1"
+    play_services_maps = '18.0.0'
 
     PlayServices = [
             kotlinx_coroutines_play_services: "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${kotlinx_coroutines}",
@@ -169,10 +169,19 @@ ext {
             play_services_maps: "com.google.android.gms:play-services-maps:${play_services_maps}"
     ]
 
+    // Google Maps SDK Utils
+    google_maps_utils = "2.2.3"
+    google_maps_utils_ktx = "3.2.0"
+
+    GoogleMapsUtils = [
+            google_maps_utils: "com.google.maps.android:android-maps-utils:${google_maps_utils}",
+            google_maps_utils_ktx: "com.google.maps.android:maps-utils-ktx:${google_maps_utils_ktx}"
+    ]
+
     // Dagger Hilt
-    dagger_hilt = '2.39.1'
+    dagger_hilt = '2.40.2'
     hilt_lifecycle_viewmodel = "1.0.0-alpha03"
-    hilt_compiler = '2.39.1'
+    hilt_compiler = '2.40.2'
 
     DaggerHilt = [
             hilt_android: "com.google.dagger:hilt-android:${dagger_hilt}",
@@ -255,7 +264,7 @@ ext {
 
     // Test Suites
     junit = "5.8.1"
-    mockk = '1.12.0'
+    mockk = '1.12.1'
 
     espresso_core = "3.4.0"
 

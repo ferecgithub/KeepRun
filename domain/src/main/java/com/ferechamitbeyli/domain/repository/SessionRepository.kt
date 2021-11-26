@@ -7,16 +7,17 @@ import kotlinx.coroutines.flow.Flow
 interface SessionRepository {
 
     /**
-     * Functions fetches identifier (uid) of the current user from FirebaseAuth and sign out
+     * Functions fetches and saves data from/to FirebaseAuth
      */
     suspend fun getCurrentUserIdentifier(): Flow<Resource<String>>
+    suspend fun updateUserPassword(password: String) : Flow<Resource<String>>
 
     suspend fun signOut(): Flow<Resource<String>>
 
     /**
      * Functions fetches and saves data from/to Firebase Realtime Database
      */
-    suspend fun getCurrentUserFromRemoteDB(identifier: String) : Flow<Resource<User>>
+    suspend fun getCurrentUserFromRemoteDB() : Flow<Resource<User>>
     suspend fun getUserUidFromRemoteDB() : Flow<Resource<String>>
     suspend fun getUsernameFromRemoteDB() : Flow<Resource<String>>
     suspend fun getUserEmailFromRemoteDB() : Flow<Resource<String>>
@@ -33,11 +34,8 @@ interface SessionRepository {
     /**
      * Functions fetches and saves data from/to Jetpack Datastore
      */
-    suspend fun getFirstUseState(): Flow<Resource<Boolean>>
+    suspend fun getFirstUseState(): Flow<Boolean>
     suspend fun cacheFirstUseState(isFirstTime: Boolean)
-
-    suspend fun getInitialSetupState(): Flow<Resource<Boolean>>
-    suspend fun cacheInitialSetupState(isInitialSetupDone: Boolean)
 
     suspend fun cacheUserAccount(
         userUid: String,
@@ -55,10 +53,18 @@ interface SessionRepository {
     suspend fun resetCachedUser()
     suspend fun resetCachedStates()
 
-    suspend fun getUserUid(): Flow<Resource<String>>
-    suspend fun getUsername(): Flow<Resource<String>>
-    suspend fun getUserEmail(): Flow<Resource<String>>
-    suspend fun getUserWeight() : Flow<Resource<Double>>
-    suspend fun getUserNotificationState() : Flow<Resource<Boolean>>
-    suspend fun getUserPhotoUrl(): Flow<Resource<String>>
+    suspend fun getUserUid(): Flow<String>
+    suspend fun getUsername(): Flow<String>
+    suspend fun getUserEmail(): Flow<String>
+    suspend fun getUserWeight() : Flow<Double>
+    suspend fun getUserNotificationState() : Flow<Boolean>
+    suspend fun getUserPhotoUrl(): Flow<String>
+
+    // Permissions
+
+    suspend fun cacheFineLocationPermissionState(hasPermission: Boolean)
+    suspend fun cacheActivityRecognitionPermissionState(hasPermission: Boolean)
+
+    suspend fun getFineLocationPermissionState(): Flow<Boolean>
+    suspend fun getActivityRecognitionPermissionState(): Flow<Boolean>
 }

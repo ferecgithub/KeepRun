@@ -1,8 +1,8 @@
-package com.ferechamitbeyli.keeprun.di.framework
+package com.ferechamitbeyli.keeprun.di
 
 import android.content.Context
 import androidx.room.Room
-import com.ferechamitbeyli.data.local.cache.DataStoreObject
+import com.ferechamitbeyli.data.local.cache.DataStoreManager
 import com.ferechamitbeyli.data.local.db.DatabaseService
 import com.ferechamitbeyli.data.local.entities.RunEntity
 import com.ferechamitbeyli.data.local.entities.mappers.RunEntityMapper
@@ -84,11 +84,8 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideAuthDataSource(@ApplicationContext appContext: Context): AuthDataSource =
+    fun provideAuthDataSource(): AuthDataSource =
         AuthDataSourceImpl(
-            provideSessionCacheDataSource(appContext),
-            provideSessionRemoteDataSource(),
-            provideAuthRemoteDBDataSource(),
             provideUserDtoMapper(),
             provideFirebaseAuth(),
             provideCoroutineDispatchers()
@@ -137,7 +134,14 @@ class AppModule {
     @Singleton
     @Provides
     fun provideAuthRepository(@ApplicationContext appContext: Context): AuthRepository =
-        AuthRepositoryImpl(provideAuthDataSource(appContext), provideAuthRemoteDBDataSource())
+        AuthRepositoryImpl(
+            provideFirebaseAuth(),
+            provideAuthDataSource(),
+            provideAuthRemoteDBDataSource(),
+            provideSessionRemoteDataSource(),
+            provideSessionCacheDataSource(appContext),
+            provideCoroutineDispatchers()
+        )
 
 
     /** -------------------- End of Authentication provide functions -------------------- **/
@@ -243,8 +247,8 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideDataStoreObject(@ApplicationContext appContext: Context): DataStoreObject =
-        DataStoreObject(appContext)
+    fun provideDataStoreObject(@ApplicationContext appContext: Context): DataStoreManager =
+        DataStoreManager(appContext)
 
     /** Firebase Realtime DB provide functions **/
 

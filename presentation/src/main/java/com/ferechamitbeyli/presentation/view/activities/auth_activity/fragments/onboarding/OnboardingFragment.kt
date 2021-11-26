@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.ferechamitbeyli.presentation.R
 import com.ferechamitbeyli.presentation.databinding.FragmentOnboardingBinding
+import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions
 import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.hideKeyboard
 import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.startNewActivity
 import com.ferechamitbeyli.presentation.utils.helpers.ZoomOutPageTransformer
@@ -20,8 +21,9 @@ import com.ferechamitbeyli.presentation.view.base.BaseFragment
 import com.ferechamitbeyli.presentation.viewmodel.activities.auth_activity.fragments.onboarding.OnboardingViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
-import logcat.logcat
+import kotlinx.coroutines.flow.combine
 
 @AndroidEntryPoint
 class OnboardingFragment : BaseFragment<FragmentOnboardingBinding>() {
@@ -36,7 +38,7 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        getUserEmailFromCache()
+        checkCachedEmailThenFirstUseState()
         listenOnboardingEventChannel()
     }
 
@@ -45,7 +47,13 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding>() {
             viewModel.onboardingEventsFlow.collectLatest {
                 when (it) {
                     is EventState.Error -> {
-                        Snackbar.make(binding.root, it.message, Snackbar.LENGTH_LONG).show()
+                        UIHelperFunctions.showSnackbar(
+                            binding.root,
+                            requireContext(),
+                            false,
+                            it.message,
+                            Snackbar.LENGTH_LONG
+                        ).show()
                     }
                     else -> {
                         /** NO-OP **/
@@ -67,28 +75,25 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding>() {
         }
     }
 
-    private fun getFirstUseState() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.getFirstUseState().collectLatest {
-            logcat("FIRST USE") { "First use : $it" }
-            if (it) {
-                setupPager()
-            } else {
-                navigateToSignInFragment()
-                hideKeyboard()
-            }
-        }
-    }
+    private fun checkCachedEmailThenFirstUseState() =
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            combine(
+                viewModel.getUserEmailFromCache(),
+                viewModel.getFirstUseState(),
+            ) { email, isFirstUse ->
 
+                if (email.isNotBlank()) {
+                    navigateToHomeActivity()
+                }
+                if (isFirstUse) {
+                    setupPager()
+                } else {
+                    navigateToSignInFragment()
+                    hideKeyboard()
+                }
 
-    private fun getUserEmailFromCache() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.getUserEmailFromCache().collectLatest { email ->
-            if (email.isBlank()) {
-                getFirstUseState()
-            } else {
-                navigateToHomeActivity()
-            }
+            }.collect()
         }
-    }
 
     private fun setupPager() {
         val fragmentList = arrayListOf<Fragment>(

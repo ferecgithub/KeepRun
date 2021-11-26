@@ -105,9 +105,6 @@ dependencies {
     // SquareUp Logcat
     api SquareUpLogcat.squareup_logcat
 
-    // Timber
-    //implementation Timber.timber
-
     // Test Suites
     implementation TestSuites.junit_jupiter_api
     implementation TestSuites.junit_jupiter_engine

@@ -9,6 +9,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.ferechamitbeyli.presentation.R
 import com.ferechamitbeyli.presentation.databinding.FragmentInitialBinding
+import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions
+import com.ferechamitbeyli.presentation.utils.states.EventState
 import com.ferechamitbeyli.presentation.view.base.BaseFragment
 import com.ferechamitbeyli.presentation.viewmodel.activities.home_activity.fragments.InitialViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -29,11 +31,13 @@ class InitialFragment : BaseFragment<FragmentInitialBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupBottomNavigationViewVisibility()
+
         checkInternetConnection()
 
-        hideBottomNavigationViewIfCurrentFragmentIsInitialFragment()
+        listenEventChannel()
 
-        checkCacheForWeightValue()
+        getUsernameFromRemoteDB()
 
         setupOnClickListeners()
 
@@ -41,33 +45,15 @@ class InitialFragment : BaseFragment<FragmentInitialBinding>() {
 
     private fun setupOnClickListeners() {
         binding.submitWeightBtn.setOnClickListener {
-            viewModel.saveWeightInformation(binding.initialWeightEt.text.toString().toDouble())
-            navigateToRunsFragment()
+            if (internetConnectionFlag) {
+                viewModel.saveWeightInformation(binding.initialWeightEt.text.toString().toDouble())
+                    .also {
+                        navigateToRunsFragment()
+                    }
+            }
+
         }
     }
-
-    private fun checkCacheForWeightValue() =
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.getUserWeightFromCache().collectLatest {
-                if (it != 0.0) {
-                    navigateToRunsFragment()
-                } else {
-                    checkRemoteDBFromWeightValue()
-                }
-            }
-        }
-
-    private fun checkRemoteDBFromWeightValue() =
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.getUserWeightFromRemoteDB().collectLatest {
-                if (it != 0.0) {
-                    viewModel.saveWeightInformation(it)
-                    navigateToRunsFragment()
-                } else {
-                    getUsernameFromRemoteDB()
-                }
-            }
-        }
 
     private fun navigateToRunsFragment() {
         if (findNavController().currentDestination?.id == R.id.initialFragment) {
@@ -82,9 +68,36 @@ class InitialFragment : BaseFragment<FragmentInitialBinding>() {
             }
         }
 
+    private fun listenEventChannel() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+        viewModel.initialEventsChannel.collectLatest {
+            when (it) {
+                is EventState.Error -> {
+                    UIHelperFunctions.showSnackbar(
+                        binding.root,
+                        requireContext(),
+                        false,
+                        it.message,
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
+                is EventState.Loading -> {
+                    /** NO-OP **/
+                }
+                is EventState.Success -> {
+                    /** NO-OP **/
+                }
+            }
+        }
+    }
+
     private fun checkInternetConnection() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        val snackBar =
-            Snackbar.make(binding.root, "No Internet Connection", Snackbar.LENGTH_INDEFINITE)
+        val snackBar = UIHelperFunctions.showSnackbar(
+            binding.root,
+            requireContext(),
+            false,
+            "No Internet Connection",
+            Snackbar.LENGTH_INDEFINITE
+        )
         viewModel.networkState.collect {
             if (it) {
                 internetConnectionFlag = true

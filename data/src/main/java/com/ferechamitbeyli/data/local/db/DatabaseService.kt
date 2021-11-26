@@ -10,7 +10,7 @@ import com.ferechamitbeyli.data.local.entities.RunEntity
     version = 1,
     exportSchema = true
 )
-@TypeConverters(TypeConverters::class)
+@TypeConverters(TypeConverter::class)
 abstract class DatabaseService: RoomDatabase() {
 
     abstract fun getRunDao(): RunDao

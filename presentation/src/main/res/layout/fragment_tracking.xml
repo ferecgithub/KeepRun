@@ -33,8 +33,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/ic_pause_run"
-        android:visibility="gone"
         android:contentDescription="@string/pause_the_run"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/horizontal85_gl"
         app:layout_constraintEnd_toEndOf="@id/vertical4_gl"
         app:layout_constraintStart_toStartOf="@id/vertical2_gl"
@@ -56,11 +56,11 @@
         android:id="@+id/startRun_btn"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:contentDescription="@string/start_a_run"
         android:background="@drawable/ic_start_run"
+        android:contentDescription="@string/start_a_run"
         app:layout_constraintBottom_toBottomOf="@id/horizontal85_gl"
-        app:layout_constraintEnd_toEndOf="@id/vertical6_gl"
-        app:layout_constraintStart_toStartOf="@id/vertical4_gl"
+        app:layout_constraintEnd_toEndOf="@id/vertical4_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical2_gl"
         app:layout_constraintTop_toTopOf="@id/horizontal75_gl" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -70,8 +70,8 @@
         android:fontFamily="@font/montserrat_medium"
         android:text="@string/start"
         android:textSize="@dimen/paragraph"
-        app:layout_constraintEnd_toEndOf="@id/vertical6_gl"
-        app:layout_constraintStart_toStartOf="@id/vertical4_gl"
+        app:layout_constraintEnd_toEndOf="@id/vertical4_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical2_gl"
         app:layout_constraintTop_toTopOf="@id/horizontal85_gl" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -79,8 +79,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/ic_finish_run"
-        android:visibility="gone"
         android:contentDescription="@string/finish_the_run"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/horizontal85_gl"
         app:layout_constraintEnd_toEndOf="@id/vertical8_gl"
         app:layout_constraintStart_toStartOf="@id/vertical6_gl"
@@ -94,6 +94,28 @@
         android:text="@string/finish"
         android:textSize="@dimen/paragraph"
         android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/vertical8_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical6_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal85_gl" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/goBack_btn"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/ic_back"
+        android:contentDescription="@string/get_back_to_runs_screen"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal85_gl"
+        app:layout_constraintEnd_toEndOf="@id/vertical8_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical6_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal75_gl" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/goBack_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_medium"
+        android:text="@string/back"
+        android:textSize="@dimen/paragraph"
         app:layout_constraintEnd_toEndOf="@id/vertical8_gl"
         app:layout_constraintStart_toStartOf="@id/vertical6_gl"
         app:layout_constraintTop_toTopOf="@id/horizontal85_gl" />

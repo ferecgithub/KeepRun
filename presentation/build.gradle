@@ -62,6 +62,10 @@ dependencies {
     implementation PlayServices.play_services_maps
     implementation PlayServices.kotlinx_coroutines_play_services
 
+    // Google Maps SDK Utils
+    implementation GoogleMapsUtils.google_maps_utils
+    implementation GoogleMapsUtils.google_maps_utils_ktx
+
     // Lifecycle
     implementation Lifecycle.lifecycle_viewmodel_ktx
     implementation Lifecycle.lifecycle_runtime_ktx

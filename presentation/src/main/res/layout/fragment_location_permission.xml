@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightGrey"
+    tools:context=".view.activities.home_activity.fragments.LocationPermissionFragment">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageLocationPermission_iv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal3_gl"
+        app:layout_constraintEnd_toEndOf="@id/vertical75_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical25_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal1_gl"
+        app:srcCompat="@drawable/ic_location_permission" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/permissionRequiredTitle_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="center"
+        android:text="@string/permission_required"
+        android:textColor="@color/normalText"
+        android:textSize="@dimen/title3"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal4_gl"
+        app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical1_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal325_gl" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/permissionRequiredDescription_tv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/montserrat_regular"
+        android:gravity="center"
+        android:text="@string/location_perm_desc"
+        android:textColor="@color/normalText"
+        android:textSize="@dimen/paragraph2"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal575_gl"
+        app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical1_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal425_gl" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/permissionRequiredReasoning_tv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/montserrat_light"
+        android:gravity="center"
+        android:text="@string/location_perm_reasoning"
+        android:textColor="@color/normalText"
+        android:textSize="@dimen/paragraph"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal7_gl"
+        app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical1_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal6_gl" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/acceptLocationPermission_btn"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/btn_background"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="center"
+        android:text="@string/accept"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/title3"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal8_gl"
+        app:layout_constraintEnd_toStartOf="@+id/vertical9_gl"
+        app:layout_constraintStart_toStartOf="@+id/vertical1_gl"
+        app:layout_constraintTop_toBottomOf="@id/horizontal725_gl" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/backToRunsFragment_btn"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/btn_background"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="center"
+        android:text="@string/back"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/title3"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal9_gl"
+        app:layout_constraintEnd_toStartOf="@+id/vertical9_gl"
+        app:layout_constraintStart_toStartOf="@+id/vertical1_gl"
+        app:layout_constraintTop_toBottomOf="@id/horizontal825_gl" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal1_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal3_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal325_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.325" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal4_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.4" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal425_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.425" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal575_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.575" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal6_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.6" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal7_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.7" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal725_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.725" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal8_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal825_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.825" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal9_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.9" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical1_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical25_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.25" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical75_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical9_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

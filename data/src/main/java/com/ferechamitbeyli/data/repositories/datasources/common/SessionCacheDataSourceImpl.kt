@@ -1,27 +1,23 @@
 package com.ferechamitbeyli.data.repositories.datasources.common
 
-import com.ferechamitbeyli.data.local.cache.DataStoreObject
-import com.ferechamitbeyli.domain.Resource
+import com.ferechamitbeyli.data.local.cache.DataStoreManager
 import com.ferechamitbeyli.domain.dispatchers.CoroutineDispatchers
 import com.ferechamitbeyli.domain.repository.datasources.common.SessionCacheDataSource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class SessionCacheDataSourceImpl @Inject constructor(
-    private val dataStoreObject: DataStoreObject,
+    private val dataStoreManager: DataStoreManager,
     private val coroutineDispatchers: CoroutineDispatchers
 ) : SessionCacheDataSource {
 
-    override suspend fun getFirstUseState(): Flow<Resource<Boolean>> =
-        dataStoreObject.getFirstUseState()
-            .catch { Resource.Error(it.toString(), null) }
+    override suspend fun getFirstUseState(): Flow<Boolean> =
+        dataStoreManager.getFirstUseState()
             .flowOn(coroutineDispatchers.io())
 
-
-    override suspend fun storeFirstUseState(isFirstTime: Boolean) =
-        dataStoreObject.cacheFirstUseState(isFirstTime)
+    override suspend fun storeFirstUseState(isFirstUse: Boolean) =
+        dataStoreManager.cacheFirstUseState(isFirstUse)
 
     override suspend fun cacheUserAccount(
         userUid: String,
@@ -30,7 +26,7 @@ class SessionCacheDataSourceImpl @Inject constructor(
         userWeight: Double,
         userNotificationEnabled: Boolean,
         userPhotoUrl: String
-    ) = dataStoreObject.cacheUserAccount(
+    ) = dataStoreManager.cacheUserAccount(
         userUid,
         username,
         userEmail,
@@ -39,54 +35,54 @@ class SessionCacheDataSourceImpl @Inject constructor(
         userPhotoUrl
     )
 
-    override suspend fun cacheUsername(username: String) = dataStoreObject.cacheUsername(username)
+    override suspend fun cacheUsername(username: String) = dataStoreManager.cacheUsername(username)
 
     override suspend fun cacheUserNotificationState(isNotificationEnabled: Boolean) =
-        dataStoreObject.cacheUserNotificationState(isNotificationEnabled)
+        dataStoreManager.cacheUserNotificationState(isNotificationEnabled)
 
-    override suspend fun cacheUserWeight(weight: Double) = dataStoreObject.cacheUserWeight(weight)
+    override suspend fun cacheUserWeight(weight: Double) = dataStoreManager.cacheUserWeight(weight)
 
-    override suspend fun resetCachedUser() = dataStoreObject.resetCachedUser()
+    override suspend fun resetCachedUser() = dataStoreManager.resetCachedUser()
 
-    override suspend fun resetCachedStates() = dataStoreObject.resetCachedStates()
+    override suspend fun resetCachedStates() = dataStoreManager.resetCachedStates()
 
-    override suspend fun getUserUid(): Flow<Resource<String>> =
-        dataStoreObject.getUserUid()
-            .catch { Resource.Error(it.toString(), null) }
+    override suspend fun getUserUid(): Flow<String> =
+        dataStoreManager.getUserUid()
             .flowOn(coroutineDispatchers.io())
 
-    override suspend fun getUsername(): Flow<Resource<String>> =
-        dataStoreObject.getUsername()
-            .catch { Resource.Error(it.toString(), null) }
+    override suspend fun getUsername(): Flow<String> =
+        dataStoreManager.getUsername()
             .flowOn(coroutineDispatchers.io())
 
 
-    override suspend fun getUserEmail(): Flow<Resource<String>> =
-        dataStoreObject.getUserEmail()
-            .catch { Resource.Error(it.toString(), null) }
+    override suspend fun getUserEmail(): Flow<String> =
+        dataStoreManager.getUserEmail()
             .flowOn(coroutineDispatchers.io())
 
-    override suspend fun getUserWeight(): Flow<Resource<Double>> =
-        dataStoreObject.getUserWeight()
-            .catch { Resource.Error(it.toString(), null) }
+    override suspend fun getUserWeight(): Flow<Double> =
+        dataStoreManager.getUserWeight()
             .flowOn(coroutineDispatchers.io())
 
-    override suspend fun getUserNotificationState(): Flow<Resource<Boolean>> =
-        dataStoreObject.getNotificationEnabled()
-            .catch { Resource.Error(it.toString(), null) }
+    override suspend fun getUserNotificationState(): Flow<Boolean> =
+        dataStoreManager.getNotificationEnabled()
             .flowOn(coroutineDispatchers.io())
 
-    override suspend fun getUserPhotoUrl(): Flow<Resource<String>> =
-        dataStoreObject.getUserPhotoUrl()
-            .catch { Resource.Error(it.toString(), null) }
+    override suspend fun getUserPhotoUrl(): Flow<String> =
+        dataStoreManager.getUserPhotoUrl()
             .flowOn(coroutineDispatchers.io())
 
-    override suspend fun getInitialSetupState(): Flow<Resource<Boolean>> =
-        dataStoreObject.getInitialSetupState()
-            .catch { Resource.Error(it.toString(), null) }
+    override suspend fun cacheFineLocationPermissionState(hasPermission: Boolean) =
+        dataStoreManager.cacheFineLocationPermissionState(hasPermission)
+
+    override suspend fun cacheActivityRecognitionPermissionState(hasPermission: Boolean) =
+        dataStoreManager.cacheActivityRecognitionPermissionState(hasPermission)
+
+    override suspend fun getFineLocationPermissionState(): Flow<Boolean> =
+        dataStoreManager.getFineLocationPermissionState()
             .flowOn(coroutineDispatchers.io())
 
-    override suspend fun storeInitialSetupState(hasInitialSetupDone: Boolean) =
-        dataStoreObject.cacheInitialSetupState(hasInitialSetupDone)
+    override suspend fun getActivityRecognitionPermissionState(): Flow<Boolean> =
+        dataStoreManager.getActivityRecognitionPermissionState()
+            .flowOn(coroutineDispatchers.io())
 
 }

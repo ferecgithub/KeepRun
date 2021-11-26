@@ -29,19 +29,7 @@ class ThirdOnboardingFragment : BaseFragment<FragmentThirdOnboardingBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.currentPagerPosition.collect {
-                binding.onboardingPagerIndicatorLayout.indicatorOne.setImageDrawableWithAnimation(
-                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_indicator_default)!!
-                )
-                binding.onboardingPagerIndicatorLayout.indicatorTwo.setImageDrawableWithAnimation(
-                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_indicator_default)!!
-                )
-                binding.onboardingPagerIndicatorLayout.indicatorThree.setImageDrawableWithAnimation(
-                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_indicator_selected)!!
-                )
-            }
-        }
+        setupPagerIndicators()
 
         setupOnClickListeners()
 
@@ -50,9 +38,23 @@ class ThirdOnboardingFragment : BaseFragment<FragmentThirdOnboardingBinding>() {
     private fun setupOnClickListeners() {
         binding.getStartedBtn.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                viewModel.storeFirstUseState(true)
+                viewModel.storeFirstUseState(false)
                 navigateToSignInFragment()
             }
+        }
+    }
+
+    private fun setupPagerIndicators() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        viewModel.currentPagerPosition.collect {
+            binding.onboardingPagerIndicatorLayout.indicatorOne.setImageDrawableWithAnimation(
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_indicator_default)!!
+            )
+            binding.onboardingPagerIndicatorLayout.indicatorTwo.setImageDrawableWithAnimation(
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_indicator_default)!!
+            )
+            binding.onboardingPagerIndicatorLayout.indicatorThree.setImageDrawableWithAnimation(
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_indicator_selected)!!
+            )
         }
     }
 
@@ -61,7 +63,6 @@ class ThirdOnboardingFragment : BaseFragment<FragmentThirdOnboardingBinding>() {
             findNavController().navigate(R.id.action_onboardingFragment_to_signInFragment)
         }
     }
-
 
 
 }

@@ -13,6 +13,7 @@ import com.ferechamitbeyli.presentation.R
 import com.ferechamitbeyli.presentation.databinding.FragmentSignUpBinding
 import com.ferechamitbeyli.presentation.utils.enums.ValidationErrorResults
 import com.ferechamitbeyli.presentation.utils.enums.ValidationResults
+import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions
 import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.enable
 import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.hideKeyboard
 import com.ferechamitbeyli.presentation.utils.states.EventState
@@ -22,7 +23,6 @@ import com.ferechamitbeyli.presentation.viewmodel.activities.auth_activity.AuthV
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import logcat.logcat
 
 @AndroidEntryPoint
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
@@ -63,21 +63,25 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
     private fun setupOnClickListeners() {
 
         binding.signUpBtn.setOnClickListener {
-            if (validUsernameFlag and validEmailFlag and validPasswordFlag and validConfirmPasswordFlag and internetConnectionFlag) {
-                viewModel.signUpUser(
-                    binding.signUpEmailEt.text.toString(),
-                    binding.signUpPasswordEt.text.toString(),
-                    binding.signUpUsernameEt.text.toString()
-                )
-            }
-            listenEventChannel()
-            hideKeyboard()
+            signUpUser()
         }
 
         binding.signUpToSignInTv.setOnClickListener {
             navigateToSignInFragment()
         }
 
+    }
+
+    private fun signUpUser() {
+        if (validUsernameFlag and validEmailFlag and validPasswordFlag and validConfirmPasswordFlag and internetConnectionFlag) {
+            viewModel.signUpUser(
+                binding.signUpEmailEt.text.toString(),
+                binding.signUpPasswordEt.text.toString(),
+                binding.signUpUsernameEt.text.toString()
+            )
+        }
+        listenEventChannel()
+        hideKeyboard()
     }
 
     private fun navigateToSignInFragment() {
@@ -151,11 +155,10 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
     }
 
     private fun listenValidationChannel() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.authValidationEventsChannel.collectLatest {
-            when (it) {
+        viewModel.authValidationEventsChannel.collectLatest { validationResult ->
+            when (validationResult) {
                 is ValidationState.ValidationError -> {
-                    logcat { "Validation Error message: ${it.result}" }
-                    when (it.result) {
+                    when (validationResult.result) {
                         ValidationErrorResults.EMPTY_EMAIL -> {
                             binding.signUpEmailEt.error = "Please enter an email."
                             validEmailFlag = false
@@ -198,7 +201,6 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                             )
                         }
                         ValidationErrorResults.EMPTY_PASSWORD -> {
-                            logcat { "EMPTY PASS, pass : ${binding.signUpPasswordEt.text.toString()} , confirmPass : ${binding.signUpPassAgainEt.text.toString()}" }
                             binding.signUpPasswordEt.error = "Please enter your password."
                             validPasswordFlag = false
                             enableSignUpButtonIfAllValid(
@@ -209,7 +211,6 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                             )
                         }
                         ValidationErrorResults.EMPTY_CONFIRM_PASSWORD -> {
-                            logcat { "EMPTY PASS, pass : ${binding.signUpPasswordEt.text.toString()} , confirmPass : ${binding.signUpPassAgainEt.text.toString()}" }
                             binding.signUpPassAgainEt.error = "Please enter your password."
                             validConfirmPasswordFlag = false
                             enableSignUpButtonIfAllValid(
@@ -243,8 +244,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                     }
                 }
                 is ValidationState.ValidationSuccess -> {
-                    logcat { "Validation Success message: ${it.result}" }
-                    when (it.result) {
+                    when (validationResult.result) {
                         ValidationResults.VALID_USERNAME -> {
                             validUsernameFlag = true
                             enableSignUpButtonIfAllValid(
@@ -286,24 +286,39 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
         viewModel.authEventsChannel.collectLatest {
             when (it) {
                 is EventState.Error -> {
-                    Snackbar.make(binding.root, it.message, Snackbar.LENGTH_LONG).show()
+                    UIHelperFunctions.showSnackbar(
+                        binding.root,
+                        requireContext(),
+                        false,
+                        it.message,
+                        Snackbar.LENGTH_LONG
+                    ).show()
                 }
                 is EventState.Loading -> {
                     /** NO-OP **/
                 }
                 is EventState.Success -> {
-                    Snackbar.make(binding.root, it.message.toString(), Snackbar.LENGTH_SHORT).show()
-                    if (findNavController().currentDestination?.id == R.id.signUpFragment) {
-                        findNavController().navigate(R.id.action_signUpFragment_to_signInFragment)
-                    }
+                    UIHelperFunctions.showSnackbar(
+                        binding.root,
+                        requireContext(),
+                        true,
+                        it.message.toString(),
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                    navigateToSignInFragment()
                 }
             }
         }
     }
 
     private fun checkInternetConnection() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        val snackBar =
-            Snackbar.make(binding.root, "No Internet Connection", Snackbar.LENGTH_INDEFINITE)
+        val snackBar = UIHelperFunctions.showSnackbar(
+            binding.root,
+            requireContext(),
+            false,
+            "No Internet Connection",
+            Snackbar.LENGTH_INDEFINITE
+        )
         viewModel.networkState.collectLatest {
             if (it) {
                 internetConnectionFlag = true

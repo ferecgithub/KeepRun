@@ -17,8 +17,8 @@ object Constants {
     const val CACHE_KEY_FOR_NOTIFICATION_ENABLED = "notification_enabled"
     const val CACHE_KEY_FOR_USER_PHOTO_URL = "user_photo_url"
     const val CACHE_KEY_FOR_FIRST_TIME_USE = "is_first_use"
-    const val CACHE_KEY_FOR_INITIAL_SETUP_DONE = "initial_setup_done"
-    const val CACHE_KEY_FOR_HAS_PERMISSION = "has_permission"
+    const val CACHE_KEY_FOR_HAS_FINE_LOCATION_PERMISSION = "has_fine_location_permission"
+    const val CACHE_KEY_FOR_HAS_ACTIVITY_RECOGNITION_PERMISSION = "has_activity_recognition_permission"
 
 
     // Pending Intent

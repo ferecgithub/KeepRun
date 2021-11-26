@@ -57,7 +57,6 @@
     <string name="settings_tab">Settings tab</string>
     <string name="logout">Logout</string>
     <string name="logout_button">Logout button</string>
-    <string name="start_a_run">Start a run</string>
     <string name="recorded_runs">Recorded Runs</string>
     <string name="sorted_by">Sorted by</string>
     <string name="start_run">Start Run</string>
@@ -88,4 +87,16 @@
     <string name="abort_cancelling_current_run">Abort cancelling current run</string>
     <string name="notifications_enabled">Notifications enabled</string>
     <string name="notifications_disabled">Notifications disabled</string>
+    <string name="your_weight">Your weight</string>
+    <string name="get_back_to_runs_screen">Get back to runs screen</string>
+    <string name="tap">Tap</string>
+    <string name="to_start_a_run">to start a run.</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="location_perm_desc">In order to use this app, you need to give permission for location information.</string>
+    <string name="location_perm_reasoning">We need this for all calculations of running and its statistics. (Except counting steps).</string>
+    <string name="activity_recog_perm_desc">In order to use this app, you need to give permission for activity recognition.</string>
+    <string name="activity_recog_perm_reasoning">We need this for calculation of steps.</string>
+    <string name="accept">Accept</string>
+    <string name="start_a_run">Start a run</string>
+
 </resources>

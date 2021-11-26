@@ -11,7 +11,7 @@ buildscript {
     dependencies {
         // AppClasspath
         classpath(AppClasspath.build_gradle)
-        classpath(AppClasspath.kotlin_gradle_plugin)
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0")
         classpath(AppClasspath.navigation_safe_args_gradle_plugin)
         classpath(AppClasspath.hilt_android_gradle_plugin)
         classpath(AppClasspath.google_services)

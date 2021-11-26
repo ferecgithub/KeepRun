@@ -27,8 +27,6 @@ class AuthRemoteDBDataSourceImpl @Inject constructor(
     override suspend fun createUserInRemoteDB(user: User): Flow<Resource<String>> =
         flow<Resource<String>> {
 
-            emit(Resource.Loading())
-
             var onSuccessFlag: Boolean? = null
 
             val currentUser = userDtoMapper.mapFromDomainModel(user)

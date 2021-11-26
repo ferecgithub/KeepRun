@@ -5,7 +5,7 @@ import android.graphics.BitmapFactory
 import androidx.room.TypeConverter
 import java.io.ByteArrayOutputStream
 
-class TypeConverters {
+class TypeConverter {
 
     @TypeConverter
     fun toBitmap(bytes: ByteArray): Bitmap {

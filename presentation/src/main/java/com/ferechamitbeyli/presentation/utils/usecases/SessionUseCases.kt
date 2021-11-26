@@ -9,6 +9,7 @@ data class SessionUseCases @Inject constructor(
      * Use cases that fetches identifier (uid) of the current user from FirebaseAuth and sign out
      */
     val getCurrentUserIdentifierUseCase: GetCurrentUserIdentifierUseCase,
+    val updateUserPasswordUseCase: UpdateUserPasswordUseCase,
     val signOutUseCase: SignOutUseCase,
 
     /**
@@ -33,7 +34,6 @@ data class SessionUseCases @Inject constructor(
      * Use cases that fetches and saves data from/to Jetpack Datastore
      */
     val getFirstUseStateUseCase: GetFirstUseStateUseCase,
-    val getInitialSetupStateUseCase: GetInitialSetupStateUseCase,
     val getUserUidUseCase: GetUserUidUseCase,
     val getUserEmailUseCase: GetUserEmailUseCase,
     val getUserWeightUseCase: GetUserWeightUseCase,
@@ -42,10 +42,16 @@ data class SessionUseCases @Inject constructor(
     val getUserNotificationStateUseCase: GetUserNotificationStateUseCase,
 
     val cacheFirstUseStateUseCase: CacheFirstUseStateUseCase,
-    val cacheInitialSetupStateUseCase: CacheInitialSetupStateUseCase,
     val cacheUserAccountUseCase: CacheUserAccountUseCase,
     val cacheUserWeightUseCase: CacheUserWeightUseCase,
 
     val resetCachedUserUseCase: ResetCachedUserUseCase,
-    val resetCachedStatesUseCase: ResetCachedStatesUseCase
+    val resetCachedStatesUseCase: ResetCachedStatesUseCase,
+
+    // Permissions
+    val cacheFineLocationPermissionStateUseCase: CacheFineLocationPermissionStateUseCase,
+    val cacheActivityRecognitionPermissionStateUseCase: CacheActivityRecognitionPermissionStateUseCase,
+
+    val getFineLocationPermissionStateUseCase: GetFineLocationPermissionStateUseCase,
+    val getActivityRecognitionPermissionStateUseCase: GetActivityRecognitionPermissionStateUseCase
 )

@@ -20,13 +20,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/runsSort_til"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:background="@null"
         android:backgroundTint="@color/hintText"
-        android:hint="@string/sorted_by"
         app:layout_constraintBottom_toBottomOf="@id/horizontal1_gl"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/vertical5_gl"
@@ -37,7 +37,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/montserrat_regular"
-            android:inputType="none" />
+            android:hint="@string/sorted_by"
+            android:inputType="none"
+            android:textColor="@color/normalText" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

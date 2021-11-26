@@ -58,16 +58,37 @@ abstract class BaseFragment<B : ViewBinding> : Fragment() {
         )
     }
 
-    fun hideBottomNavigationViewIfCurrentFragmentIsInitialFragment() {
-        if (findNavController().currentDestination?.id == R.id.initialFragment || findNavController().currentDestination?.id == R.id.trackingFragment) {
-            requireActivity().findViewById<BottomNavigationView>(R.id.home_bab).visible(false)
-            requireActivity().findViewById<BottomNavigationView>(R.id.home_bnv).visible(false)
-            requireActivity().findViewById<BottomNavigationView>(R.id.add_run_fab).visible(false)
-        } else {
-            requireActivity().findViewById<BottomNavigationView>(R.id.home_bab).visible(true)
-            requireActivity().findViewById<BottomNavigationView>(R.id.home_bnv).visible(true)
-            requireActivity().findViewById<BottomNavigationView>(R.id.add_run_fab).visible(true)
+    fun setupBottomNavigationViewVisibility() {
+
+        when (findNavController().currentDestination?.id) {
+            R.id.initialFragment -> {
+                hideBottomNavigationView()
+            }
+            R.id.trackingFragment -> {
+                hideBottomNavigationView()
+            }
+            R.id.locationPermissionFragment -> {
+                hideBottomNavigationView()
+            }
+            R.id.activityRecognitionPermissionFragment -> {
+                hideBottomNavigationView()
+            }
+            else -> {
+                showBottomNavigationView()
+            }
         }
+    }
+
+    private fun hideBottomNavigationView() {
+        requireActivity().findViewById<BottomNavigationView>(R.id.home_bab).visible(false)
+        requireActivity().findViewById<BottomNavigationView>(R.id.home_bnv).visible(false)
+        requireActivity().findViewById<BottomNavigationView>(R.id.add_run_fab).visible(false)
+    }
+
+    private fun showBottomNavigationView() {
+        requireActivity().findViewById<BottomNavigationView>(R.id.home_bab).visible(true)
+        requireActivity().findViewById<BottomNavigationView>(R.id.home_bnv).visible(true)
+        requireActivity().findViewById<BottomNavigationView>(R.id.add_run_fab).visible(true)
     }
 
     suspend fun getBlurBackgroundDrawable(): Drawable =
@@ -82,8 +103,8 @@ abstract class BaseFragment<B : ViewBinding> : Fragment() {
         }.await()
 
     override fun onDestroy() {
-        super.onDestroy()
         _binding = null
+        super.onDestroy()
     }
 
 }
