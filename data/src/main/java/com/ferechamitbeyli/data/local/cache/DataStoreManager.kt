@@ -4,16 +4,14 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
-import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_FIRST_TIME_USE
-import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_HAS_ACTIVITY_RECOGNITION_PERMISSION
-import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_HAS_FINE_LOCATION_PERMISSION
-import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_NOTIFICATION_ENABLED
-import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_USERNAME
-import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_USER_EMAIL
-import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_USER_PHOTO_URL
-import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_USER_UID
-import com.ferechamitbeyli.data.utils.Constants.CACHE_KEY_FOR_USER_WEIGHT
-import com.ferechamitbeyli.data.utils.Constants.KEEPRUN_CACHE_NAME
+import com.ferechamitbeyli.data.utils.DataConstants.CACHE_KEY_FOR_FIRST_TIME_USE
+import com.ferechamitbeyli.data.utils.DataConstants.CACHE_KEY_FOR_NOTIFICATION_ENABLED
+import com.ferechamitbeyli.data.utils.DataConstants.CACHE_KEY_FOR_USERNAME
+import com.ferechamitbeyli.data.utils.DataConstants.CACHE_KEY_FOR_USER_EMAIL
+import com.ferechamitbeyli.data.utils.DataConstants.CACHE_KEY_FOR_USER_PHOTO_URL
+import com.ferechamitbeyli.data.utils.DataConstants.CACHE_KEY_FOR_USER_UID
+import com.ferechamitbeyli.data.utils.DataConstants.CACHE_KEY_FOR_USER_WEIGHT
+import com.ferechamitbeyli.data.utils.DataConstants.KEEPRUN_CACHE_NAME
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -37,10 +35,7 @@ class DataStoreManager @Inject constructor(@ApplicationContext appContext: Conte
 
         /** Miscellaneous Information **/
         val firstUseStateCached = booleanPreferencesKey(CACHE_KEY_FOR_FIRST_TIME_USE)
-        val hasFineLocationPermissionCached =
-            booleanPreferencesKey(CACHE_KEY_FOR_HAS_FINE_LOCATION_PERMISSION)
-        val hasActivityRecognitionPermissionCached =
-            booleanPreferencesKey(CACHE_KEY_FOR_HAS_ACTIVITY_RECOGNITION_PERMISSION)
+
     }
 
     suspend fun cacheUserAccount(
@@ -85,18 +80,6 @@ class DataStoreManager @Inject constructor(@ApplicationContext appContext: Conte
         }
     }
 
-    suspend fun cacheFineLocationPermissionState(hasPermission: Boolean) {
-        keepRunDataStore.edit {
-            it[hasFineLocationPermissionCached] = hasPermission
-        }
-    }
-
-    suspend fun cacheActivityRecognitionPermissionState(hasPermission: Boolean) {
-        keepRunDataStore.edit {
-            it[hasActivityRecognitionPermissionCached] = hasPermission
-        }
-    }
-
     suspend fun resetCachedUser() {
         keepRunDataStore.edit {
             it[userUidCached] = ""
@@ -111,8 +94,6 @@ class DataStoreManager @Inject constructor(@ApplicationContext appContext: Conte
     suspend fun resetCachedStates() {
         keepRunDataStore.edit {
             it[firstUseStateCached] = true
-            it[hasFineLocationPermissionCached] = false
-            it[hasActivityRecognitionPermissionCached] = false
         }
     }
 
@@ -142,14 +123,6 @@ class DataStoreManager @Inject constructor(@ApplicationContext appContext: Conte
 
     fun getFirstUseState() = keepRunDataStore.data.map {
         it[firstUseStateCached] ?: true
-    }
-
-    fun getFineLocationPermissionState() = keepRunDataStore.data.map {
-        it[hasFineLocationPermissionCached] ?: false
-    }
-
-    fun getActivityRecognitionPermissionState() = keepRunDataStore.data.map {
-        it[hasActivityRecognitionPermissionCached] ?: false
     }
 
 }

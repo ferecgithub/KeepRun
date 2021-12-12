@@ -1,6 +1,7 @@
 package com.ferechamitbeyli.presentation.utils.helpers
 
 import android.app.Activity
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
@@ -9,7 +10,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.Drawable
-import android.util.Log
+import android.os.Build
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.getColor
@@ -20,6 +21,7 @@ import com.ferechamitbeyli.presentation.R
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.material.snackbar.Snackbar
+import java.io.ByteArrayOutputStream
 
 
 class UIHelperFunctions {
@@ -99,12 +101,9 @@ class UIHelperFunctions {
             return returnedBitmap
         }
 
-        private fun fromVectorToBitmap(id: Int, color: Int, resources: Resources) : BitmapDescriptor {
-            val vectorDrawable: Drawable? = ResourcesCompat.getDrawable(resources, id, null)
-            if (vectorDrawable == null) {
-                Log.d("MapsActivity", "Resource not found.")
-                return BitmapDescriptorFactory.defaultMarker()
-            }
+        fun fromVectorToBitmap(id: Int, color: Int, resources: Resources) : BitmapDescriptor {
+            val vectorDrawable: Drawable = ResourcesCompat.getDrawable(resources, id, null)
+                ?: return BitmapDescriptorFactory.defaultMarker()
             val bitmap = Bitmap.createBitmap(
                 vectorDrawable.intrinsicWidth,
                 vectorDrawable.intrinsicHeight,
@@ -117,6 +116,16 @@ class UIHelperFunctions {
             return BitmapDescriptorFactory.fromBitmap(bitmap)
         }
 
+        fun toBitmap(bytes: ByteArray): Bitmap {
+            return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+        }
+
+        fun fromBitmap(bmp: Bitmap): ByteArray {
+            val outputStream = ByteArrayOutputStream()
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            return outputStream.toByteArray()
+        }
+
         /** Navigation Helper Functions **/
 
         fun <A : Activity> Activity.startNewActivity(activity: Class<A>) {
@@ -125,6 +134,13 @@ class UIHelperFunctions {
                 startActivity(it)
             }
         }
+
+        fun setPendingIntentFlag(): Int =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            } else {
+                PendingIntent.FLAG_UPDATE_CURRENT
+            }
 
 
     }

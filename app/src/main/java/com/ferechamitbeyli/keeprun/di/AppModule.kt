@@ -20,9 +20,9 @@ import com.ferechamitbeyli.data.repositories.datasources.common.SessionCacheData
 import com.ferechamitbeyli.data.repositories.datasources.common.SessionRemoteDataSourceImpl
 import com.ferechamitbeyli.data.repositories.datasources.home.RunLocalDataSourceImpl
 import com.ferechamitbeyli.data.repositories.datasources.home.RunRemoteDBDataSourceImpl
-import com.ferechamitbeyli.data.utils.Constants
-import com.ferechamitbeyli.data.utils.Constants.FIREBASE_DB_REF
-import com.ferechamitbeyli.data.utils.Constants.FIREBASE_STORAGE_REF
+import com.ferechamitbeyli.data.utils.DataConstants
+import com.ferechamitbeyli.data.utils.DataConstants.FIREBASE_DB_REF
+import com.ferechamitbeyli.data.utils.DataConstants.FIREBASE_STORAGE_REF
 import com.ferechamitbeyli.data.utils.EntityMapper
 import com.ferechamitbeyli.domain.DomainMapper
 import com.ferechamitbeyli.domain.dispatchers.CoroutineDispatchers
@@ -43,6 +43,8 @@ import com.ferechamitbeyli.presentation.uimodels.UserUIModel
 import com.ferechamitbeyli.presentation.uimodels.mappers.RunToUIMapper
 import com.ferechamitbeyli.presentation.uimodels.mappers.UserToUIMapper
 import com.ferechamitbeyli.presentation.utils.helpers.NetworkConnectionTracker
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -210,6 +212,14 @@ class AppModule {
             provideCoroutineDispatchers()
         )
 
+    /** FusedLocationProviderClient **/
+
+    @Singleton
+    @Provides
+    fun provideFusedLocationProviderClient(
+        @ApplicationContext appContext: Context
+    ): FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(appContext)
+
     /** -------------------- End of Home provide functions -------------------- **/
 
     /** Network Connection Tracker provide function **/
@@ -236,7 +246,7 @@ class AppModule {
     ) = Room.databaseBuilder(
         appContext,
         DatabaseService::class.java,
-        Constants.KEEPRUN_DB_NAME
+        DataConstants.KEEPRUN_DB_NAME
     ).build()
 
     @Provides

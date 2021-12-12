@@ -1,18 +1,88 @@
 package com.ferechamitbeyli.presentation.view.activities.home_activity.fragments
 
+import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
+import android.graphics.Color
+import android.location.Location
+import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
+import android.util.Log
 import android.view.*
+import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.ferechamitbeyli.presentation.R
 import com.ferechamitbeyli.presentation.databinding.CancelRunDialogBinding
 import com.ferechamitbeyli.presentation.databinding.FragmentTrackingBinding
+import com.ferechamitbeyli.presentation.service.TrackingService
+import com.ferechamitbeyli.presentation.uimodels.RunUIModel
+import com.ferechamitbeyli.presentation.utils.enums.RunButtonsState
+import com.ferechamitbeyli.presentation.utils.helpers.PermissionManager
+import com.ferechamitbeyli.presentation.utils.helpers.Polyline
+import com.ferechamitbeyli.presentation.utils.helpers.PresentationConstants.ACTION_PAUSE_SERVICE
+import com.ferechamitbeyli.presentation.utils.helpers.PresentationConstants.ACTION_START_OR_RESUME_SERVICE
+import com.ferechamitbeyli.presentation.utils.helpers.PresentationConstants.ACTION_STOP_SERVICE
+import com.ferechamitbeyli.presentation.utils.helpers.PresentationConstants.FOLLOW_POLYLINE_ZOOM
+import com.ferechamitbeyli.presentation.utils.helpers.TrackingHelperFunctions.calculateDistance
+import com.ferechamitbeyli.presentation.utils.helpers.TrackingHelperFunctions.calculateElapsedTime
+import com.ferechamitbeyli.presentation.utils.helpers.TrackingHelperFunctions.calculateMETValue
+import com.ferechamitbeyli.presentation.utils.helpers.TrackingHelperFunctions.setCameraPosition
+import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.fromVectorToBitmap
+import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.showSnackbar
+import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.visible
+import com.ferechamitbeyli.presentation.utils.states.EventState
 import com.ferechamitbeyli.presentation.view.base.BaseFragment
+import com.ferechamitbeyli.presentation.viewmodel.activities.home_activity.fragments.TrackingViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationListener
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.*
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import java.util.*
+import javax.inject.Inject
+import kotlin.math.round
 
 @AndroidEntryPoint
-class TrackingFragment : BaseFragment<FragmentTrackingBinding>() {
+class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListener,
+    GoogleMap.OnMarkerClickListener {
+
+    private lateinit var map: GoogleMap
+
+    private val viewModel: TrackingViewModel by viewModels()
+
+    @Inject
+    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+    private lateinit var serviceIntent: Intent
+
+    private var currentLatitude: Double? = null
+    private var currentLongitude: Double? = null
+
+    private val isFirstRun = MutableLiveData<Boolean>()
+    private val isStarted = MutableLiveData<Boolean>()
+    private val isKilled = MutableLiveData<Boolean>()
+
+    private var runTimeInMillis = 0L
+    private var weight = 0.0
+
+    private var locationList = mutableListOf<Polyline>()
+
+    private var markerList = mutableListOf<Marker>()
+
+    private var stepCount = 0
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
@@ -22,18 +92,71 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupGoogleMap(savedInstanceState)
+
+        initiateServiceIntent()
+
         setupBottomNavigationViewVisibility()
 
         setupOnClickListeners()
+
+        getWeightFromCache()
+
+        listenEventChannel()
+    }
+
+    private fun initiateServiceIntent() {
+        serviceIntent = Intent(requireContext(), TrackingService::class.java)
+        checkForService()
+    }
+
+    private fun getWeightFromCache() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        viewModel.getUserWeightFromCache().collect {
+            weight = it
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun setupGoogleMap(savedInstanceState: Bundle?) {
+
+        binding.trackingMapMv.onCreate(savedInstanceState)
+
+        binding.trackingMapMv.getMapAsync { googleMap ->
+            map = googleMap
+            map.isMyLocationEnabled = true
+            if (currentLatitude != null && currentLongitude != null) {
+                map.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        LatLng(currentLatitude!!, currentLongitude!!),
+                        15f
+                    )
+                )
+            }
+            map.uiSettings.apply {
+                setAllGesturesEnabled(false)
+                isCompassEnabled = false
+            }
+        }
+        drawPolylines()
+    }
+
+    private fun checkForService() {
+        if (isKilled.value == false || isKilled.value == null) {
+            requireActivity().bindService(
+                serviceIntent,
+                getServiceConnection(),
+                Context.BIND_AUTO_CREATE
+            )
+        }
     }
 
     private fun setupOnClickListeners() {
         binding.startRunBtn.setOnClickListener {
-
+            checkPermissionsBeforeStartingTheRun()
         }
 
         binding.pauseRunBtn.setOnClickListener {
-
+            pauseTheRun()
         }
 
         binding.finishRunBtn.setOnClickListener {
@@ -43,6 +166,344 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>() {
         binding.goBackBtn.setOnClickListener {
             navigateToRunsFragment()
         }
+
+        binding.resetRunBtn.setOnClickListener {
+            resetMap()
+            setupRunButtons(RunButtonsState.INITIAL)
+        }
+    }
+
+    private fun setupRunButtonsForServiceState() {
+        if (isKilled.value == false) {
+            if (isFirstRun.value == true) {
+                setupRunButtons(RunButtonsState.INITIAL)
+            } else {
+                if (isStarted.value == true) {
+                    setupRunButtons(RunButtonsState.STARTED)
+                } else {
+                    setupRunButtons(RunButtonsState.PAUSED)
+                }
+            }
+        }
+    }
+
+    private fun setupRunButtons(state: RunButtonsState) {
+        when (state) {
+            RunButtonsState.INITIAL -> {
+                // Visible
+                binding.startRunBtn.visible(true)
+                binding.startTv.visible(true)
+                binding.goBackBtn.visible(true)
+                binding.goBackTv.visible(true)
+
+                // Hidden
+                binding.pauseRunBtn.visible(false)
+                binding.finishRunBtn.visible(false)
+                binding.pauseTv.visible(false)
+                binding.finishTv.visible(false)
+                binding.resumeTv.visible(false)
+                binding.resetRunBtn.visible(false)
+                binding.resetTv.visible(false)
+            }
+            RunButtonsState.STARTED -> {
+                // Visible
+                binding.pauseRunBtn.visible(true)
+                binding.finishRunBtn.visible(true)
+                binding.pauseTv.visible(true)
+                binding.finishTv.visible(true)
+
+                // Hidden
+                binding.startRunBtn.visible(false)
+                binding.startTv.visible(false)
+                binding.goBackBtn.visible(false)
+                binding.goBackTv.visible(false)
+                binding.resumeTv.visible(false)
+                binding.resetRunBtn.visible(false)
+                binding.resetTv.visible(false)
+            }
+            RunButtonsState.PAUSED -> {
+                // Visible
+                binding.startRunBtn.visible(true)
+                binding.resumeTv.visible(true)
+                binding.finishRunBtn.visible(true)
+                binding.finishTv.visible(true)
+
+                // Hidden
+                binding.pauseRunBtn.visible(false)
+                binding.pauseTv.visible(false)
+                binding.startTv.visible(false)
+                binding.goBackBtn.visible(false)
+                binding.goBackTv.visible(false)
+                binding.resetRunBtn.visible(false)
+                binding.resetTv.visible(false)
+            }
+            RunButtonsState.STOPPED -> {
+                // Visible
+                binding.resetRunBtn.visible(true)
+                binding.resetTv.visible(true)
+                binding.goBackBtn.visible(true)
+                binding.goBackTv.visible(true)
+
+                // Hidden
+                binding.finishRunBtn.visible(false)
+                binding.finishTv.visible(false)
+                binding.pauseRunBtn.visible(false)
+                binding.pauseTv.visible(false)
+                binding.startRunBtn.visible(false)
+                binding.startTv.visible(false)
+                binding.resumeTv.visible(false)
+            }
+        }
+    }
+
+    private fun checkPermissionsBeforeStartingTheRun() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            if (PermissionManager.hasActivityRecognitionPermission(requireContext()) &&
+                PermissionManager.hasBackgroundLocationPermission(requireContext())
+            ) {
+                Toast.makeText(requireContext(), "EVERY PERMISSION IS GIVEN", Toast.LENGTH_SHORT)
+                    .show()
+                /** START RUN HERE **/
+                sendActionCommandToService(ACTION_START_OR_RESUME_SERVICE)
+            } else {
+                navigateToActivityRecognitionPermission()
+            }
+        } else {
+            Toast.makeText(requireContext(), "NO NEED FOR ANY PERMISSION", Toast.LENGTH_SHORT)
+                .show()
+            /** START RUN HERE **/
+            sendActionCommandToService(ACTION_START_OR_RESUME_SERVICE)
+        }
+
+    }
+
+    /*
+    private fun toggleRun() {
+        sendActionCommandToService(if (isStarted.value == true) ACTION_START_OR_RESUME_SERVICE else ACTION_PAUSE_SERVICE)
+    }
+
+     */
+
+    private fun pauseTheRun() {
+        sendActionCommandToService(ACTION_PAUSE_SERVICE)
+    }
+
+    private fun stopTheRun() {
+        sendActionCommandToService(ACTION_STOP_SERVICE)
+    }
+
+    private fun sendActionCommandToService(action: String) {
+        serviceIntent.apply {
+            this.action = action
+            requireContext().startService(this)
+        }
+    }
+
+    private fun getServiceConnection() = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, iBinder: IBinder?) {
+            val localBinder = iBinder as TrackingService.LocalBinder
+            val service = localBinder.getTrackingServiceInstance()
+            viewLifecycleOwner.lifecycleScope.launch {
+
+                service.locationList.observe(viewLifecycleOwner) { locations ->
+
+                    locationList = locations
+//                    drawPolylines()
+                    drawLatestPolyline()
+                    followUserWithCamera()
+                    Log.d("MAPS_FRAGMENT_LOC_LIST", locationList.toString())
+                    Log.d("MAPS_FRAGMENT_LOC_LIST1", locations.toString())
+                }
+
+                service.totalTime.observe(viewLifecycleOwner) { totalTime ->
+                    runTimeInMillis = totalTime
+                    binding.trackingTimerTv.text = calculateElapsedTime(totalTime)
+                }
+
+                service.isKilled.observe(viewLifecycleOwner) { killed ->
+                    isKilled.value = killed
+                    if (killed) {
+                        showWholePath()
+                        setupRunButtons(RunButtonsState.STOPPED)
+                    }
+                }
+
+                service.isFirstRun.observe(viewLifecycleOwner) { firstRun ->
+                    isFirstRun.value = firstRun
+                }
+
+                service.started.observe(viewLifecycleOwner) { started ->
+                    isStarted.value = started
+
+                    setupRunButtonsForServiceState()
+
+                    Log.d(
+                        "TRACKING_FRAGMENT",
+                        "isStarted: ${isStarted.value}, isKilled: ${isKilled.value}, isFirstRun: ${isFirstRun.value}"
+                    )
+
+                }
+
+                service.stepCount.observe(viewLifecycleOwner) {
+                    stepCount = it
+                }
+
+
+            }
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            /** NO-OP **/
+        }
+    }
+
+    private fun drawPolylines() {
+        if (locationList.isNotEmpty()) {
+            locationList.forEach {
+                map.addPolyline(
+                    PolylineOptions().apply {
+                        width(10f)
+                        color(Color.GREEN)
+                        jointType(JointType.ROUND)
+                        startCap(ButtCap())
+                        endCap(ButtCap())
+                        addAll(it)
+                    }
+                )
+
+            }
+        }
+    }
+
+    private fun drawLatestPolyline() {
+        if (locationList.isNotEmpty() && locationList.last().size > 1) {
+            val preLastLatLng = locationList.last()[locationList.last().size - 2]
+            val lastLatLng = locationList.last().last()
+            val polylineOptions = PolylineOptions().apply {
+                width(10f)
+                color(Color.GREEN)
+                jointType(JointType.ROUND)
+                startCap(ButtCap())
+                endCap(ButtCap())
+                add(preLastLatLng)
+                add(lastLatLng)
+            }
+            map.addPolyline(polylineOptions)
+        }
+    }
+
+    private fun followUserWithCamera() {
+        if (locationList.isNotEmpty() && locationList.last().isNotEmpty()) {
+            map.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    locationList.last().last(),
+                    FOLLOW_POLYLINE_ZOOM
+                )
+            )
+        }
+    }
+
+    private fun showWholePath() {
+        val bounds = LatLngBounds.Builder()
+        locationList.forEach { polyline ->
+            polyline.forEach {
+                bounds.include(it)
+            }
+        }
+        map.animateCamera(
+            CameraUpdateFactory.newLatLngBounds(
+                bounds.build(),
+                100
+            ), 2000, null
+        )
+        addStartMarker(locationList.first().first())
+        addEndMarker(locationList.last().last())
+    }
+
+    private fun saveRunToDBWithScreenshot() = viewLifecycleOwner.lifecycleScope.launch {
+        map.snapshot { screenshot ->
+            val distanceInMeters = calculateDistance(locationList, false)
+            val avgSpeedInKMH =
+                round((distanceInMeters / 1000f) / (runTimeInMillis / 1000f / 60 / 60) * 10) / 10f
+            val timestamp = Calendar.getInstance().timeInMillis
+            // caloriesBurned = MET * 3.5 * weight / 200
+            val caloriesBurned =
+                (calculateMETValue(avgSpeedInKMH * 1000) * 3.5 * weight / 200 * runTimeInMillis / 1000f / 60).toInt()
+            val run = RunUIModel(
+                image = screenshot,
+                timestamp = timestamp,
+                avgSpeedInKMH = avgSpeedInKMH,
+                distanceInMeters = distanceInMeters.toInt(),
+                timeInMillis = runTimeInMillis,
+                caloriesBurned = caloriesBurned,
+                steps = stepCount
+            )
+            Log.d("SAVE_TO_DB", "${run.toString()}, weight: $weight")
+            Log.d(
+                "SAVE_TO_DB_DISTANCE",
+                "$distanceInMeters, locationList_size: ${locationList.size}}"
+            )
+            viewModel.saveRunToDatabase(run).also {
+                viewModel.saveRunToRemoteDatabase(run)
+            }
+            showSnackbar(
+                binding.root,
+                requireContext(),
+                true,
+                "Run saved successfully",
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
+        stopTheRun()
+    }
+
+    private fun addStartMarker(position: LatLng) {
+        val marker = map.addMarker(
+            MarkerOptions()
+                .position(position)
+                .icon(
+                    fromVectorToBitmap(
+                        R.drawable.ic_runs_tab,
+                        ContextCompat.getColor(requireContext(), R.color.darkGreen),
+                        resources
+                    )
+                )
+        )
+        marker?.let { markerList.add(it) }
+    }
+
+    private fun addEndMarker(position: LatLng) {
+        val marker = map.addMarker(
+            MarkerOptions()
+                .position(position)
+                .icon(
+                    fromVectorToBitmap(
+                        R.drawable.ic_marker_finished,
+                        ContextCompat.getColor(requireContext(), R.color.darkGreen),
+                        resources
+                    )
+                )
+        )
+        marker?.let { markerList.add(it) }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun resetMap() {
+        fusedLocationProviderClient.lastLocation.addOnCompleteListener {
+            val lastKnownLocation = LatLng(
+                it.result.latitude,
+                it.result.longitude
+            )
+            map.animateCamera(
+                CameraUpdateFactory.newCameraPosition(
+                    setCameraPosition(lastKnownLocation, FOLLOW_POLYLINE_ZOOM)
+                )
+            )
+            locationList.forEach { polyline -> polyline.forEach { latLng -> polyline.remove(latLng) } }
+            markerList.forEach { marker -> marker.remove() }
+            locationList.clear()
+            markerList.clear()
+        }
     }
 
     private fun navigateToRunsFragment() {
@@ -51,16 +512,54 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>() {
         }
     }
 
+    private fun navigateToActivityRecognitionPermission() {
+        if (findNavController().currentDestination?.id == R.id.trackingFragment) {
+            findNavController().navigate(R.id.action_trackingFragment_to_activityRecognitionPermissionFragment)
+        }
+    }
+
+    private fun listenEventChannel() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+        viewModel.trackingEventsChannel.collectLatest {
+            when (it) {
+                is EventState.Error -> {
+                    showSnackbar(
+                        binding.root,
+                        requireContext(),
+                        false,
+                        it.message,
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
+                is EventState.Loading -> {
+                    /** NO-OP **/
+                }
+                is EventState.Success -> {
+                    showSnackbar(
+                        binding.root,
+                        requireContext(),
+                        true,
+                        it.message.toString(),
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+    }
+
     private fun showCancelRunDialog() =
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+
             val customDialog = Dialog(requireContext())
-            customDialog.window?.setLayout(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT
-            )
-            customDialog.window?.setGravity(Gravity.CENTER)
-            customDialog.window?.setBackgroundDrawable(getBlurBackgroundDrawable())
-            customDialog.window?.attributes?.windowAnimations = android.R.style.Animation_Dialog
+
+            customDialog.window?.apply {
+                setLayout(
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT
+                )
+                setGravity(Gravity.CENTER)
+                setBackgroundDrawable(getBlurBackgroundDrawable())
+                attributes?.windowAnimations = android.R.style.Animation_Activity
+            }
 
             customDialog.setCancelable(false)
 
@@ -70,7 +569,9 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>() {
 
             bindingCancelRun.cancelRunConfirmBtn.setOnClickListener {
                 /** CANCEL THE RUN HERE **/
-                navigateToRunsFragment()
+                viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                    saveRunToDBWithScreenshot()
+                }
             }
 
             bindingCancelRun.cancelRunAbortBtn.setOnClickListener {
@@ -79,6 +580,54 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>() {
 
             customDialog.show()
         }
+
+    override fun onResume() {
+        binding.trackingMapMv.onResume()
+        super.onResume()
+    }
+
+    override fun onStart() {
+        binding.trackingMapMv.onStart()
+        super.onStart()
+    }
+
+    override fun onPause() {
+        binding.trackingMapMv.onPause()
+        super.onPause()
+    }
+
+    override fun onStop() {
+        binding.trackingMapMv.onStart()
+        super.onStop()
+    }
+
+    override fun onDestroyView() {
+        map.clear()
+        binding.trackingMapMv.onDestroy()
+        binding.trackingMapMv.removeAllViews()
+        super.onDestroyView()
+    }
+
+    /*
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        binding.trackingMapMv.onSaveInstanceState(outState)
+    }
+    */
+
+    override fun onLowMemory() {
+        binding.trackingMapMv.onLowMemory()
+        super.onLowMemory()
+    }
+
+    override fun onLocationChanged(location: Location) {
+        currentLatitude = location.latitude
+        currentLongitude = location.longitude
+    }
+
+    override fun onMarkerClick(p0: Marker): Boolean {
+        return true
+    }
 
 
 }

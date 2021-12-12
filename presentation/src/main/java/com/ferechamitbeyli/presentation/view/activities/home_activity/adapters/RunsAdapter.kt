@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.ferechamitbeyli.presentation.databinding.ItemRunLayoutBinding
 import com.ferechamitbeyli.presentation.uimodels.RunUIModel
-import com.ferechamitbeyli.presentation.utils.helpers.TrackingHelperFunctions.getFormattedStopWatchTime
+import com.ferechamitbeyli.presentation.utils.helpers.TrackingHelperFunctions.calculateElapsedTime
 import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.splitBitmap
 import java.text.SimpleDateFormat
 import java.util.*
@@ -70,7 +70,7 @@ class RunsAdapter : RecyclerView.Adapter<RunsAdapter.RunsViewHolder>() {
             val dateFormat = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
             itemDateTv.text = dateFormat.format(calendar.time)
 
-            val time = getFormattedStopWatchTime(run.timeInMillis)
+            val time = calculateElapsedTime(run.timeInMillis)
             itemTimeTv.text = time
 
             val distanceInKm = "${run.distanceInMeters / 1000f}km"

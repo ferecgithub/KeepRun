@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lightGrey">
@@ -10,11 +11,12 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/map_view_for_you_to_track_the_route"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal6_gl"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal675_gl"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context=".view.activities.home_activity.fragments.TrackingFragment" />
+    <!--android:name="com.google.android.gms.maps.SupportMapFragment"-->
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/trackingTimer_tv"
         android:layout_width="wrap_content"
@@ -23,10 +25,10 @@
         android:fontFamily="@font/montserrat_bold"
         android:text="@string/timer_start_value"
         android:textSize="@dimen/title2"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal725_gl"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal8_gl"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/horizontal625_gl" />
+        app:layout_constraintTop_toBottomOf="@id/horizontal7_gl" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/pauseRun_btn"
@@ -35,22 +37,24 @@
         android:background="@drawable/ic_pause_run"
         android:contentDescription="@string/pause_the_run"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal85_gl"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal925_gl"
         app:layout_constraintEnd_toEndOf="@id/vertical4_gl"
         app:layout_constraintStart_toStartOf="@id/vertical2_gl"
-        app:layout_constraintTop_toTopOf="@id/horizontal75_gl" />
+        app:layout_constraintTop_toTopOf="@id/horizontal825_gl" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/pause_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat_medium"
+        android:gravity="center"
         android:text="@string/pause"
         android:textSize="@dimen/paragraph"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal975_gl"
         app:layout_constraintEnd_toEndOf="@id/vertical4_gl"
         app:layout_constraintStart_toStartOf="@id/vertical2_gl"
-        app:layout_constraintTop_toTopOf="@id/horizontal85_gl" />
+        app:layout_constraintTop_toTopOf="@id/horizontal925_gl" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/startRun_btn"
@@ -58,21 +62,23 @@
         android:layout_height="0dp"
         android:background="@drawable/ic_start_run"
         android:contentDescription="@string/start_a_run"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal85_gl"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal925_gl"
         app:layout_constraintEnd_toEndOf="@id/vertical4_gl"
         app:layout_constraintStart_toStartOf="@id/vertical2_gl"
-        app:layout_constraintTop_toTopOf="@id/horizontal75_gl" />
+        app:layout_constraintTop_toTopOf="@id/horizontal825_gl" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/start_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat_medium"
+        android:gravity="center"
         android:text="@string/start"
         android:textSize="@dimen/paragraph"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal975_gl"
         app:layout_constraintEnd_toEndOf="@id/vertical4_gl"
         app:layout_constraintStart_toStartOf="@id/vertical2_gl"
-        app:layout_constraintTop_toTopOf="@id/horizontal85_gl" />
+        app:layout_constraintTop_toTopOf="@id/horizontal925_gl" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/finishRun_btn"
@@ -81,22 +87,24 @@
         android:background="@drawable/ic_finish_run"
         android:contentDescription="@string/finish_the_run"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal85_gl"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal925_gl"
         app:layout_constraintEnd_toEndOf="@id/vertical8_gl"
         app:layout_constraintStart_toStartOf="@id/vertical6_gl"
-        app:layout_constraintTop_toTopOf="@id/horizontal75_gl" />
+        app:layout_constraintTop_toTopOf="@id/horizontal825_gl" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/finish_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:fontFamily="@font/montserrat_medium"
+        android:gravity="center"
         android:text="@string/finish"
         android:textSize="@dimen/paragraph"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal975_gl"
         app:layout_constraintEnd_toEndOf="@id/vertical8_gl"
         app:layout_constraintStart_toStartOf="@id/vertical6_gl"
-        app:layout_constraintTop_toTopOf="@id/horizontal85_gl" />
+        app:layout_constraintTop_toTopOf="@id/horizontal925_gl" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/goBack_btn"
@@ -104,64 +112,106 @@
         android:layout_height="0dp"
         android:background="@drawable/ic_back"
         android:contentDescription="@string/get_back_to_runs_screen"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal85_gl"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal925_gl"
         app:layout_constraintEnd_toEndOf="@id/vertical8_gl"
         app:layout_constraintStart_toStartOf="@id/vertical6_gl"
-        app:layout_constraintTop_toTopOf="@id/horizontal75_gl" />
+        app:layout_constraintTop_toTopOf="@id/horizontal825_gl" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/goBack_tv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/montserrat_medium"
+        android:gravity="center"
+        android:text="@string/back"
+        android:textSize="@dimen/paragraph"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal975_gl"
+        app:layout_constraintEnd_toEndOf="@id/vertical8_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical6_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal925_gl" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/resetRun_btn"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/ic_reset"
+        android:contentDescription="@string/start_a_run"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal925_gl"
+        app:layout_constraintEnd_toEndOf="@id/vertical4_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical2_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal825_gl" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/reset_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat_medium"
-        android:text="@string/back"
+        android:gravity="center"
+        android:text="@string/reset"
         android:textSize="@dimen/paragraph"
-        app:layout_constraintEnd_toEndOf="@id/vertical8_gl"
-        app:layout_constraintStart_toStartOf="@id/vertical6_gl"
-        app:layout_constraintTop_toTopOf="@id/horizontal85_gl" />
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal975_gl"
+        app:layout_constraintEnd_toEndOf="@id/vertical4_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical2_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal925_gl" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/resume_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_medium"
+        android:gravity="center"
+        android:text="@string/resume"
+        android:textSize="@dimen/paragraph"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal975_gl"
+        app:layout_constraintEnd_toEndOf="@id/vertical4_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical2_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal925_gl" />
 
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal6_gl"
+        android:id="@+id/horizontal675_gl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.6" />
+        app:layout_constraintGuide_percent="0.675" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal625_gl"
+        android:id="@+id/horizontal7_gl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.625" />
+        app:layout_constraintGuide_percent="0.7" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal725_gl"
+        android:id="@+id/horizontal8_gl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.725" />
+        app:layout_constraintGuide_percent="0.8" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal75_gl"
+        android:id="@+id/horizontal825_gl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.75" />
+        app:layout_constraintGuide_percent="0.825" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal85_gl"
+        android:id="@+id/horizontal925_gl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.85" />
+        app:layout_constraintGuide_percent="0.925" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal875_gl"
+        android:id="@+id/horizontal975_gl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.875" />
+        app:layout_constraintGuide_percent="0.975" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/vertical2_gl"

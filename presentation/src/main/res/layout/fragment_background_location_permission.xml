@@ -5,17 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lightGrey"
-    tools:context=".view.activities.home_activity.fragments.ActivityRecognitionPermissionFragment">
+    tools:context=".view.activities.home_activity.fragments.BackgroundLocationPermissionFragment">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageActivityRecognitionPermission_iv"
+        android:id="@+id/imageBackgroundLocationPermission_iv"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="@id/horizontal275_gl"
         app:layout_constraintEnd_toEndOf="@id/vertical75_gl"
         app:layout_constraintStart_toStartOf="@id/vertical25_gl"
         app:layout_constraintTop_toTopOf="@id/horizontal075_gl"
-        app:srcCompat="@drawable/ic_activity_recog_permission" />
+        app:srcCompat="@drawable/ic_background_permission" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/permissionRequiredTitle_tv"
@@ -37,7 +37,7 @@
         android:layout_height="0dp"
         android:fontFamily="@font/montserrat_regular"
         android:gravity="center"
-        android:text="@string/activity_recog_perm_desc"
+        android:text="@string/background_location_perm_desc"
         android:textColor="@color/normalText"
         android:textSize="@dimen/paragraph1"
         app:layout_constraintBottom_toBottomOf="@id/horizontal575_gl"
@@ -51,7 +51,7 @@
         android:layout_height="0dp"
         android:fontFamily="@font/montserrat_light"
         android:gravity="center"
-        android:text="@string/activity_recog_perm_reasoning"
+        android:text="@string/background_location_perm_reasoning"
         android:textColor="@color/normalText"
         android:textSize="@dimen/paragraph"
         app:layout_constraintBottom_toBottomOf="@id/horizontal7_gl"
@@ -60,7 +60,7 @@
         app:layout_constraintTop_toTopOf="@id/horizontal6_gl" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/acceptActivityRecognitionPermission_btn"
+        android:id="@+id/acceptBackgroundLocationPermission_btn"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/btn_background"
@@ -204,6 +204,5 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.9" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

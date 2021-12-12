@@ -11,7 +11,7 @@ buildscript {
     dependencies {
         // AppClasspath
         classpath(AppClasspath.build_gradle)
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0")
+        classpath(AppClasspath.kotlin_gradle_plugin)
         classpath(AppClasspath.navigation_safe_args_gradle_plugin)
         classpath(AppClasspath.hilt_android_gradle_plugin)
         classpath(AppClasspath.google_services)
@@ -30,7 +30,6 @@ allprojects {
     }
 
     configurations.all {
-
         resolutionStrategy {
             force 'org.objenesis:objenesis:2.6'
             exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"

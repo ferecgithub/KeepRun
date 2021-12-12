@@ -63,6 +63,11 @@ class RunLocalDataSourceImpl @Inject constructor(
         runDao.getAllRunsSortedByDistance()
             .map { list -> Resource.Success(runEntityMapper.mapToDomainModelList(list)) }
             .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
+
+    override suspend fun getAllRunsSortedByStepCount(): Flow<Resource<List<Run>>> =
+        runDao.getAllRunsSortedByStepCount()
+            .map { list -> Resource.Success(runEntityMapper.mapToDomainModelList(list)) }
+            .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
     //runDao.getAllRunsSortedByDistance().map { list -> list.map { runEntity -> runEntity.toRun() } }
 
     override suspend fun getTotalTimeInMillis(): Flow<Resource<Long>> =

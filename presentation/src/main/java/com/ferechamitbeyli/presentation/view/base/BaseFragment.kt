@@ -102,9 +102,9 @@ abstract class BaseFragment<B : ViewBinding> : Fragment() {
             return@async (imageLoader.execute(request) as SuccessResult).drawable
         }.await()
 
-    override fun onDestroy() {
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
-        super.onDestroy()
     }
 
 }

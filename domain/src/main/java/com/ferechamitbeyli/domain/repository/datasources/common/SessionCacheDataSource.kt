@@ -30,14 +30,4 @@ interface SessionCacheDataSource {
     suspend fun getUserNotificationState(): Flow<Boolean>
     suspend fun getUserPhotoUrl(): Flow<String>
 
-    /**
-     * Permissions
-     */
-
-    suspend fun cacheFineLocationPermissionState(hasPermission: Boolean)
-    suspend fun cacheActivityRecognitionPermissionState(hasPermission: Boolean)
-
-    suspend fun getFineLocationPermissionState(): Flow<Boolean>
-    suspend fun getActivityRecognitionPermissionState(): Flow<Boolean>
-
 }

@@ -2,6 +2,7 @@
 <resources>
 
     <dimen name="paragraph">18sp</dimen>
+    <dimen name="paragraph1">22sp</dimen>
     <dimen name="paragraph2">24sp</dimen>
     <dimen name="title1">64sp</dimen>
     <dimen name="title2">48sp</dimen>

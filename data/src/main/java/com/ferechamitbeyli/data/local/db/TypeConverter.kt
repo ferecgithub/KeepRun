@@ -18,4 +18,21 @@ class TypeConverter {
         bmp.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
         return outputStream.toByteArray()
     }
+
+    /*
+    @TypeConverter
+    fun toLatLng(locationString: String?): LatLng? {
+        return try {
+            Gson().fromJson(locationString, LatLng::class.java)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    @TypeConverter
+    fun fromLatLng(location: LatLng?): String? {
+        return Gson().toJson(location)
+    }
+     */
+
 }

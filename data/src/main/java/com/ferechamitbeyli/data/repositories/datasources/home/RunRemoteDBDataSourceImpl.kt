@@ -3,8 +3,8 @@ package com.ferechamitbeyli.data.repositories.datasources.home
 import com.ferechamitbeyli.data.local.db.RunDao
 import com.ferechamitbeyli.data.local.entities.RunEntity
 import com.ferechamitbeyli.data.remote.entities.RunDto
-import com.ferechamitbeyli.data.utils.Constants
-import com.ferechamitbeyli.data.utils.Constants.RUNS_STORAGE_REF
+import com.ferechamitbeyli.data.utils.DataConstants
+import com.ferechamitbeyli.data.utils.DataConstants.RUNS_STORAGE_REF
 import com.ferechamitbeyli.data.utils.EntityMapper
 import com.ferechamitbeyli.domain.DomainMapper
 import com.ferechamitbeyli.domain.Resource
@@ -88,7 +88,7 @@ class RunRemoteDBDataSourceImpl @Inject constructor(
                 run.id
             )
 
-            databaseReference.child(Constants.RUNS_TABLE_REF).child(firebaseAuth.uid.toString())
+            databaseReference.child(DataConstants.RUNS_TABLE_REF).child(firebaseAuth.uid.toString())
                 .child(runDto.id.toString())
                 .setValue(runDto).await().also {
                     emit(Resource.Success("The run is successfully inserted."))
@@ -105,7 +105,7 @@ class RunRemoteDBDataSourceImpl @Inject constructor(
 
             val runDto = runDtoMapper.mapFromDomainModel(run)
 
-            databaseReference.child(Constants.RUNS_TABLE_REF).child(firebaseAuth.uid.toString())
+            databaseReference.child(DataConstants.RUNS_TABLE_REF).child(firebaseAuth.uid.toString())
                 .child(runDto.id.toString())
                 .removeValue().await().also {
                     emit(Resource.Success("The run is successfully removed."))
@@ -122,7 +122,7 @@ class RunRemoteDBDataSourceImpl @Inject constructor(
 
             val runList = mutableListOf<RunDto>()
 
-            databaseReference.child(Constants.RUNS_TABLE_REF).child(firebaseAuth.uid.toString())
+            databaseReference.child(DataConstants.RUNS_TABLE_REF).child(firebaseAuth.uid.toString())
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.exists()) {

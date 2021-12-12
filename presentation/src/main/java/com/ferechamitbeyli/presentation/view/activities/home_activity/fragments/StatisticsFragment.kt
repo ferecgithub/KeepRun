@@ -1,6 +1,5 @@
 package com.ferechamitbeyli.presentation.view.activities.home_activity.fragments
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -47,20 +46,10 @@ class StatisticsFragment : BaseFragment<FragmentStatisticsBinding>() {
     }
 
     private fun checkPermissionsBeforeNavigateToTrackingFragment() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            if (PermissionManager.hasLocationPermission(requireContext()) &&
-                PermissionManager.hasActivityRecognitionPermission(requireContext())
-            ) {
-                navigateToTrackingFragment()
-            } else {
-                navigateToLocationPermissionFragment()
-            }
+        if (PermissionManager.hasLocationPermission(requireContext())) {
+            navigateToTrackingFragment()
         } else {
-            if (PermissionManager.hasLocationPermission(requireContext())) {
-                navigateToTrackingFragment()
-            } else {
-                navigateToLocationPermissionFragment()
-            }
+            navigateToLocationPermissionFragment()
         }
     }
 }

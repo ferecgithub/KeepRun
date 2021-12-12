@@ -9,5 +9,6 @@ import javax.inject.Inject
 class SortedByDistanceUseCase @Inject constructor(
     private val runRepository: RunRepository
 ) {
-    suspend operator fun invoke(): Flow<Resource<List<Run>>> = runRepository.getAllRunsSortedByDistance()
+    suspend operator fun invoke(): Flow<Resource<List<Run>>> =
+        runRepository.getAllRunsSortedByDistance()
 }

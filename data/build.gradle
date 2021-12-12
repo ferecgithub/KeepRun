@@ -15,8 +15,6 @@ android {
     defaultConfig {
         minSdk AppConfig.min_sdk
         targetSdk AppConfig.target_sdk
-        versionCode AppConfig.version_code
-        versionName AppConfig.version_name
 
         testInstrumentationRunner AppConfig.test_instrumentation_runner
     }
@@ -72,8 +70,9 @@ dependencies {
     api Firebase.firebase_auth_ktx
     api Firebase.firebase_database
     api Firebase.firebase_storage
-    implementation Firebase.firebase_crashlytics
-    implementation Firebase.firebase_analytics
+    api Firebase.firebase_messaging
+    api Firebase.firebase_crashlytics
+    api Firebase.firebase_analytics
 
     // Coroutines
     implementation Coroutines.kotlinx_coroutines_android
@@ -96,7 +95,6 @@ dependencies {
 
     // PlayServices
     implementation PlayServices.kotlinx_coroutines_play_services
-    implementation PlayServices.play_services_location
     implementation PlayServices.play_services_maps
 
     // EasyPermissions

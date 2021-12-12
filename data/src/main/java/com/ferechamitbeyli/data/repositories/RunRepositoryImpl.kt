@@ -55,6 +55,11 @@ class RunRepositoryImpl @Inject constructor(
             .catch { Resource.Error(it.message.toString(), null) }
             .flowOn(coroutineDispatchers.io())
 
+    override suspend fun getAllRunsSortedByStepCount(): Flow<Resource<List<Run>>> =
+        runLocalDataSource.getAllRunsSortedByStepCount()
+            .catch { Resource.Error(it.message.toString(), null) }
+            .flowOn(coroutineDispatchers.io())
+
     override suspend fun getTotalTimeInMillis(): Flow<Resource<Long>> =
         runLocalDataSource.getTotalTimeInMillis()
             .catch { Resource.Error(it.message.toString(), null) }

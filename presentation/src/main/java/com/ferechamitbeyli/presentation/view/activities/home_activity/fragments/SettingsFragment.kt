@@ -1,7 +1,6 @@
 package com.ferechamitbeyli.presentation.view.activities.home_activity.fragments
 
 import android.app.Dialog
-import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.core.widget.addTextChangedListener
@@ -14,9 +13,9 @@ import com.ferechamitbeyli.presentation.databinding.LogoutDialogBinding
 import com.ferechamitbeyli.presentation.utils.enums.ValidationErrorResults
 import com.ferechamitbeyli.presentation.utils.enums.ValidationResults
 import com.ferechamitbeyli.presentation.utils.helpers.PermissionManager
-import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions
 import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.enable
 import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.hideKeyboard
+import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.showSnackbar
 import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.startNewActivity
 import com.ferechamitbeyli.presentation.utils.states.EventState
 import com.ferechamitbeyli.presentation.utils.states.ValidationState
@@ -25,10 +24,12 @@ import com.ferechamitbeyli.presentation.view.base.BaseFragment
 import com.ferechamitbeyli.presentation.viewmodel.activities.home_activity.fragments.SettingsViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.tasks.await
 
 @AndroidEntryPoint
 class SettingsFragment : BaseFragment<FragmentSettingsBinding>() {
@@ -65,7 +66,6 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>() {
     private fun setupOnClickListeners() {
         binding.settingsSaveBtn.setOnClickListener {
             saveAllFieldsToRemoteDB()
-            //resetPasswordFields()
         }
 
         binding.settingsLogoutBtn.setOnClickListener {
@@ -84,20 +84,10 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>() {
     }
 
     private fun checkPermissionsBeforeNavigateToTrackingFragment() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            if (PermissionManager.hasLocationPermission(requireContext()) &&
-                PermissionManager.hasActivityRecognitionPermission(requireContext())
-            ) {
-                navigateToTrackingFragment()
-            } else {
-                navigateToLocationPermissionFragment()
-            }
+        if (PermissionManager.hasLocationPermission(requireContext())) {
+            navigateToTrackingFragment()
         } else {
-            if (PermissionManager.hasLocationPermission(requireContext())) {
-                navigateToTrackingFragment()
-            } else {
-                navigateToLocationPermissionFragment()
-            }
+            navigateToLocationPermissionFragment()
         }
     }
 
@@ -127,15 +117,18 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>() {
 
     private fun showLogoutDialog() =
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+
             val customDialog = Dialog(requireContext())
 
-            customDialog.window?.setLayout(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT
-            )
-            customDialog.window?.setGravity(Gravity.CENTER)
-            customDialog.window?.setBackgroundDrawable(getBlurBackgroundDrawable())
-            customDialog.window?.attributes?.windowAnimations = android.R.style.Animation_Activity
+            customDialog.window?.apply {
+                setLayout(
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT
+                )
+                setGravity(Gravity.CENTER)
+                setBackgroundDrawable(getBlurBackgroundDrawable())
+                attributes?.windowAnimations = android.R.style.Animation_Activity
+            }
 
             customDialog.setCancelable(false)
 
@@ -231,8 +224,19 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>() {
         binding.notificationStateSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 binding.notificationStateTv.text = getString(R.string.notifications_enabled)
+                setupPushNotification(true)
             } else {
                 binding.notificationStateTv.text = getString(R.string.notifications_disabled)
+                setupPushNotification(false)
+            }
+        }
+    }
+
+    private fun setupPushNotification(isEnabled: Boolean) {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            when(isEnabled) {
+                true -> FirebaseMessaging.getInstance().subscribeToTopic("APP").await()
+                false -> FirebaseMessaging.getInstance().unsubscribeFromTopic("APP").await()
             }
         }
     }
@@ -279,7 +283,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>() {
         viewModel.settingsEventsChannel.collectLatest {
             when (it) {
                 is EventState.Error -> {
-                    UIHelperFunctions.showSnackbar(
+                    showSnackbar(
                         binding.root,
                         requireContext(),
                         false,
@@ -291,7 +295,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>() {
                     /** NO-OP **/
                 }
                 is EventState.Success -> {
-                    UIHelperFunctions.showSnackbar(
+                    showSnackbar(
                         binding.root,
                         requireContext(),
                         true,
@@ -382,7 +386,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>() {
     }
 
     private fun checkInternetConnection() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        val snackBar = UIHelperFunctions.showSnackbar(
+        val snackBar = showSnackbar(
             binding.root,
             requireContext(),
             false,

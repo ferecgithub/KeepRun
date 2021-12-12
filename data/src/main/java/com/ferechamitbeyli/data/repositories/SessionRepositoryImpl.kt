@@ -424,18 +424,4 @@ class SessionRepositoryImpl @Inject constructor(
     override suspend fun getUserPhotoUrl(): Flow<String> =
         sessionCacheDataSource.getUserPhotoUrl()
             .flowOn(coroutineDispatchers.io())
-
-    override suspend fun cacheFineLocationPermissionState(hasPermission: Boolean) =
-        sessionCacheDataSource.cacheFineLocationPermissionState(hasPermission)
-
-    override suspend fun cacheActivityRecognitionPermissionState(hasPermission: Boolean) =
-        sessionCacheDataSource.cacheActivityRecognitionPermissionState(hasPermission)
-
-    override suspend fun getFineLocationPermissionState(): Flow<Boolean> =
-        sessionCacheDataSource.getFineLocationPermissionState()
-            .flowOn(coroutineDispatchers.io())
-
-    override suspend fun getActivityRecognitionPermissionState(): Flow<Boolean> =
-        sessionCacheDataSource.getActivityRecognitionPermissionState()
-            .flowOn(coroutineDispatchers.io())
 }

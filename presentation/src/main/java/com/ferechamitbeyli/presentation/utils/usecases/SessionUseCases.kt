@@ -48,10 +48,4 @@ data class SessionUseCases @Inject constructor(
     val resetCachedUserUseCase: ResetCachedUserUseCase,
     val resetCachedStatesUseCase: ResetCachedStatesUseCase,
 
-    // Permissions
-    val cacheFineLocationPermissionStateUseCase: CacheFineLocationPermissionStateUseCase,
-    val cacheActivityRecognitionPermissionStateUseCase: CacheActivityRecognitionPermissionStateUseCase,
-
-    val getFineLocationPermissionStateUseCase: GetFineLocationPermissionStateUseCase,
-    val getActivityRecognitionPermissionStateUseCase: GetActivityRecognitionPermissionStateUseCase
 )

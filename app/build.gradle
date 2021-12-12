@@ -96,7 +96,7 @@ dependencies {
     kapt Room.room_compiler_kapt
 
     // LeakCanary
-    debugImplementation LeakCanary.leakcanary_android
+    //debugImplementation LeakCanary.leakcanary_android
 
     // Test Suites
     implementation TestSuites.junit_jupiter_api

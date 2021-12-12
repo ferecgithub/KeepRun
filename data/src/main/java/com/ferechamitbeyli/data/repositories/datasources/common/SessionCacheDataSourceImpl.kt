@@ -71,18 +71,4 @@ class SessionCacheDataSourceImpl @Inject constructor(
         dataStoreManager.getUserPhotoUrl()
             .flowOn(coroutineDispatchers.io())
 
-    override suspend fun cacheFineLocationPermissionState(hasPermission: Boolean) =
-        dataStoreManager.cacheFineLocationPermissionState(hasPermission)
-
-    override suspend fun cacheActivityRecognitionPermissionState(hasPermission: Boolean) =
-        dataStoreManager.cacheActivityRecognitionPermissionState(hasPermission)
-
-    override suspend fun getFineLocationPermissionState(): Flow<Boolean> =
-        dataStoreManager.getFineLocationPermissionState()
-            .flowOn(coroutineDispatchers.io())
-
-    override suspend fun getActivityRecognitionPermissionState(): Flow<Boolean> =
-        dataStoreManager.getActivityRecognitionPermissionState()
-            .flowOn(coroutineDispatchers.io())
-
 }

@@ -1,8 +1,6 @@
 package com.ferechamitbeyli.data.utils
 
-import android.graphics.Color
-
-object Constants {
+object DataConstants {
 
     // Room DB
     const val KEEPRUN_DB_NAME = "keeprun_db"
@@ -17,37 +15,10 @@ object Constants {
     const val CACHE_KEY_FOR_NOTIFICATION_ENABLED = "notification_enabled"
     const val CACHE_KEY_FOR_USER_PHOTO_URL = "user_photo_url"
     const val CACHE_KEY_FOR_FIRST_TIME_USE = "is_first_use"
-    const val CACHE_KEY_FOR_HAS_FINE_LOCATION_PERMISSION = "has_fine_location_permission"
-    const val CACHE_KEY_FOR_HAS_ACTIVITY_RECOGNITION_PERMISSION = "has_activity_recognition_permission"
-
-
-    // Pending Intent
-    const val ACTION_START_OR_RESUME_SERVICE = "ACTION_START_OR_RESUME_SERVICE"
-    const val ACTION_PAUSE_SERVICE = "ACTION_PAUSE_SERVICE"
-    const val ACTION_STOP_SERVICE = "ACTION_STOP_SERVICE"
-    const val ACTION_SHOW_TRACKING_FRAGMENT = "ACTION_SHOW_TRACKING_FRAGMENT"
-
-    // Notification
-    const val NOTIFICATION_CHANNEL_ID = "keeprun_channel"
-    const val NOTIFICATION_CHANNEL_NAME = "keeprun"
-    const val NOTIFICATION_ID = 1
-
-    // Cancel Dialog Tag
-    const val CANCEL_TRACKING_DIALOG_TAG = "CANCEL_TRACKING_DIALOG_TAG"
-
-    // Google Maps
-    const val LOCATION_UPDATE_INTERVAL = 5000L
-    const val FASTEST_LOCATION_INTERVAL = 2000L
-
-    const val TIMER_UPDATE_INTERVAL = 50L
-
-    const val POLYLINE_COLOR = Color.GREEN
-    const val POLYLINE_WIDTH = 8f
-
-    const val MAP_CAMERA_ZOOM = 15f
 
     // Firebase Realtime Database
-    const val FIREBASE_DB_REF = "https://keeprun-c873e-default-rtdb.europe-west1.firebasedatabase.app"
+    const val FIREBASE_DB_REF =
+        "https://keeprun-c873e-default-rtdb.europe-west1.firebasedatabase.app"
     const val USERS_TABLE_REF = "Users"
 
     const val USERS_TABLE_UID_REF = "uid"
@@ -71,8 +42,5 @@ object Constants {
     const val FIREBASE_STORAGE_REF = "gs://keeprun-c873e.appspot.com"
     const val USERS_STORAGE_REF = "Users"
     const val RUNS_STORAGE_REF = "Runs"
-
-
-
 
 }

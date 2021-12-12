@@ -5,6 +5,7 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'androidx.navigation.safeargs.kotlin'
     id 'com.google.gms.google-services'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
@@ -13,8 +14,6 @@ android {
     defaultConfig {
         minSdk AppConfig.min_sdk
         targetSdk AppConfig.target_sdk
-        versionCode AppConfig.version_code
-        versionName AppConfig.version_name
 
         testInstrumentationRunner AppConfig.test_instrumentation_runner
     }
@@ -58,9 +57,12 @@ dependencies {
     implementation Google.material
 
     // Play Services
-    implementation PlayServices.play_services_location
-    implementation PlayServices.play_services_maps
+    api PlayServices.play_services_location
+    api PlayServices.play_services_maps
     implementation PlayServices.kotlinx_coroutines_play_services
+
+    // Firebase Push Notification
+    implementation Firebase.firebase_messaging
 
     // Google Maps SDK Utils
     implementation GoogleMapsUtils.google_maps_utils

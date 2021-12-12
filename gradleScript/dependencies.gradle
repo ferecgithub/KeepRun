@@ -54,9 +54,9 @@ ext {
     ]
 
     // AppClasspath
-    build_gradle = "7.0.3"
-    kotlin_gradle_plugin = "1.5.31"
-    navigation_safe_args_gradle_plugin = "2.3.5"
+    build_gradle = '7.0.4'
+    kotlin_gradle_plugin = "1.6.0"
+    navigation_safe_args_gradle_plugin = "2.4.0-beta02"
     hilt_android_gradle_plugin = "2.38.1"
     google_services = "4.3.10"
     firebase_crashlytics_gradle = "2.8.0"
@@ -117,12 +117,13 @@ ext {
     ]
 
     // Firebase
-    firebase_bom = '29.0.0'
+    firebase_bom = '29.0.1'
     firebase_auth_ktx = "21.0.1"
-    firebase_database = "20.0.2"
+    firebase_database = '20.0.3'
     firebase_storage = "20.0.0"
-    firebase_crashlytics = "18.2.4"
+    firebase_crashlytics = '18.2.5'
     firebase_analytics = "20.0.0"
+    firebase_messaging = "23.0.0"
 
     Firebase = [
             firebase_bom: "com.google.firebase:firebase-bom:${firebase_bom}",
@@ -130,7 +131,8 @@ ext {
             firebase_database: "com.google.firebase:firebase-database-ktx:${firebase_database}",
             firebase_storage: "com.google.firebase:firebase-storage-ktx:${firebase_storage}",
             firebase_crashlytics: "com.google.firebase:firebase-crashlytics-ktx:${firebase_crashlytics}",
-            firebase_analytics: "com.google.firebase:firebase-analytics-ktx:${firebase_analytics}"
+            firebase_analytics: "com.google.firebase:firebase-analytics-ktx:${firebase_analytics}",
+            firebase_messaging: "com.google.firebase:firebase-messaging-ktx:${firebase_messaging}"
 
     ]
 
@@ -170,8 +172,8 @@ ext {
     ]
 
     // Google Maps SDK Utils
-    google_maps_utils = "2.2.3"
-    google_maps_utils_ktx = "3.2.0"
+    google_maps_utils = '2.3.0'
+    google_maps_utils_ktx = '3.3.0'
 
     GoogleMapsUtils = [
             google_maps_utils: "com.google.maps.android:android-maps-utils:${google_maps_utils}",
@@ -179,9 +181,9 @@ ext {
     ]
 
     // Dagger Hilt
-    dagger_hilt = '2.40.2'
+    dagger_hilt = '2.40.5'
     hilt_lifecycle_viewmodel = "1.0.0-alpha03"
-    hilt_compiler = '2.40.2'
+    hilt_compiler = '2.40.5'
 
     DaggerHilt = [
             hilt_android: "com.google.dagger:hilt-android:${dagger_hilt}",
@@ -263,7 +265,7 @@ ext {
     ]
 
     // Test Suites
-    junit = "5.8.1"
+    junit = '5.8.2'
     mockk = '1.12.1'
 
     espresso_core = "3.4.0"

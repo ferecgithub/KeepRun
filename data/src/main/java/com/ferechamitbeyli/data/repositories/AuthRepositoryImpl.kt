@@ -55,16 +55,13 @@ class AuthRepositoryImpl @Inject constructor(
                                         }
                                     }
                                 }
-
                         }
                     }
                     else -> {
                         /** NO-OP **/
                     }
                 }
-
             }
-
     }
 
     override suspend fun signInWithEmailPassword(
@@ -116,15 +113,12 @@ class AuthRepositoryImpl @Inject constructor(
                             ).also {
                                 emit(Resource.Success("Login is successful."))
                             }
-
                         }
-
                     }
                     else -> {
                         /** NO-OP **/
                     }
                 }
-
             }
     }
 
@@ -148,7 +142,6 @@ class AuthRepositoryImpl @Inject constructor(
                             /** NO-OP **/
                         }
                     }
-
                 }
         }
 

@@ -9,5 +9,6 @@ import javax.inject.Inject
 class SortedByAverageSpeedUseCase @Inject constructor(
     private val runRepository: RunRepository
 ) {
-    suspend operator fun invoke(): Flow<Resource<List<Run>>> = runRepository.getAllRunsSortedByAverageSpeed()
+    suspend operator fun invoke(): Flow<Resource<List<Run>>> =
+        runRepository.getAllRunsSortedByAverageSpeed()
 }

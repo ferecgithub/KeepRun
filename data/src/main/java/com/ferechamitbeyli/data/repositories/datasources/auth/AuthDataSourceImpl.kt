@@ -7,6 +7,7 @@ import com.ferechamitbeyli.domain.dispatchers.CoroutineDispatchers
 import com.ferechamitbeyli.domain.entity.User
 import com.ferechamitbeyli.domain.repository.datasources.auth.AuthDataSource
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -35,6 +36,9 @@ class AuthDataSourceImpl @Inject constructor(
                 username = username,
                 photoUrl = ""
             )
+
+            // Subscribed to APP for Push Notifications upon registration.
+            FirebaseMessaging.getInstance().subscribeToTopic("APP").await()
 
             emit(Resource.Success(userDtoMapper.mapToDomainModel(userModel)))
 

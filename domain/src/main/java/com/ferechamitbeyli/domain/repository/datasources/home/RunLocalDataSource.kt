@@ -33,6 +33,7 @@ interface RunLocalDataSource {
     suspend fun getAllRunsSortedByCaloriesBurned(): Flow<Resource<List<Run>>>
     suspend fun getAllRunsSortedByAverageSpeed(): Flow<Resource<List<Run>>>
     suspend fun getAllRunsSortedByDistance(): Flow<Resource<List<Run>>>
+    suspend fun getAllRunsSortedByStepCount(): Flow<Resource<List<Run>>>
 
     /** Get total functions **/
     suspend fun getTotalTimeInMillis(): Flow<Resource<Long>>

@@ -1,13 +1,17 @@
 package com.ferechamitbeyli.data.local.entities
 
+import android.graphics.Bitmap
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.ferechamitbeyli.domain.entity.Run
 
 @Entity(tableName = "runs")
 data class RunEntity(
+    @ColumnInfo(name = "image_url")
     val imageUrl: String? = null,
+
+    val image: Bitmap? = null,
+
     val timestamp: Long = 0L,
 
     @ColumnInfo(name = "avg_speed_in_kmh")
@@ -27,20 +31,4 @@ data class RunEntity(
 
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L
-) {
-    companion object {
-        fun fromRun(run: Run)
-            = RunEntity(
-            run.imageUrl,
-            run.timestamp,
-            run.avgSpeedInKMH,
-            run.distanceInMeters,
-            run.timeInMillis,
-            run.caloriesBurned,
-            run.steps
-        )
-    }
-
-    fun toRun()
-        = Run(imageUrl, timestamp, avgSpeedInKMH, distanceInMeters, timeInMillis, caloriesBurned, steps, id)
-}
+)

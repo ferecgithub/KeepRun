@@ -9,5 +9,6 @@ import javax.inject.Inject
 class SortedByTimeInMillisUseCase @Inject constructor(
     private val runRepository: RunRepository
 ) {
-    suspend operator fun invoke(): Flow<Resource<List<Run>>> = runRepository.getAllRunsSortedByTimeInMillis()
+    suspend operator fun invoke(): Flow<Resource<List<Run>>> =
+        runRepository.getAllRunsSortedByTimeInMillis()
 }

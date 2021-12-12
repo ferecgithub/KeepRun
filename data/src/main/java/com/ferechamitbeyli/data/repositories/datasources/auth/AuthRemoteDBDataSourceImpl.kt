@@ -1,7 +1,7 @@
 package com.ferechamitbeyli.data.repositories.datasources.auth
 
 import com.ferechamitbeyli.data.remote.entities.UserDto
-import com.ferechamitbeyli.data.utils.Constants.USERS_TABLE_REF
+import com.ferechamitbeyli.data.utils.DataConstants.USERS_TABLE_REF
 import com.ferechamitbeyli.domain.DomainMapper
 import com.ferechamitbeyli.domain.Resource
 import com.ferechamitbeyli.domain.dispatchers.CoroutineDispatchers
