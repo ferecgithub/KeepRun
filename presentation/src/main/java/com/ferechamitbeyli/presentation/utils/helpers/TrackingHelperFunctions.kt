@@ -4,6 +4,8 @@ import android.util.Log
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
+import java.text.DecimalFormat
+import java.text.NumberFormat
 
 typealias Polyline = MutableList<LatLng>
 typealias PolylineList = MutableList<Polyline>
@@ -39,7 +41,8 @@ object TrackingHelperFunctions {
         val minutes = (elapsedTime / (1000 * 60) % 60)
         val hours = (elapsedTime / (1000 * 60 * 60) % 24)
 
-        return "$hours:$minutes:$seconds:$millis"
+        val f: NumberFormat = DecimalFormat("00")
+        return "${f.format(hours)}:${f.format(minutes)}:${f.format(seconds)}:${f.format(millis)}"
     }
 
     fun calculateDistance(locationList: PolylineList, inKilometers: Boolean): Double {

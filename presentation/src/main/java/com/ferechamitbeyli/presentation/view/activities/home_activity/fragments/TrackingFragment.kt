@@ -315,7 +315,7 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
                     Log.d("MAPS_FRAGMENT_LOC_LIST1", locations.toString())
                 }
 
-                service.totalTime.observe(viewLifecycleOwner) { totalTime ->
+                service.totalTimeInMillis.observe(viewLifecycleOwner) { totalTime ->
                     runTimeInMillis = totalTime
                     binding.trackingTimerTv.text = calculateElapsedTime(totalTime)
                 }
@@ -438,7 +438,7 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
                 caloriesBurned = caloriesBurned,
                 steps = stepCount
             )
-            Log.d("SAVE_TO_DB", "${run.toString()}, weight: $weight")
+            Log.d("SAVE_TO_DB", "${run.toString()}, weight: $weight, locList: ${locationList.toString()}")
             Log.d(
                 "SAVE_TO_DB_DISTANCE",
                 "$distanceInMeters, locationList_size: ${locationList.size}}"
@@ -446,6 +446,7 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
             viewModel.saveRunToDatabase(run).also {
                 viewModel.saveRunToRemoteDatabase(run)
             }
+            /*
             showSnackbar(
                 binding.root,
                 requireContext(),
@@ -453,6 +454,7 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
                 "Run saved successfully",
                 Snackbar.LENGTH_LONG
             ).show()
+             */
         }
         stopTheRun()
     }

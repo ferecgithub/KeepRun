@@ -43,9 +43,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.text.DecimalFormat
 import javax.inject.Inject
 
@@ -97,8 +95,8 @@ class TrackingService : LifecycleService(), SensorEventListener {
 
 //    private val _startTime = MutableLiveData<Long>()
 
-    private val _totalTime = MutableLiveData<Long>()
-    val totalTime: LiveData<Long> get() = _totalTime
+    private val _totalTimeInMillis = MutableLiveData<Long>()
+    val totalTimeInMillis: LiveData<Long> get() = _totalTimeInMillis
 
     private val _stepCount = MutableLiveData<Int>()
     val stepCount: LiveData<Int> get() = _stepCount
@@ -112,7 +110,7 @@ class TrackingService : LifecycleService(), SensorEventListener {
         _isKilled.postValue(false)
 //        _startTime.postValue(0L)
         _stepCount.postValue(-1)
-        _totalTime.postValue(0L)
+        _totalTimeInMillis.postValue(0L)
 
         _locationList.postValue(mutableListOf())
     }
@@ -170,7 +168,7 @@ class TrackingService : LifecycleService(), SensorEventListener {
                         startForegroundService()
 //                        _startTime.postValue(System.currentTimeMillis())
                     } else {
-                        startTimer()
+                        if (!isTimerEnabled) startTimer()
                     }
                 }
                 ACTION_PAUSE_SERVICE -> {
@@ -326,13 +324,14 @@ class TrackingService : LifecycleService(), SensorEventListener {
         _started.postValue(true)
         startTime = System.currentTimeMillis()
         isTimerEnabled = true
-        lifecycleScope.launch {
-            while (started.value!! && isTimerEnabled) {
+        CoroutineScope(Dispatchers.Main).launch {
+            while (started.value!!) {
                 lapTime = System.currentTimeMillis() - startTime
-                _totalTime.postValue(runTime + lapTime)
+                _totalTimeInMillis.postValue(runTime + lapTime)
+                delay(TIMER_UPDATE_INTERVAL)
             }
             runTime += lapTime
-            delay(TIMER_UPDATE_INTERVAL)
+            Log.d("SERVICE_TIME", "totalTime: ${_totalTimeInMillis.value}, startTime: ${startTime}, runTime: $runTime")
         }
 
         //Log.d("SERVICE_TIME", "totalTime: ${totalTime.value}, startTime: ${_startTime.value!!}, runTime: $runTime")
