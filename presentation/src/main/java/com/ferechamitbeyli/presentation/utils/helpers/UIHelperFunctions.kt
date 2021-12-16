@@ -69,25 +69,17 @@ class UIHelperFunctions {
             return snackbar
         }
 
-        fun splitBitmap(bitmap: Bitmap, whichHalf: Int): Bitmap? {
-            val bitmapOptions = BitmapFactory.Options()
-            bitmapOptions.inTargetDensity = 1
-            bitmap.density = Bitmap.DENSITY_NONE
-            var top = 0
-            var bottom = 0
-            //val targetHeight = 0
-            when (whichHalf) {
-                1 -> { // return 1st half of image
-                    top = 0
-                    bottom = bitmap.height / 2
-                }
-                2 -> { // return 2nd half of image
-                    top = bitmap.height / 2 - 10
-                    bottom = bitmap.height / 2 - 10
-                }
-            }
-            //val fromHere = (bitmap.height * 0.5).toInt()
-            return Bitmap.createBitmap(bitmap, 0, top, bitmap.width, bottom)
+        fun divideBitmap(picture: Bitmap): Array<Bitmap?> {
+            val halves = arrayOfNulls<Bitmap>(2)
+            halves[0] = Bitmap.createBitmap(picture, 0, 0, picture.width, picture.height / 2)
+            halves[1] = Bitmap.createBitmap(
+                picture,
+                0,
+                picture.height / 2,
+                picture.width,
+                picture.height / 2
+            )
+            return halves
         }
 
         fun getScreenShot(view: View): Bitmap {
@@ -101,7 +93,7 @@ class UIHelperFunctions {
             return returnedBitmap
         }
 
-        fun fromVectorToBitmap(id: Int, color: Int, resources: Resources) : BitmapDescriptor {
+        fun fromVectorToBitmap(id: Int, color: Int, resources: Resources): BitmapDescriptor {
             val vectorDrawable: Drawable = ResourcesCompat.getDrawable(resources, id, null)
                 ?: return BitmapDescriptorFactory.defaultMarker()
             val bitmap = Bitmap.createBitmap(

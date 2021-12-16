@@ -8,10 +8,10 @@ import kotlinx.coroutines.flow.Flow
 interface RunDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(runEntity: RunEntity)
+    suspend fun insert(runEntity: RunEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMultiple(vararg runEntity: RunEntity)
+    suspend fun insertMultiple(vararg runEntity: RunEntity): List<Long>
 
     @Delete
     suspend fun remove(runEntity: RunEntity)

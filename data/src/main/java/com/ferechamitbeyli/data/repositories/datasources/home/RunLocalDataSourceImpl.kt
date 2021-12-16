@@ -19,13 +19,9 @@ class RunLocalDataSourceImpl @Inject constructor(
     private val coroutineDispatchers: CoroutineDispatchers
 ) : RunLocalDataSource {
 
-    override suspend fun insertToDB(run: Run) {
-        runDao.insert(runEntityMapper.mapFromDomainModel(run))
-    }
+    override suspend fun insertToDB(run: Run) = runDao.insert(runEntityMapper.mapFromDomainModel(run))
 
-    override suspend fun insertMultipleToDB(vararg run: Run) {
-        runDao.insertMultiple(*runEntityMapper.mapFromDomainModelList(run.toList()).toTypedArray())
-    }
+    override suspend fun insertMultipleToDB(vararg run: Run) = runDao.insertMultiple(*runEntityMapper.mapFromDomainModelList(run.toList()).toTypedArray())
 
     override suspend fun removeFromDB(run: Run) {
         runDao.remove(runEntityMapper.mapFromDomainModel(run))

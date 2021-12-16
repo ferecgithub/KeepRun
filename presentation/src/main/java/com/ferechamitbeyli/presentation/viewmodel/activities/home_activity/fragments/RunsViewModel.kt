@@ -3,6 +3,8 @@ package com.ferechamitbeyli.presentation.viewmodel.activities.home_activity.frag
 import com.ferechamitbeyli.domain.Resource
 import com.ferechamitbeyli.domain.dispatchers.CoroutineDispatchers
 import com.ferechamitbeyli.domain.entity.Run
+import com.ferechamitbeyli.presentation.uimodels.RunUIModel
+import com.ferechamitbeyli.presentation.uimodels.mappers.RunToUIMapper
 import com.ferechamitbeyli.presentation.utils.enums.RunSortType
 import com.ferechamitbeyli.presentation.utils.helpers.NetworkConnectionTracker
 import com.ferechamitbeyli.presentation.utils.states.EventState
@@ -22,10 +24,14 @@ class RunsViewModel @Inject constructor(
     coroutineDispatchers: CoroutineDispatchers
 ) : BaseViewModel(networkConnectionTracker, coroutineDispatchers) {
 
+    var runSortType = RunSortType.DATE
+
+    init {
+        sortRuns(runSortType)
+    }
+
     private var _runEventsChannel = MutableSharedFlow<EventState>()
     val runEventsChannel: SharedFlow<EventState> = _runEventsChannel
-
-    var runSortType = RunSortType.DATE
 
     private var _runs = MutableStateFlow<List<Run>>(mutableListOf())
     val runs: StateFlow<List<Run>> = _runs
@@ -78,6 +84,37 @@ class RunsViewModel @Inject constructor(
         }
     }
 
+    fun removeRunFromSynced(run: RunUIModel) = ioScope.launch {
+        val runToBeDeleted = RunToUIMapper.mapToDomainModel(run)
+        runUseCases.removeRunUseCase.invoke(runToBeDeleted)
+        runUseCases.removeMapImageFromRemoteDBUseCase.invoke(runToBeDeleted.timestamp.toString()).collect { deleteImgResponse ->
+            when(deleteImgResponse) {
+                is Resource.Error -> {
+                    _runEventsChannel.emit(EventState.Error(deleteImgResponse.message.toString()))
+                }
+                is Resource.Loading -> {
+                    /** NO-OP **/
+                }
+                is Resource.Success -> {
+                    runUseCases.removeRunFromRemoteDBUseCase.invoke(RunToUIMapper.mapToDomainModel(run)).collect { deleteResponse ->
+                        when(deleteResponse) {
+                            is Resource.Error -> {
+                                _runEventsChannel.emit(EventState.Error(deleteResponse.message.toString()))
+                            }
+                            is Resource.Loading -> {
+                                /** NO-OP **/
+                            }
+                            is Resource.Success -> {
+                                _runEventsChannel.emit(EventState.Success(deleteResponse.data.toString()))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
     fun getUserWeightFromRemoteDB() = flow<Double> {
         sessionUseCases.getUserWeightFromRemoteDBUseCase.invoke().collect { remoteDBResponse ->
             when (remoteDBResponse) {
@@ -101,7 +138,7 @@ class RunsViewModel @Inject constructor(
     }
 
     fun sortRuns(sortType: RunSortType) = ioScope.launch {
-        when(sortType) {
+        when (sortType) {
             RunSortType.DATE -> {
                 runsSortedByDate.collectLatest { runsList ->
                     runsList?.let { _runs.value = it }
@@ -154,5 +191,4 @@ class RunsViewModel @Inject constructor(
             }
         }
     }
-
 }

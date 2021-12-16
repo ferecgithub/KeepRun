@@ -28,7 +28,8 @@ object RunEntityMapper : DomainMapper<RunEntity, Run> {
         distanceInMeters = domainModel.distanceInMeters,
         timeInMillis = domainModel.timeInMillis,
         caloriesBurned = domainModel.caloriesBurned,
-        steps = domainModel.steps
+        steps = domainModel.steps,
+        id = domainModel.id
     )
 
     override fun mapToDomainModelList(list: List<RunEntity>): List<Run> =

@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.StorageReference
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -44,13 +45,31 @@ class RunRemoteDBDataSourceImpl @Inject constructor(
 
             val runMapStorageReference = firebaseStorageReference.child(RUNS_STORAGE_REF)
                 .child(firebaseAuth.currentUser?.uid.toString()).child(timestamp)
-                .putBytes(byteArray)
 
-            val mapImageUrl: String =
-                runMapStorageReference.snapshot.storage.downloadUrl.await().toString()
+            val uploadTask = runMapStorageReference.putBytes(byteArray)
 
-            if (mapImageUrl.isNotBlank()) {
-                emit(Resource.Success(mapImageUrl))
+            var mapImageUrl: String? = null
+
+            uploadTask.continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+                    }
+                }
+                runMapStorageReference.downloadUrl
+
+            }.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    mapImageUrl = task.result.toString()
+                }
+
+
+            }
+
+            delay(2000)
+
+            if (mapImageUrl != null) {
+                emit(Resource.Success(mapImageUrl.toString()))
             }
 
         }.catch {
@@ -64,9 +83,10 @@ class RunRemoteDBDataSourceImpl @Inject constructor(
 
             val runMapStorageReference = firebaseStorageReference.child(RUNS_STORAGE_REF)
                 .child(firebaseAuth.currentUser?.uid.toString()).child(timestamp)
-                .delete().await()
+                .delete().await().also {
+                    emit(Resource.Success("Map Image is successfully deleted."))
+                }
 
-            emit(Resource.Success("Map Image is successfully deleted."))
         }.catch {
             emit(Resource.Error(it.message.toString()))
         }.flowOn(coroutineDispatchers.io())
@@ -89,9 +109,9 @@ class RunRemoteDBDataSourceImpl @Inject constructor(
             )
 
             databaseReference.child(DataConstants.RUNS_TABLE_REF).child(firebaseAuth.uid.toString())
-                .child(runDto.id.toString())
+                .child(runDto.timestamp.toString())
                 .setValue(runDto).await().also {
-                    emit(Resource.Success("The run is successfully inserted."))
+                    emit(Resource.Success("The run is successfully saved."))
                 }
 
         }.catch {
@@ -106,7 +126,7 @@ class RunRemoteDBDataSourceImpl @Inject constructor(
             val runDto = runDtoMapper.mapFromDomainModel(run)
 
             databaseReference.child(DataConstants.RUNS_TABLE_REF).child(firebaseAuth.uid.toString())
-                .child(runDto.id.toString())
+                .child(runDto.timestamp.toString())
                 .removeValue().await().also {
                     emit(Resource.Success("The run is successfully removed."))
                 }

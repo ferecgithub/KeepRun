@@ -5,8 +5,8 @@ import com.ferechamitbeyli.domain.entity.Run
 import kotlinx.coroutines.flow.Flow
 
 interface RunLocalDataSource {
-    suspend fun insertToDB(run: Run)
-    suspend fun insertMultipleToDB(vararg run: Run)
+    suspend fun insertToDB(run: Run) : Long
+    suspend fun insertMultipleToDB(vararg run: Run) : List<Long>
     suspend fun removeFromDB(run: Run)
     suspend fun removeAllFromDB()
 

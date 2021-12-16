@@ -1,38 +1,15 @@
 package com.ferechamitbeyli.presentation.utils.helpers
 
-import android.util.Log
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 import java.text.DecimalFormat
 import java.text.NumberFormat
 
-typealias Polyline = MutableList<LatLng>
-typealias PolylineList = MutableList<Polyline>
+typealias SinglePolyline = MutableList<LatLng>
+typealias PolylineList = MutableList<SinglePolyline>
 
 object TrackingHelperFunctions {
-
-    /*
-    fun getFormattedStopWatchTime(ms: Long, includeMillis: Boolean = false): String {
-        var milliseconds = ms
-        val hours = TimeUnit.MILLISECONDS.toHours(milliseconds)
-        milliseconds -= TimeUnit.HOURS.toMillis(hours)
-        val minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds)
-        milliseconds -= TimeUnit.MINUTES.toMillis(minutes)
-        val seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds)
-        if (!includeMillis) {
-            return "${if (hours < 10) "0" else ""}$hours:" +
-                    "${if (minutes < 10) "0" else ""}$minutes:" +
-                    "${if (seconds < 10) "0" else ""}$seconds"
-        }
-        milliseconds -= TimeUnit.SECONDS.toMillis(seconds)
-        milliseconds /= 10
-        return "${if (hours < 10) "0" else ""}$hours:" +
-                "${if (minutes < 10) "0" else ""}$minutes:" +
-                "${if (seconds < 10) "0" else ""}$seconds:" +
-                "${if (milliseconds < 10) "0" else ""}$milliseconds"
-    }
-     */
 
     fun calculateElapsedTime(elapsedTime: Long): String {
 
@@ -51,7 +28,6 @@ object TrackingHelperFunctions {
             locationList.forEach {
                 meters += SphericalUtil.computeDistanceBetween(it.first(), it.last())
             }
-            Log.d("CALC_DISTANCE", "inKilometers: $inKilometers, meters: $meters, km: ${meters / 1000}")
             when (inKilometers) {
                 true -> meters / 1000
                 false -> meters
@@ -60,22 +36,6 @@ object TrackingHelperFunctions {
             meters
         }
     }
-
-    /*
-    fun calculateDistance(locationList: MutableList<LatLng>, inKilometers: Boolean): Double {
-        if (locationList.isNotEmpty()) {
-            val meters =
-                SphericalUtil.computeDistanceBetween(locationList.first(), locationList.last())
-            return if (inKilometers) {
-                meters / 1000 // in kilometer
-            } else {
-                meters // in meter
-            }
-
-        }
-        return 0.0
-    }
-     */
 
     fun calculateMETValue(mph: Double): Float =
         when (mph) {

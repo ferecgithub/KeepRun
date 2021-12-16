@@ -93,8 +93,6 @@ class TrackingService : LifecycleService(), SensorEventListener {
     private val _locationList = MutableLiveData<PolylineList>()
     val locationList: LiveData<PolylineList> get() = _locationList
 
-//    private val _startTime = MutableLiveData<Long>()
-
     private val _totalTimeInMillis = MutableLiveData<Long>()
     val totalTimeInMillis: LiveData<Long> get() = _totalTimeInMillis
 
@@ -102,17 +100,13 @@ class TrackingService : LifecycleService(), SensorEventListener {
     val stepCount: LiveData<Int> get() = _stepCount
 
 
-    private fun setInitialValues() = lifecycleScope.launch {
-        neglectedStepCount = -1
-        isTimerEnabled = false
+    private fun setInitialValues() {
         _isFirstRun.postValue(true)
-        _started.postValue(false)
-        _isKilled.postValue(false)
-//        _startTime.postValue(0L)
-        _stepCount.postValue(-1)
+        _locationList.postValue(mutableListOf())
+        _stepCount.postValue(0)
         _totalTimeInMillis.postValue(0L)
 
-        _locationList.postValue(mutableListOf())
+        neglectedStepCount = -1
     }
 
     override fun onCreate() {
@@ -166,7 +160,6 @@ class TrackingService : LifecycleService(), SensorEventListener {
                     if (isFirstRun.value == true) {
                         _isFirstRun.postValue(false)
                         startForegroundService()
-//                        _startTime.postValue(System.currentTimeMillis())
                     } else {
                         if (!isTimerEnabled) startTimer()
                     }
@@ -203,6 +196,10 @@ class TrackingService : LifecycleService(), SensorEventListener {
     private fun stopForegroundService() {
         _isKilled.postValue(true)
         _isFirstRun.postValue(true)
+        lapTime = 0L
+        runTime = 0L
+        startTime = 0L
+
         pauseForegroundService()
         setInitialValues()
         (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(
@@ -271,7 +268,7 @@ class TrackingService : LifecycleService(), SensorEventListener {
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(result: LocationResult) {
             super.onLocationResult(result)
-            if (_started.value == true) {
+            if (_started.value == true && isKilled.value == false) {
                 result.locations.let { locations ->
                     locations.forEach {
                         updateLocationList(it)
@@ -279,11 +276,10 @@ class TrackingService : LifecycleService(), SensorEventListener {
                     }
                 }
             }
-
         }
     }
 
-    private fun updateNotificationPeriodically() = lifecycleScope.launch {
+    private fun updateNotificationPeriodically() {
         notificationBuilder.apply {
             setContentTitle("KeepRun | You've run:")
             setContentText(
@@ -303,13 +299,15 @@ class TrackingService : LifecycleService(), SensorEventListener {
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
     }
 
-    private fun updateLocationList(location: Location?) = lifecycleScope.launch {
+    private fun updateLocationList(location: Location?) {
         location?.let {
-            val newLatLng = LatLng(location.latitude, location.longitude)
+            if (isKilled.value == false) {
+                val newLatLng = LatLng(location.latitude, location.longitude)
 
-            _locationList.value?.apply {
-                last().add(newLatLng)
-                _locationList.postValue(this)
+                _locationList.value?.apply {
+                    last().add(newLatLng)
+                    _locationList.postValue(this)
+                }
             }
         }
     }
@@ -325,16 +323,13 @@ class TrackingService : LifecycleService(), SensorEventListener {
         startTime = System.currentTimeMillis()
         isTimerEnabled = true
         CoroutineScope(Dispatchers.Main).launch {
-            while (started.value!!) {
+            while (started.value == true && isTimerEnabled) {
                 lapTime = System.currentTimeMillis() - startTime
                 _totalTimeInMillis.postValue(runTime + lapTime)
                 delay(TIMER_UPDATE_INTERVAL)
             }
             runTime += lapTime
-            Log.d("SERVICE_TIME", "totalTime: ${_totalTimeInMillis.value}, startTime: ${startTime}, runTime: $runTime")
         }
-
-        //Log.d("SERVICE_TIME", "totalTime: ${totalTime.value}, startTime: ${_startTime.value!!}, runTime: $runTime")
     }
 
     private fun createNotificationChannel() {

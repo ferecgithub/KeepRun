@@ -8,13 +8,13 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.graphics.Color
 import android.location.Location
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.location.LocationManagerCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
@@ -26,15 +26,16 @@ import com.ferechamitbeyli.presentation.service.TrackingService
 import com.ferechamitbeyli.presentation.uimodels.RunUIModel
 import com.ferechamitbeyli.presentation.utils.enums.RunButtonsState
 import com.ferechamitbeyli.presentation.utils.helpers.PermissionManager
-import com.ferechamitbeyli.presentation.utils.helpers.Polyline
 import com.ferechamitbeyli.presentation.utils.helpers.PresentationConstants.ACTION_PAUSE_SERVICE
 import com.ferechamitbeyli.presentation.utils.helpers.PresentationConstants.ACTION_START_OR_RESUME_SERVICE
 import com.ferechamitbeyli.presentation.utils.helpers.PresentationConstants.ACTION_STOP_SERVICE
 import com.ferechamitbeyli.presentation.utils.helpers.PresentationConstants.FOLLOW_POLYLINE_ZOOM
+import com.ferechamitbeyli.presentation.utils.helpers.SinglePolyline
 import com.ferechamitbeyli.presentation.utils.helpers.TrackingHelperFunctions.calculateDistance
 import com.ferechamitbeyli.presentation.utils.helpers.TrackingHelperFunctions.calculateElapsedTime
 import com.ferechamitbeyli.presentation.utils.helpers.TrackingHelperFunctions.calculateMETValue
 import com.ferechamitbeyli.presentation.utils.helpers.TrackingHelperFunctions.setCameraPosition
+import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.enable
 import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.fromVectorToBitmap
 import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.showSnackbar
 import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.visible
@@ -48,6 +49,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -78,7 +80,8 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
     private var runTimeInMillis = 0L
     private var weight = 0.0
 
-    private var locationList = mutableListOf<Polyline>()
+    private var locationList = mutableListOf<SinglePolyline>()
+    private var polylineList = mutableListOf<Polyline>()
 
     private var markerList = mutableListOf<Marker>()
 
@@ -137,7 +140,6 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
                 isCompassEnabled = false
             }
         }
-        drawPolylines()
     }
 
     private fun checkForService() {
@@ -164,6 +166,7 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
         }
 
         binding.goBackBtn.setOnClickListener {
+            resetMap()
             navigateToRunsFragment()
         }
 
@@ -184,6 +187,8 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
                     setupRunButtons(RunButtonsState.PAUSED)
                 }
             }
+        } else {
+            setupRunButtons(RunButtonsState.STOPPED)
         }
     }
 
@@ -256,33 +261,45 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
         }
     }
 
+    private fun setInitialValues() {
+        locationList = mutableListOf()
+        markerList = mutableListOf()
+        runTimeInMillis = 0L
+        stepCount = 0
+    }
+
+    private fun isLocationEnabled(context: Context): Boolean {
+        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return LocationManagerCompat.isLocationEnabled(locationManager)
+    }
+
     private fun checkPermissionsBeforeStartingTheRun() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             if (PermissionManager.hasActivityRecognitionPermission(requireContext()) &&
                 PermissionManager.hasBackgroundLocationPermission(requireContext())
             ) {
-                Toast.makeText(requireContext(), "EVERY PERMISSION IS GIVEN", Toast.LENGTH_SHORT)
-                    .show()
-                /** START RUN HERE **/
-                sendActionCommandToService(ACTION_START_OR_RESUME_SERVICE)
+                checkLocationOptionBeforeStartingTheRun()
             } else {
                 navigateToActivityRecognitionPermission()
             }
         } else {
-            Toast.makeText(requireContext(), "NO NEED FOR ANY PERMISSION", Toast.LENGTH_SHORT)
-                .show()
-            /** START RUN HERE **/
-            sendActionCommandToService(ACTION_START_OR_RESUME_SERVICE)
+            checkLocationOptionBeforeStartingTheRun()
         }
-
     }
 
-    /*
-    private fun toggleRun() {
-        sendActionCommandToService(if (isStarted.value == true) ACTION_START_OR_RESUME_SERVICE else ACTION_PAUSE_SERVICE)
+    private fun checkLocationOptionBeforeStartingTheRun() {
+        if (isLocationEnabled(requireContext())) {
+            sendActionCommandToService(ACTION_START_OR_RESUME_SERVICE)
+        } else {
+            showSnackbar(
+                binding.root,
+                requireContext(),
+                false,
+                "Please enable your location from your phone.",
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
     }
-
-     */
 
     private fun pauseTheRun() {
         sendActionCommandToService(ACTION_PAUSE_SERVICE)
@@ -305,25 +322,9 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
             val service = localBinder.getTrackingServiceInstance()
             viewLifecycleOwner.lifecycleScope.launch {
 
-                service.locationList.observe(viewLifecycleOwner) { locations ->
-
-                    locationList = locations
-//                    drawPolylines()
-                    drawLatestPolyline()
-                    followUserWithCamera()
-                    Log.d("MAPS_FRAGMENT_LOC_LIST", locationList.toString())
-                    Log.d("MAPS_FRAGMENT_LOC_LIST1", locations.toString())
-                }
-
-                service.totalTimeInMillis.observe(viewLifecycleOwner) { totalTime ->
-                    runTimeInMillis = totalTime
-                    binding.trackingTimerTv.text = calculateElapsedTime(totalTime)
-                }
-
                 service.isKilled.observe(viewLifecycleOwner) { killed ->
                     isKilled.value = killed
                     if (killed) {
-                        showWholePath()
                         setupRunButtons(RunButtonsState.STOPPED)
                     }
                 }
@@ -334,21 +335,33 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
 
                 service.started.observe(viewLifecycleOwner) { started ->
                     isStarted.value = started
-
                     setupRunButtonsForServiceState()
+                }
 
-                    Log.d(
-                        "TRACKING_FRAGMENT",
-                        "isStarted: ${isStarted.value}, isKilled: ${isKilled.value}, isFirstRun: ${isFirstRun.value}"
-                    )
+                service.locationList.observe(viewLifecycleOwner) { locations ->
+                    if (isStarted.value == true && isKilled.value == false) {
+                        locationList = locations
+                        drawPolylines()
+                        followUserWithCamera()
+                    }
 
                 }
+
 
                 service.stepCount.observe(viewLifecycleOwner) {
-                    stepCount = it
+                    if (isStarted.value == true && isKilled.value == false) {
+                        stepCount = it
+                    }
                 }
 
-
+                service.totalTimeInMillis.observe(viewLifecycleOwner) { totalTime ->
+                    if (isStarted.value == true && isKilled.value == false) {
+                        runTimeInMillis = totalTime
+                        binding.trackingTimerTv.text = calculateElapsedTime(totalTime)
+                    } else {
+                        binding.trackingTimerTv.text = getString(R.string.timer_start_value)
+                    }
+                }
             }
         }
 
@@ -358,9 +371,11 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
     }
 
     private fun drawPolylines() {
-        if (locationList.isNotEmpty()) {
+        if (locationList.isNotEmpty() &&
+            isKilled.value == false
+        ) {
             locationList.forEach {
-                map.addPolyline(
+                val polyline = map.addPolyline(
                     PolylineOptions().apply {
                         width(10f)
                         color(Color.GREEN)
@@ -370,30 +385,16 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
                         addAll(it)
                     }
                 )
-
+                polylineList.add(polyline)
             }
-        }
-    }
-
-    private fun drawLatestPolyline() {
-        if (locationList.isNotEmpty() && locationList.last().size > 1) {
-            val preLastLatLng = locationList.last()[locationList.last().size - 2]
-            val lastLatLng = locationList.last().last()
-            val polylineOptions = PolylineOptions().apply {
-                width(10f)
-                color(Color.GREEN)
-                jointType(JointType.ROUND)
-                startCap(ButtCap())
-                endCap(ButtCap())
-                add(preLastLatLng)
-                add(lastLatLng)
-            }
-            map.addPolyline(polylineOptions)
         }
     }
 
     private fun followUserWithCamera() {
-        if (locationList.isNotEmpty() && locationList.last().isNotEmpty()) {
+        if (locationList.isNotEmpty() &&
+            locationList.last().isNotEmpty() &&
+            isKilled.value == false
+        ) {
             map.animateCamera(
                 CameraUpdateFactory.newLatLngZoom(
                     locationList.last().last(),
@@ -404,57 +405,49 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
     }
 
     private fun showWholePath() {
-        val bounds = LatLngBounds.Builder()
-        locationList.forEach { polyline ->
-            polyline.forEach {
-                bounds.include(it)
+        if (locationList.isNotEmpty() &&
+            isKilled.value == false
+        ) {
+            val bounds = LatLngBounds.Builder()
+            locationList.forEach { polyline ->
+                polyline.forEach {
+                    bounds.include(it)
+                }
             }
+            map.animateCamera(
+                CameraUpdateFactory.newLatLngBounds(
+                    bounds.build(),
+                    100
+                ), 1500, null
+            )
+            addStartMarker(locationList.first().first())
+            addEndMarker(locationList.last().last())
         }
-        map.animateCamera(
-            CameraUpdateFactory.newLatLngBounds(
-                bounds.build(),
-                100
-            ), 2000, null
-        )
-        addStartMarker(locationList.first().first())
-        addEndMarker(locationList.last().last())
     }
 
-    private fun saveRunToDBWithScreenshot() = viewLifecycleOwner.lifecycleScope.launch {
+    private fun saveRunToDBWithScreenshot() {
+        val distanceInMeters = calculateDistance(locationList, false)
+        val timeInMs = runTimeInMillis
+        val steps = stepCount
+        val avgSpeedInKMH =
+            round((distanceInMeters / 1000f) / (timeInMs / 1000f / 60 / 60) * 10) / 10f
+        val timestamp = Calendar.getInstance().timeInMillis
+
+        // caloriesBurned = MET * 3.5 * weight / 200
+        val caloriesBurned =
+            (calculateMETValue(avgSpeedInKMH * 1000) * 3.5 * weight / 200 * timeInMs / 1000f / 60).toInt()
         map.snapshot { screenshot ->
-            val distanceInMeters = calculateDistance(locationList, false)
-            val avgSpeedInKMH =
-                round((distanceInMeters / 1000f) / (runTimeInMillis / 1000f / 60 / 60) * 10) / 10f
-            val timestamp = Calendar.getInstance().timeInMillis
-            // caloriesBurned = MET * 3.5 * weight / 200
-            val caloriesBurned =
-                (calculateMETValue(avgSpeedInKMH * 1000) * 3.5 * weight / 200 * runTimeInMillis / 1000f / 60).toInt()
             val run = RunUIModel(
                 image = screenshot,
                 timestamp = timestamp,
                 avgSpeedInKMH = avgSpeedInKMH,
                 distanceInMeters = distanceInMeters.toInt(),
-                timeInMillis = runTimeInMillis,
+                timeInMillis = timeInMs,
                 caloriesBurned = caloriesBurned,
-                steps = stepCount
+                steps = steps
             )
-            Log.d("SAVE_TO_DB", "${run.toString()}, weight: $weight, locList: ${locationList.toString()}")
-            Log.d(
-                "SAVE_TO_DB_DISTANCE",
-                "$distanceInMeters, locationList_size: ${locationList.size}}"
-            )
-            viewModel.saveRunToDatabase(run).also {
-                viewModel.saveRunToRemoteDatabase(run)
-            }
-            /*
-            showSnackbar(
-                binding.root,
-                requireContext(),
-                true,
-                "Run saved successfully",
-                Snackbar.LENGTH_LONG
-            ).show()
-             */
+
+            viewModel.saveRunToSynced(run)
         }
         stopTheRun()
     }
@@ -501,10 +494,11 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
                     setCameraPosition(lastKnownLocation, FOLLOW_POLYLINE_ZOOM)
                 )
             )
-            locationList.forEach { polyline -> polyline.forEach { latLng -> polyline.remove(latLng) } }
+            polylineList.forEach { polyline -> polyline.remove() }
             markerList.forEach { marker -> marker.remove() }
             locationList.clear()
             markerList.clear()
+            setInitialValues()
         }
     }
 
@@ -572,7 +566,14 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
             bindingCancelRun.cancelRunConfirmBtn.setOnClickListener {
                 /** CANCEL THE RUN HERE **/
                 viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                    showWholePath()
+                    customDialog.dismiss()
+                    pauseTheRun()
+                    setAvailabilityOfFinishedButtonsForUploadingImage(false)
+                    delay(2000)
                     saveRunToDBWithScreenshot()
+                    delay(2000)
+                    setAvailabilityOfFinishedButtonsForUploadingImage(true)
                 }
             }
 
@@ -582,6 +583,11 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
 
             customDialog.show()
         }
+
+    private fun setAvailabilityOfFinishedButtonsForUploadingImage(isDisabled: Boolean) {
+        binding.resetRunBtn.enable(isDisabled)
+        binding.goBackBtn.enable(isDisabled)
+    }
 
     override fun onResume() {
         binding.trackingMapMv.onResume()
@@ -609,13 +615,6 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
         binding.trackingMapMv.removeAllViews()
         super.onDestroyView()
     }
-
-    /*
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        binding.trackingMapMv.onSaveInstanceState(outState)
-    }
-    */
 
     override fun onLowMemory() {
         binding.trackingMapMv.onLowMemory()

@@ -35,39 +35,58 @@ class TrackingViewModel @Inject constructor(
         }
     }
 
-    fun saveRunToDatabase(run: RunUIModel) = ioScope.launch {
-        val runToBeSaved = RunToUIMapper.mapToDomainModel(run)
-        runUseCases.insertRunUseCase.invoke(runToBeSaved)
+    fun saveRunToSynced(run: RunUIModel) = ioScope.launch {
+        val runToBeSaved = RunToUIMapper.mapToDomainModel(
+            RunUIModel(
+                imageUrl = run.imageUrl,
+                image = run.image,
+                timestamp = run.timestamp,
+                avgSpeedInKMH = run.avgSpeedInKMH,
+                distanceInMeters = run.distanceInMeters,
+                timeInMillis = run.timeInMillis,
+                caloriesBurned = run.caloriesBurned,
+                steps = run.steps,
+                id = runUseCases.insertRunUseCase.invoke(RunToUIMapper.mapToDomainModel(run))
+            )
+        )
 
-    }
-
-    fun saveRunToRemoteDatabase(run: RunUIModel) = ioScope.launch {
-        val runToBeSaved = RunToUIMapper.mapToDomainModel(run)
         if (run.image != null) {
             runUseCases.insertMapImageToRemoteDBUseCase.invoke(
                 fromBitmap(run.image),
                 run.timestamp.toString()
             ).collect { imageUrlResponse ->
-                runUseCases.insertRunToRemoteDBUseCase.invoke(
-                    runToBeSaved,
-                    imageUrlResponse.data.toString()
-                ).collect { databaseResponse ->
-                    when(databaseResponse) {
-                        is Resource.Error -> {
-                            _trackingEventsChannel.emit(EventState.Error(databaseResponse.message.toString()))
-                        }
-                        is Resource.Loading -> {
-                            /** NO-OP **/
-                        }
-                        is Resource.Success -> {
-                            _trackingEventsChannel.emit(EventState.Success(databaseResponse.data))
+                when (imageUrlResponse) {
+                    is Resource.Error -> {
+                        _trackingEventsChannel.emit(EventState.Error(imageUrlResponse.message.toString()))
+                    }
+                    is Resource.Loading -> {
+                        /** NO-OP **/
+                    }
+                    is Resource.Success -> {
+                        runUseCases.insertRunToRemoteDBUseCase.invoke(
+                            runToBeSaved,
+                            imageUrlResponse.data.toString()
+                        ).collect { databaseResponse ->
+                            when (databaseResponse) {
+                                is Resource.Error -> {
+                                    _trackingEventsChannel.emit(EventState.Error(databaseResponse.message.toString()))
+                                }
+                                is Resource.Loading -> {
+                                    /** NO-OP **/
+                                }
+                                is Resource.Success -> {
+                                    _trackingEventsChannel.emit(EventState.Success(databaseResponse.data))
+                                }
+                            }
                         }
                     }
                 }
+
             }
         } else {
             runUseCases.insertRunToRemoteDBUseCase.invoke(runToBeSaved, "")
         }
+
     }
 
 

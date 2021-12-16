@@ -4,14 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ferechamitbeyli.presentation.R
 import com.ferechamitbeyli.presentation.databinding.FragmentRunsBinding
+import com.ferechamitbeyli.presentation.uimodels.RunUIModel
 import com.ferechamitbeyli.presentation.uimodels.mappers.RunToUIMapper
 import com.ferechamitbeyli.presentation.utils.enums.RunSortType
 import com.ferechamitbeyli.presentation.utils.helpers.PermissionManager
@@ -19,11 +21,13 @@ import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions
 import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.visible
 import com.ferechamitbeyli.presentation.utils.states.EventState
 import com.ferechamitbeyli.presentation.view.activities.home_activity.adapters.RunsAdapter
+import com.ferechamitbeyli.presentation.view.activities.home_activity.adapters.SwipeToDeleteCallback
 import com.ferechamitbeyli.presentation.view.base.BaseFragment
 import com.ferechamitbeyli.presentation.viewmodel.activities.home_activity.fragments.RunsViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
@@ -32,6 +36,8 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
     private val viewModel: RunsViewModel by viewModels()
 
     private var runsAdapter: RunsAdapter? = null
+
+    private var runsList: MutableList<RunUIModel>? = null
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
@@ -58,22 +64,6 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
             checkPermissionsBeforeNavigateToTrackingFragment()
         }
 
-        binding.runsSortSp.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                when(position) {
-                    0 -> viewModel.sortRuns(RunSortType.DATE)
-                    1 -> viewModel.sortRuns(RunSortType.RUN_TIME)
-                    2 -> viewModel.sortRuns(RunSortType.CALORIES_BURNED)
-                    3 -> viewModel.sortRuns(RunSortType.DISTANCE)
-                    4 -> viewModel.sortRuns(RunSortType.AVG_SPEED)
-                    5 -> viewModel.sortRuns(RunSortType.STEP_COUNT)
-                }
-            }
-
-            override fun onNothingSelected(adapterView: AdapterView<*>?) { /** NO-OP **/ }
-
-        }
-
     }
 
     private fun adjustSortingSpinner() {
@@ -82,7 +72,34 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
             ArrayAdapter(requireContext(), R.layout.runs_sort_spinner_item, sortingOptions)
         binding.runsSortSp.setAdapter(arrayAdapter)
 
-        when(viewModel.runSortType) {
+        selectInitialSortTypeIfEmpty()
+
+        setSelectionPerRunSortType()
+
+        binding.runsSortSp.setOnItemClickListener { adapterView, view, position, id ->
+            when (position) {
+                0 -> viewModel.sortRuns(RunSortType.DATE)
+                1 -> viewModel.sortRuns(RunSortType.RUN_TIME)
+                2 -> viewModel.sortRuns(RunSortType.CALORIES_BURNED)
+                3 -> viewModel.sortRuns(RunSortType.DISTANCE)
+                4 -> viewModel.sortRuns(RunSortType.AVG_SPEED)
+                5 -> viewModel.sortRuns(RunSortType.STEP_COUNT)
+                else -> {
+                    /** NO-OP **/
+                }
+            }
+        }
+
+    }
+
+    private fun selectInitialSortTypeIfEmpty() {
+        if (!binding.runsSortSp.hasSelection()) {
+            binding.runsSortSp.setText(binding.runsSortSp.adapter.getItem(0).toString(), false)
+        }
+    }
+
+    private fun setSelectionPerRunSortType() {
+        when (viewModel.runSortType) {
             RunSortType.DATE -> binding.runsSortSp.setSelection(0)
             RunSortType.RUN_TIME -> binding.runsSortSp.setSelection(1)
             RunSortType.CALORIES_BURNED -> binding.runsSortSp.setSelection(2)
@@ -92,20 +109,50 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
         }
     }
 
-    private fun setupRecyclerView() = binding.runsListRv.apply {
-        runsAdapter = RunsAdapter()
-        adapter = runsAdapter
-        layoutManager = LinearLayoutManager(requireContext())
+    private fun setupRecyclerView() =
+        binding.runsListRv.apply {
+            runsAdapter = RunsAdapter(requireContext())
+            adapter = runsAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+            setHasFixedSize(true)
 
-        getRuns()
 
-        handleEmptyRecyclerView()
+            val swipeToDeleteCallback = object : SwipeToDeleteCallback() {
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val position = viewHolder.adapterPosition
+                    runsList?.get(position)?.let { viewModel.removeRunFromSynced(it) }
+                    this@apply.adapter?.notifyItemChanged(position)
+                }
+            }
 
+            val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
+            itemTouchHelper.attachToRecyclerView(this@apply)
+
+
+        }
+
+    private fun getRuns() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        viewModel.runs.collectLatest { runsFromDB ->
+            if (runsFromDB.isEmpty()) {
+                viewModel.getAllRunsFromRemoteDatabase().collect { runsFromRemote ->
+                    populateRecyclerView(RunToUIMapper.mapFromDomainModelList(runsFromRemote))
+                }
+            } else {
+                populateRecyclerView(RunToUIMapper.mapFromDomainModelList(runsFromDB))
+            }
+
+        }
     }
 
-    private fun handleEmptyRecyclerView() {
-        if (runsAdapter?.checkIfListIsEmpty() == true) {
-            binding.runsSortTil.visible(false)
+    private fun populateRecyclerView(list: List<RunUIModel>) {
+        runsList = list.toMutableList()
+        runsAdapter?.submitList(list)
+        handleEmptyRecyclerView(list)
+    }
+
+    private fun handleEmptyRecyclerView(list: List<Any>) {
+        if (list.isNullOrEmpty()) {
+            binding.runsSortTil.visible(true)
             binding.runsListRv.visible(false)
             binding.runsEmptyIv.visible(true)
             binding.runsEmptyIv.alpha = 0.5f
@@ -115,12 +162,6 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
             binding.runsListRv.visible(true)
             binding.runsEmptyIv.visible(false)
             binding.runsEmptyTv.visible(false)
-        }
-    }
-
-    private fun getRuns() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.runs.collectLatest {
-            runsAdapter?.submitList(RunToUIMapper.mapFromDomainModelList(it))
         }
     }
 
@@ -162,6 +203,7 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
                     checkRemoteDBFromWeightValue()
                 } else {
                     setupRecyclerView()
+                    getRuns()
                 }
             }
         }
@@ -173,11 +215,12 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
                     navigateToInitialFragment()
                 } else {
                     setupRecyclerView()
+                    getRuns()
                 }
             }
         }
 
-    private fun listenEventChannel() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+    private fun listenEventChannel() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
         viewModel.runEventsChannel.collectLatest {
             when (it) {
                 is EventState.Error -> {
