@@ -15,7 +15,7 @@
         android:fontFamily="@font/montserrat_regular"
         android:text="@string/settings"
         android:textSize="@dimen/paragraph2"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal1_gl"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal175_gl"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,7 +25,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/horizontal1_gl">
+        app:layout_constraintTop_toTopOf="@+id/horizontal175_gl">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -293,10 +293,10 @@
 
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal1_gl"
+        android:id="@+id/horizontal175_gl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.1" />
+        app:layout_constraintGuide_percent="0.175" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

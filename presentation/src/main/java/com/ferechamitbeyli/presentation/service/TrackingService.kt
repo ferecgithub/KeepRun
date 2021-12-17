@@ -53,8 +53,6 @@ class TrackingService : LifecycleService(), SensorEventListener {
     @Inject
     lateinit var notificationBuilder: NotificationCompat.Builder
 
-    lateinit var curNotificationBuilder: NotificationCompat.Builder
-
     @Inject
     lateinit var notificationManager: NotificationManager
 
@@ -111,7 +109,6 @@ class TrackingService : LifecycleService(), SensorEventListener {
 
     override fun onCreate() {
         super.onCreate()
-        curNotificationBuilder = notificationBuilder
 
         setInitialValues()
 
@@ -252,17 +249,17 @@ class TrackingService : LifecycleService(), SensorEventListener {
             )
         }
 
-        curNotificationBuilder.javaClass.getDeclaredField("mActions").apply {
-            isAccessible = true
-            set(curNotificationBuilder, ArrayList<NotificationCompat.Action>())
-        }
-
         if (isKilled.value == false) {
-            curNotificationBuilder = notificationBuilder.apply {
-                addAction(R.drawable.ic_pause, actionText, pendingIntent)
-            }
-            notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
+            adjustNotificationActions(R.drawable.ic_pause, actionText, pendingIntent)
         }
+    }
+
+    private fun adjustNotificationActions(icon: Int, text: String, pendingIntent: PendingIntent) {
+        notificationBuilder.apply {
+            clearActions()
+            addAction(icon, text, pendingIntent)
+        }
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
     }
 
     private val locationCallback = object : LocationCallback() {

@@ -1,6 +1,7 @@
 package com.ferechamitbeyli.data.remote.entities.mappers
 
 import com.ferechamitbeyli.data.remote.entities.RunDto
+import com.ferechamitbeyli.data.utils.HelperFunctions.getByteArrayFromUrl
 import com.ferechamitbeyli.domain.DomainMapper
 import com.ferechamitbeyli.domain.entity.Run
 
@@ -8,6 +9,7 @@ object RunDtoMapper : DomainMapper<RunDto, Run> {
 
     override fun mapToDomainModel(model: RunDto): Run = Run(
         imageUrl = model.imageUrl,
+        image = model.imageUrl?.let { getByteArrayFromUrl(it) },
         timestamp = model.timestamp,
         avgSpeedInKMH = model.avgSpeedInKMH,
         distanceInMeters = model.distanceInMeters,

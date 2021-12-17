@@ -51,7 +51,7 @@ class ActivityRecognitionPermissionFragment :
                 binding.root,
                 requireContext(),
                 false,
-                "You need to give permissions in order to use the app.",
+                getString(R.string.permission_error),
                 Snackbar.LENGTH_LONG
             ).show()
         }

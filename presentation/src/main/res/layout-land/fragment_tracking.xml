@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightGrey">
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/trackingMap_mv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/map_view_for_you_to_track_the_route"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/vertical85_gl"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context=".view.activities.home_activity.fragments.TrackingFragment" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/bottom_nav_background"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal975_gl"
+        app:layout_constraintEnd_toEndOf="@id/vertical625_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical225_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal8_gl" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/trackingTimer_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/timer_start_value"
+        android:textSize="@dimen/title2"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal975_gl"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintTop_toTopOf="@id/horizontal8_gl" />
+
+
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/pauseRun_btn"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/ic_pause_run"
+        android:contentDescription="@string/pause_the_run"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal4_gl"
+        app:layout_constraintEnd_toEndOf="@id/vertical975_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical875_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal175_gl" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/pause_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_medium"
+        android:gravity="center"
+        android:text="@string/pause"
+        android:textSize="@dimen/paragraph"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal525_gl"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/vertical85_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal425_gl" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/startRun_btn"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/ic_start_run"
+        android:contentDescription="@string/start_a_run"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal4_gl"
+        app:layout_constraintEnd_toEndOf="@id/vertical975_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical875_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal175_gl" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/start_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_medium"
+        android:gravity="center"
+        android:text="@string/start"
+        android:textSize="@dimen/paragraph"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal525_gl"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/vertical85_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal425_gl" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/finishRun_btn"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/ic_finish_run"
+        android:contentDescription="@string/finish_the_run"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal775_gl"
+        app:layout_constraintEnd_toEndOf="@id/vertical975_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical875_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal55_gl" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/finish_tv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/montserrat_medium"
+        android:gravity="center"
+        android:text="@string/finish"
+        android:textSize="@dimen/paragraph"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal9_gl"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/vertical85_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal775_gl" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/goBack_btn"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/ic_back"
+        android:contentDescription="@string/get_back_to_runs_screen"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal775_gl"
+        app:layout_constraintEnd_toEndOf="@id/vertical975_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical875_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal55_gl" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/goBack_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_medium"
+        android:gravity="center"
+        android:text="@string/back"
+        android:textSize="@dimen/paragraph"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal9_gl"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/vertical85_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal8_gl" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/resetRun_btn"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/ic_reset"
+        android:contentDescription="@string/start_a_run"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal4_gl"
+        app:layout_constraintEnd_toEndOf="@id/vertical975_gl"
+        app:layout_constraintStart_toStartOf="@id/vertical875_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal175_gl" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/reset_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_medium"
+        android:gravity="center"
+        android:text="@string/reset"
+        android:textSize="@dimen/paragraph"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal525_gl"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/vertical85_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal425_gl" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/resume_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_medium"
+        android:gravity="center"
+        android:text="@string/resume"
+        android:textSize="@dimen/paragraph"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal525_gl"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/vertical85_gl"
+        app:layout_constraintTop_toTopOf="@id/horizontal425_gl" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal175_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.175" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal4_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.4" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal425_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.425" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal525_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.525" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal55_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.55" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal775_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.775" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal8_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal9_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.9" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal975_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.975" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical225_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.225" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical625_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.625" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical85_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.85" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical875_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.875" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical975_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.975" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

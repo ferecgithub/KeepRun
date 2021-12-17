@@ -134,22 +134,17 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>() {
                 is ValidationState.ValidationError -> {
                     when (validationResponse.result) {
                         ValidationErrorResults.EMPTY_EMAIL -> {
-                            binding.signInEmailEt.error = "Please enter your email."
+                            binding.signInEmailEt.error = getString(R.string.email_empty_error)
                             validEmailFlag = false
                             enableSignInButtonIfAllValid(validEmailFlag, validPasswordFlag)
                         }
                         ValidationErrorResults.INVALID_EMAIL -> {
-                            binding.signInEmailEt.error = "Invalid email."
+                            binding.signInEmailEt.error = getString(R.string.email_invalid_error)
                             validEmailFlag = false
                             enableSignInButtonIfAllValid(validEmailFlag, validPasswordFlag)
                         }
                         ValidationErrorResults.EMPTY_PASSWORD -> {
-                            binding.signInPasswordEt.error = "Please enter your password."
-                            validPasswordFlag = false
-                            enableSignInButtonIfAllValid(validEmailFlag, validPasswordFlag)
-                        }
-                        ValidationErrorResults.PASSWORD_CHAR_ERROR -> {
-                            binding.signInPasswordEt.error = "Password configuration is wrong."
+                            binding.signInPasswordEt.error = getString(R.string.password_empty_error)
                             validPasswordFlag = false
                             enableSignInButtonIfAllValid(validEmailFlag, validPasswordFlag)
                         }
@@ -204,7 +199,7 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>() {
             binding.root,
             requireContext(),
             false,
-            "No Internet Connection",
+            getString(R.string.no_internet_error),
             Snackbar.LENGTH_INDEFINITE
         )
 

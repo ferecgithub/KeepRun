@@ -1,5 +1,6 @@
 package com.ferechamitbeyli.presentation.viewmodel.activities.home_activity.fragments
 
+import android.util.Log
 import com.ferechamitbeyli.domain.Resource
 import com.ferechamitbeyli.domain.dispatchers.CoroutineDispatchers
 import com.ferechamitbeyli.domain.entity.Run
@@ -41,6 +42,11 @@ class RunsViewModel @Inject constructor(
             if (response is Resource.Success) {
                 emit(response.data)
             }
+        }
+
+
+        runUseCases.getAllRunsSortedByDateUseCase.invoke().collectLatest { runs ->
+            runs.data?.let { _runs.emit(it) }
         }
     }
 
@@ -87,31 +93,36 @@ class RunsViewModel @Inject constructor(
     fun removeRunFromSynced(run: RunUIModel) = ioScope.launch {
         val runToBeDeleted = RunToUIMapper.mapToDomainModel(run)
         runUseCases.removeRunUseCase.invoke(runToBeDeleted)
-        runUseCases.removeMapImageFromRemoteDBUseCase.invoke(runToBeDeleted.timestamp.toString()).collect { deleteImgResponse ->
-            when(deleteImgResponse) {
-                is Resource.Error -> {
-                    _runEventsChannel.emit(EventState.Error(deleteImgResponse.message.toString()))
-                }
-                is Resource.Loading -> {
-                    /** NO-OP **/
-                }
-                is Resource.Success -> {
-                    runUseCases.removeRunFromRemoteDBUseCase.invoke(RunToUIMapper.mapToDomainModel(run)).collect { deleteResponse ->
-                        when(deleteResponse) {
-                            is Resource.Error -> {
-                                _runEventsChannel.emit(EventState.Error(deleteResponse.message.toString()))
-                            }
-                            is Resource.Loading -> {
-                                /** NO-OP **/
-                            }
-                            is Resource.Success -> {
-                                _runEventsChannel.emit(EventState.Success(deleteResponse.data.toString()))
+        runUseCases.removeMapImageFromRemoteDBUseCase.invoke(runToBeDeleted.timestamp.toString())
+            .collect { deleteImgResponse ->
+                when (deleteImgResponse) {
+                    is Resource.Error -> {
+                        _runEventsChannel.emit(EventState.Error(deleteImgResponse.message.toString()))
+                    }
+                    is Resource.Loading -> {
+                        /** NO-OP **/
+                    }
+                    is Resource.Success -> {
+                        runUseCases.removeRunFromRemoteDBUseCase.invoke(
+                            RunToUIMapper.mapToDomainModel(
+                                run
+                            )
+                        ).collect { deleteResponse ->
+                            when (deleteResponse) {
+                                is Resource.Error -> {
+                                    _runEventsChannel.emit(EventState.Error(deleteResponse.message.toString()))
+                                }
+                                is Resource.Loading -> {
+                                    /** NO-OP **/
+                                }
+                                is Resource.Success -> {
+                                    _runEventsChannel.emit(EventState.Success(deleteResponse.data.toString()))
+                                }
                             }
                         }
                     }
                 }
             }
-        }
 
     }
 
@@ -176,19 +187,21 @@ class RunsViewModel @Inject constructor(
 
     fun getAllRunsFromRemoteDatabase() = flow<List<Run>> {
         runUseCases.getAllRunsFromRemoteDBUseCase.invoke().collectLatest { remoteDBResponse ->
+            Log.d("RUN_FROM_DB_outer", "entered here")
             when (remoteDBResponse) {
                 is Resource.Error -> {
+                    Log.d("RUN_FROM_DB_ERR", "entered here")
                     _runEventsChannel.emit(EventState.Error(remoteDBResponse.message.toString()))
                 }
                 is Resource.Loading -> {
+                    Log.d("RUN_FROM_DB_LOAD", "entered here")
                     /** NO-OP **/
                 }
                 is Resource.Success -> {
-                    remoteDBResponse.data?.let {
-                        runUseCases.insertMultipleRunsUseCase.invoke(*it.toTypedArray())
-                    }
+                    _runEventsChannel.emit(EventState.Success(remoteDBResponse.message.toString()))
                 }
             }
         }
     }
+
 }

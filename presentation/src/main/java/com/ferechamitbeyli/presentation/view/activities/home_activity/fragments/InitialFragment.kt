@@ -95,7 +95,7 @@ class InitialFragment : BaseFragment<FragmentInitialBinding>() {
             binding.root,
             requireContext(),
             false,
-            "No Internet Connection",
+            getString(R.string.no_internet_error),
             Snackbar.LENGTH_INDEFINITE
         )
         viewModel.networkState.collect {

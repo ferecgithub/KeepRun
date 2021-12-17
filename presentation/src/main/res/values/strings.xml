@@ -32,6 +32,17 @@
     <string name="forgot_your_password">Forgot your password?</string>
     <string name="do_not_have_acc">Don\'t have an account? Sign Up</string>
     <string name="already_have_acc">Already have an account? Sign In</string>
+    <string name="email_empty_error">Please enter your email.</string>
+    <string name="email_invalid_error">Invalid email.</string>
+    <string name="username_empty_error">Please enter a username.</string>
+    <string name="username_too_long_error">Please enter a username shorter than 13 characters.</string>
+    <string name="password_empty_error">Please enter your password.</string>
+    <string name="password_char_error">Your password must be longer than 6 character and must contain at least one capital, one lower letter, and one special character.</string>
+    <string name="password_match_error">The passwords are not matched.</string>
+    <string name="confirmation_sent_to_email">Confirmation mail has sent to your email address.</string>
+    <string name="permission_error">You need to give permissions in order to use the app.</string>
+    <string name="ready_to_run">All set! You are ready to run.</string>
+    <string name="no_internet_error">No Internet Connection.</string>
     <string name="welcome_onboard">Welcome Onboard!</string>
     <string name="sign_up">Sign Up</string>
     <string name="enter_your_username">Enter your user name</string>
@@ -65,6 +76,7 @@
     <string name="about">About</string>
     <string name="about_content">KeepRun is a running application that aims for its users to make it such a healthy habit. \n\nThis application is designed and developed by Ferec Hamitbeyli. \n\nFor your further questions, feedbacks, and business inquiries, please send me an email. \n\nferechamitbeyli@gmail.com</string>
     <string name="your_statistics">Your Statistics</string>
+    <string name="phone_location_alert">Please enable your location from your phone.</string>
     <string name="timer_start_value">00:00:00:00</string>
     <string name="pause">Pause</string>
     <string name="start">Start</string>

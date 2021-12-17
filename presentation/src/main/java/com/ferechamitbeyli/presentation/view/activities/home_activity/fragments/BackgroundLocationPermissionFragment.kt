@@ -38,7 +38,7 @@ class BackgroundLocationPermissionFragment :
                     binding.root,
                     requireContext(),
                     true,
-                    "All set! You are ready to run.",
+                    getString(R.string.ready_to_run),
                     Snackbar.LENGTH_LONG
                 ).show()
             } else {
@@ -52,7 +52,7 @@ class BackgroundLocationPermissionFragment :
                 binding.root,
                 requireContext(),
                 false,
-                "You need to give permissions in order to use the app.",
+                getString(R.string.permission_error),
                 Snackbar.LENGTH_LONG
             ).show()
         }
@@ -87,7 +87,7 @@ class BackgroundLocationPermissionFragment :
             binding.root,
             requireContext(),
             true,
-            "All set! You are ready to run.",
+            getString(R.string.ready_to_run),
             Snackbar.LENGTH_LONG
         ).show()
     }

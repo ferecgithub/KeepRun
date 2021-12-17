@@ -295,7 +295,7 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
                 binding.root,
                 requireContext(),
                 false,
-                "Please enable your location from your phone.",
+                getString(R.string.phone_location_alert),
                 Snackbar.LENGTH_LONG
             ).show()
         }
@@ -339,23 +339,18 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
                 }
 
                 service.locationList.observe(viewLifecycleOwner) { locations ->
-                    if (isStarted.value == true && isKilled.value == false) {
-                        locationList = locations
-                        drawPolylines()
-                        followUserWithCamera()
-                    }
-
+                    locationList = locations
+                    drawPolylines()
+                    followUserWithCamera()
                 }
 
 
                 service.stepCount.observe(viewLifecycleOwner) {
-                    if (isStarted.value == true && isKilled.value == false) {
-                        stepCount = it
-                    }
+                    stepCount = it
                 }
 
                 service.totalTimeInMillis.observe(viewLifecycleOwner) { totalTime ->
-                    if (isStarted.value == true && isKilled.value == false) {
+                    if (isKilled.value == false) {
                         runTimeInMillis = totalTime
                         binding.trackingTimerTv.text = calculateElapsedTime(totalTime)
                     } else {

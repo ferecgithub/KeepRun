@@ -3,13 +3,10 @@ package com.ferechamitbeyli.presentation.view.activities.home_activity.adapters
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.graphics.drawable.toBitmap
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import coil.ImageLoader
 import coil.load
-import coil.request.ImageRequest
 import com.ferechamitbeyli.presentation.databinding.ItemRunLayoutBinding
 import com.ferechamitbeyli.presentation.uimodels.RunUIModel
 import com.ferechamitbeyli.presentation.utils.helpers.TrackingHelperFunctions.calculateElapsedTime
@@ -48,28 +45,11 @@ class RunsAdapter(val context: Context) : RecyclerView.Adapter<RunsAdapter.RunsV
 
         holder.binding.apply {
 
-            if (run.image != null) {
-                val firstImagePart = divideBitmap(run.image)[0]
-                val secondImagePart = divideBitmap(run.image)[1]
+            val firstImagePart = run.image?.let { divideBitmap(it)[0] }
+            val secondImagePart = run.image?.let { divideBitmap(it)[1] }
 
-                itemRunRoute1Iv.load(firstImagePart)
-                itemRunRoute2Iv.load(secondImagePart)
-            } else {
-
-                val imageRequest = ImageRequest.Builder(context)
-                    .data(run.imageUrl)
-                    .target { drawable ->
-                        val bitmap = drawable.toBitmap() // This is the bitmap 🚨
-                        val firstImagePart = divideBitmap(bitmap)[0]
-                        val secondImagePart = divideBitmap(bitmap)[1]
-                        itemRunRoute1Iv.load(firstImagePart)
-                        itemRunRoute2Iv.load(secondImagePart)
-                    }
-                    .build()
-                ImageLoader(context).enqueue(imageRequest)
-
-            }
-
+            itemRunRoute1Iv.load(firstImagePart)
+            itemRunRoute2Iv.load(secondImagePart)
 
             val calendar = Calendar.getInstance().apply {
                 timeInMillis = run.timestamp

@@ -134,9 +134,9 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
     private fun getRuns() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
         viewModel.runs.collectLatest { runsFromDB ->
             if (runsFromDB.isEmpty()) {
-                viewModel.getAllRunsFromRemoteDatabase().collect { runsFromRemote ->
-                    populateRecyclerView(RunToUIMapper.mapFromDomainModelList(runsFromRemote))
-                }
+                viewModel.getAllRunsFromRemoteDatabase().collect()
+                viewModel.sortRuns(viewModel.runSortType)
+                populateRecyclerView(RunToUIMapper.mapFromDomainModelList(runsFromDB))
             } else {
                 populateRecyclerView(RunToUIMapper.mapFromDomainModelList(runsFromDB))
             }

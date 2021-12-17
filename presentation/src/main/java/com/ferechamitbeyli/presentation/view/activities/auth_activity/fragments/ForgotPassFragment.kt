@@ -91,12 +91,12 @@ class ForgotPassFragment : BaseFragment<FragmentForgotPassBinding>() {
                 is ValidationState.ValidationError -> {
                     when (it.result) {
                         ValidationErrorResults.EMPTY_EMAIL -> {
-                            binding.forgotPassEmailEt.error = "Please enter your email."
+                            binding.forgotPassEmailEt.error = getString(R.string.email_empty_error)
                             validEmailFlag = false
                             enableSendButtonIfAllValid(validEmailFlag)
                         }
                         ValidationErrorResults.INVALID_EMAIL -> {
-                            binding.forgotPassEmailEt.error = "Invalid email."
+                            binding.forgotPassEmailEt.error = getString(R.string.email_invalid_error)
                             validEmailFlag = false
                             enableSendButtonIfAllValid(validEmailFlag)
                         }
@@ -133,7 +133,7 @@ class ForgotPassFragment : BaseFragment<FragmentForgotPassBinding>() {
                     navigateToSignInFragment()
                     Snackbar.make(
                         binding.root,
-                        "Confirmation mail has sent to your email address.",
+                        getString(R.string.confirmation_sent_to_email),
                         Snackbar.LENGTH_LONG
                     ).show()
                 }
@@ -143,7 +143,7 @@ class ForgotPassFragment : BaseFragment<FragmentForgotPassBinding>() {
 
     private fun checkInternetConnection() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
         val snackBar =
-            Snackbar.make(binding.root, "No Internet Connection", Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(binding.root, getString(R.string.no_internet_error), Snackbar.LENGTH_INDEFINITE)
         viewModel.networkState.collect {
             if (it) {
                 internetConnectionFlag = true

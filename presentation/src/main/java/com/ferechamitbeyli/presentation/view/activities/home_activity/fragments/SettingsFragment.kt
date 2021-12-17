@@ -234,7 +234,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>() {
 
     private fun setupPushNotification(isEnabled: Boolean) {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            when(isEnabled) {
+            when (isEnabled) {
                 true -> FirebaseMessaging.getInstance().subscribeToTopic("APP").await()
                 false -> FirebaseMessaging.getInstance().unsubscribeFromTopic("APP").await()
             }
@@ -315,7 +315,8 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>() {
                     is ValidationState.ValidationError -> {
                         when (validationResponse.result) {
                             ValidationErrorResults.EMPTY_PASSWORD -> {
-                                binding.settingsPasswordEt.error = "Please enter your password."
+                                binding.settingsPasswordEt.error =
+                                    getString(R.string.password_empty_error)
                                 validPasswordFlag = false
                                 enableSaveButtonIfAllValid(
                                     passwordChangedFlag,
@@ -325,7 +326,8 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>() {
                                 )
                             }
                             ValidationErrorResults.EMPTY_CONFIRM_PASSWORD -> {
-                                binding.settingsPassAgainEt.error = "Please enter your password."
+                                binding.settingsPassAgainEt.error =
+                                    getString(R.string.password_empty_error)
                                 validConfirmPasswordFlag = false
                                 enableSaveButtonIfAllValid(
                                     passwordChangedFlag,
@@ -336,7 +338,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>() {
                             }
                             ValidationErrorResults.PASSWORD_CHAR_ERROR -> {
                                 binding.settingsPasswordEt.error =
-                                    "Your password must be longer than 6 character and must contain at least one capital, one lower letter, and one special character."
+                                    getString(R.string.password_char_error)
                                 validPasswordFlag = false
                                 enableSaveButtonIfAllValid(
                                     passwordChangedFlag,
@@ -346,7 +348,8 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>() {
                                 )
                             }
                             ValidationErrorResults.PASSWORDS_NOT_MATCHED -> {
-                                binding.settingsPassAgainEt.error = "The passwords are not matched."
+                                binding.settingsPassAgainEt.error =
+                                    getString(R.string.password_match_error)
                                 validConfirmPasswordFlag = false
                                 enableSaveButtonIfAllValid(
                                     passwordChangedFlag,
@@ -363,17 +366,14 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>() {
                     is ValidationState.ValidationSuccess -> {
                         when (validationResponse.result) {
                             ValidationResults.VALID_BOTH_PASSWORDS -> {
-                                println("BURADA_GIRDI $validConfirmPasswordFlag ve $validPasswordFlag")
                                 validConfirmPasswordFlag = true
                                 validPasswordFlag = true
-                                println("BURADA_CIKTI $validConfirmPasswordFlag ve $validPasswordFlag")
                                 enableSaveButtonIfAllValid(
                                     passwordChangedFlag,
                                     validPasswordFlag,
                                     validConfirmPasswordFlag,
                                     validWeightFlag,
                                 )
-
                             }
                             else -> {
                                 /** NO-OP **/
@@ -390,7 +390,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>() {
             binding.root,
             requireContext(),
             false,
-            "No Internet Connection",
+            getString(R.string.no_internet_error),
             Snackbar.LENGTH_INDEFINITE
         )
         viewModel.networkState.collectLatest {

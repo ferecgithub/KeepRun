@@ -93,8 +93,8 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
     private fun setSpannableTextColorOfSignIn() {
         setSpannableTextColor(
             binding.signUpToSignInTv,
-            resources.getString(R.string.already_have_acc),
-            resources.getString(R.string.sign_in),
+            getString(R.string.already_have_acc),
+            getString(R.string.sign_in),
             ContextCompat.getColor(requireContext(), R.color.darkGreen)
         )
     }
@@ -160,7 +160,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                 is ValidationState.ValidationError -> {
                     when (validationResult.result) {
                         ValidationErrorResults.EMPTY_EMAIL -> {
-                            binding.signUpEmailEt.error = "Please enter an email."
+                            binding.signUpEmailEt.error = getString(R.string.email_empty_error)
                             validEmailFlag = false
                             enableSignUpButtonIfAllValid(
                                 validUsernameFlag,
@@ -170,7 +170,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                             )
                         }
                         ValidationErrorResults.INVALID_EMAIL -> {
-                            binding.signUpEmailEt.error = "Invalid email."
+                            binding.signUpEmailEt.error = getString(R.string.email_invalid_error)
                             validEmailFlag = false
                             enableSignUpButtonIfAllValid(
                                 validUsernameFlag,
@@ -180,7 +180,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                             )
                         }
                         ValidationErrorResults.EMPTY_USERNAME -> {
-                            binding.signUpUsernameEt.error = "Please enter a username."
+                            binding.signUpUsernameEt.error = getString(R.string.username_empty_error)
                             validUsernameFlag = false
                             enableSignUpButtonIfAllValid(
                                 validUsernameFlag,
@@ -191,7 +191,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                         }
                         ValidationErrorResults.USERNAME_TOO_LONG -> {
                             binding.signUpUsernameEt.error =
-                                "Please enter a username shorter than 13 characters."
+                                getString(R.string.username_too_long_error)
                             validUsernameFlag = false
                             enableSignUpButtonIfAllValid(
                                 validUsernameFlag,
@@ -201,7 +201,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                             )
                         }
                         ValidationErrorResults.EMPTY_PASSWORD -> {
-                            binding.signUpPasswordEt.error = "Please enter your password."
+                            binding.signUpPasswordEt.error = getString(R.string.password_empty_error)
                             validPasswordFlag = false
                             enableSignUpButtonIfAllValid(
                                 validUsernameFlag,
@@ -211,7 +211,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                             )
                         }
                         ValidationErrorResults.EMPTY_CONFIRM_PASSWORD -> {
-                            binding.signUpPassAgainEt.error = "Please enter your password."
+                            binding.signUpPassAgainEt.error = getString(R.string.password_empty_error)
                             validConfirmPasswordFlag = false
                             enableSignUpButtonIfAllValid(
                                 validUsernameFlag,
@@ -221,8 +221,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                             )
                         }
                         ValidationErrorResults.PASSWORD_CHAR_ERROR -> {
-                            binding.signUpPasswordEt.error =
-                                "Your password must be longer than 6 character and must contain at least one capital, one lower letter, and one special character."
+                            binding.signUpPasswordEt.error = getString(R.string.password_char_error)
                             validPasswordFlag = false
                             enableSignUpButtonIfAllValid(
                                 validUsernameFlag,
@@ -232,7 +231,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                             )
                         }
                         ValidationErrorResults.PASSWORDS_NOT_MATCHED -> {
-                            binding.signUpPassAgainEt.error = "The passwords are not matched."
+                            binding.signUpPassAgainEt.error = getString(R.string.password_match_error)
                             validConfirmPasswordFlag = false
                             enableSignUpButtonIfAllValid(
                                 validUsernameFlag,
@@ -316,7 +315,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
             binding.root,
             requireContext(),
             false,
-            "No Internet Connection",
+            getString(R.string.no_internet_error),
             Snackbar.LENGTH_INDEFINITE
         )
         viewModel.networkState.collectLatest {
