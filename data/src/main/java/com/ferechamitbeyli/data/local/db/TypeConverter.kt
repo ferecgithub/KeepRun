@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.room.TypeConverter
 import java.io.ByteArrayOutputStream
+import java.util.*
 
 class TypeConverter {
 
@@ -19,20 +20,10 @@ class TypeConverter {
         return outputStream.toByteArray()
     }
 
-    /*
     @TypeConverter
-    fun toLatLng(locationString: String?): LatLng? {
-        return try {
-            Gson().fromJson(locationString, LatLng::class.java)
-        } catch (e: Exception) {
-            null
-        }
-    }
+    fun fromTimestamp(value: Long?): Date? = if (null == value) null else Date(value)
 
     @TypeConverter
-    fun fromLatLng(location: LatLng?): String? {
-        return Gson().toJson(location)
-    }
-     */
+    fun dateToTimestamp(date: Date?): Long? = date?.time
 
 }

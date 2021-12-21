@@ -47,6 +47,8 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        checkInternetConnection()
+
         setupBottomNavigationViewVisibility()
 
         clearFocusFromSpinner()
@@ -69,14 +71,14 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
     private fun adjustSortingSpinner() {
         val sortingOptions = resources.getStringArray(R.array.sorting_options)
         val arrayAdapter =
-            ArrayAdapter(requireContext(), R.layout.runs_sort_spinner_item, sortingOptions)
+            ArrayAdapter(requireContext(), R.layout.spinner_item, sortingOptions)
         binding.runsSortSp.setAdapter(arrayAdapter)
 
         selectInitialSortTypeIfEmpty()
 
         setSelectionPerRunSortType()
 
-        binding.runsSortSp.setOnItemClickListener { adapterView, view, position, id ->
+        binding.runsSortSp.setOnItemClickListener { _, _, position, _ ->
             when (position) {
                 0 -> viewModel.sortRuns(RunSortType.DATE)
                 1 -> viewModel.sortRuns(RunSortType.RUN_TIME)
@@ -111,7 +113,7 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
 
     private fun setupRecyclerView() =
         binding.runsListRv.apply {
-            runsAdapter = RunsAdapter(requireContext())
+            runsAdapter = RunsAdapter()
             adapter = runsAdapter
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
@@ -132,7 +134,7 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
         }
 
     private fun getRuns() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.runs.collectLatest { runsFromDB ->
+        viewModel.runsFlow.collectLatest { runsFromDB ->
             if (runsFromDB.isEmpty()) {
                 viewModel.getAllRunsFromRemoteDatabase().collect()
                 viewModel.sortRuns(viewModel.runSortType)
@@ -256,5 +258,25 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
     override fun onDestroyView() {
         runsAdapter = null
         super.onDestroyView()
+    }
+
+    private fun checkInternetConnection() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        val snackBar = UIHelperFunctions.showSnackbar(
+            binding.root,
+            requireContext(),
+            false,
+            getString(R.string.no_internet_error),
+            Snackbar.LENGTH_INDEFINITE
+        )
+
+        viewModel.networkState.collectLatest {
+            if (it) {
+                internetConnectionFlag = true
+                snackBar.dismiss()
+            } else {
+                internetConnectionFlag = false
+                snackBar.show()
+            }
+        }
     }
 }

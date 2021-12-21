@@ -36,14 +36,4 @@ open class BaseViewModel @Inject constructor(
         ioScope.coroutineContext.cancelChildren()
         defaultScope.coroutineContext.cancelChildren()
     }
-
-    fun capitalizeFirstLetter(
-        string: String,
-        delimiter: String = " ",
-        separator: String = " "
-    ): String {
-        return string.split(delimiter).joinToString(separator = separator) {
-            it.lowercase().replaceFirstChar { char -> char.titlecase() }
-        }
-    }
 }

@@ -23,6 +23,12 @@
         <item>Steps count</item>
     </string-array>
 
+    <string-array name="date_options">
+        <item>Today</item>
+        <item>This week</item>
+        <item>This month</item>
+    </string-array>
+
     <string name="get_started">Get Started</string>
     <string name="welcome_w_exclamation">Welcome!</string>
     <string name="welcome">Welcome</string>
@@ -115,5 +121,13 @@
     <string name="empty_recyclerview_description">You don\'t have any recorded run.\nPlease start a run.</string>
     <string name="reset">Reset</string>
     <string name="resume">Resume</string>
+    <string name="displayed_date">Displayed date</string>
+    <string name="total_run_time">Total Run Time</string>
+    <string name="total_average_run_speed">Total Average Run Speed</string>
+    <string name="total_run_distance">Total Run Distance</string>
+    <string name="total_calories_burned">Total Calories Burned</string>
+    <string name="total_steps">Total Steps</string>
+    <string name="first_week">First Week</string>
+    <string name="second_week">Second Week</string>
 
 </resources>

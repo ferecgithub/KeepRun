@@ -95,6 +95,8 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        checkInternetConnection()
+
         setupGoogleMap(savedInstanceState)
 
         initiateServiceIntent()
@@ -520,9 +522,11 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
                         it.message,
                         Snackbar.LENGTH_LONG
                     ).show()
+                    setAvailabilityOfFinishedButtonsForUploadingImage(true)
                 }
                 is EventState.Loading -> {
                     /** NO-OP **/
+                    setAvailabilityOfFinishedButtonsForUploadingImage(false)
                 }
                 is EventState.Success -> {
                     showSnackbar(
@@ -532,6 +536,7 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
                         it.message.toString(),
                         Snackbar.LENGTH_LONG
                     ).show()
+                    setAvailabilityOfFinishedButtonsForUploadingImage(true)
                 }
             }
         }
@@ -564,11 +569,8 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
                     showWholePath()
                     customDialog.dismiss()
                     pauseTheRun()
-                    setAvailabilityOfFinishedButtonsForUploadingImage(false)
                     delay(2000)
                     saveRunToDBWithScreenshot()
-                    delay(2000)
-                    setAvailabilityOfFinishedButtonsForUploadingImage(true)
                 }
             }
 
@@ -579,9 +581,25 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
             customDialog.show()
         }
 
-    private fun setAvailabilityOfFinishedButtonsForUploadingImage(isDisabled: Boolean) {
-        binding.resetRunBtn.enable(isDisabled)
-        binding.goBackBtn.enable(isDisabled)
+    private fun setAvailabilityOfFinishedButtonsForUploadingImage(isEnabled: Boolean) {
+        binding.resetRunBtn.enable(isEnabled)
+        binding.goBackBtn.enable(isEnabled)
+    }
+
+    private fun setStartButtonsForNoInternetConnection(isConnected: Boolean) {
+        when (isConnected) {
+            true -> {
+                binding.resetRunBtn.enable(true)
+                binding.startRunBtn.enable(true)
+                binding.goBackBtn.enable(true)
+            }
+            false -> {
+                binding.resetRunBtn.enable(false)
+                binding.startRunBtn.enable(false)
+                binding.goBackBtn.enable(true)
+            }
+        }
+
     }
 
     override fun onResume() {
@@ -623,6 +641,28 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
 
     override fun onMarkerClick(p0: Marker): Boolean {
         return true
+    }
+
+    private fun checkInternetConnection() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        val snackBar = showSnackbar(
+            binding.root,
+            requireContext(),
+            false,
+            getString(R.string.no_internet_error),
+            Snackbar.LENGTH_INDEFINITE
+        )
+
+        viewModel.networkState.collectLatest {
+            if (it) {
+                internetConnectionFlag = true
+                snackBar.dismiss()
+                setStartButtonsForNoInternetConnection(it)
+            } else {
+                internetConnectionFlag = false
+                snackBar.show()
+                setStartButtonsForNoInternetConnection(it)
+            }
+        }
     }
 
 

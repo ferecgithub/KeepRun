@@ -12,14 +12,24 @@ typealias PolylineList = MutableList<SinglePolyline>
 object TrackingHelperFunctions {
 
     fun calculateElapsedTime(elapsedTime: Long): String {
-
         val millis = (elapsedTime % 100)
-        val seconds = (elapsedTime / 1000).toInt() % 60
+        val seconds = (elapsedTime / 1000) % 60
         val minutes = (elapsedTime / (1000 * 60) % 60)
         val hours = (elapsedTime / (1000 * 60 * 60) % 24)
 
-        val f: NumberFormat = DecimalFormat("00")
-        return "${f.format(hours)}:${f.format(minutes)}:${f.format(seconds)}:${f.format(millis)}"
+        val decimal: NumberFormat = DecimalFormat("00")
+        return "${decimal.format(hours)}:${decimal.format(minutes)}:${decimal.format(seconds)}:${decimal.format(millis)}"
+    }
+
+    fun calculateTimeFromDatabase(elapsedTime: Long): String {
+        val millis = (elapsedTime % 100)
+        val seconds = (elapsedTime / 1000) % 60
+        val minutes = (elapsedTime / (1000 * 60) % 60)
+        val hours = (elapsedTime / (1000 * 60 * 60) % 24)
+
+        val decimal: NumberFormat = DecimalFormat("00")
+        val hourDecimal: NumberFormat = DecimalFormat("000")
+        return "${hourDecimal.format(hours)}:${decimal.format(minutes)}:${decimal.format(seconds)}:${decimal.format(millis)}"
     }
 
     fun calculateDistance(locationList: PolylineList, inKilometers: Boolean): Double {

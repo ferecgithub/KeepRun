@@ -60,6 +60,46 @@ class RunRepositoryImpl @Inject constructor(
             .catch { Resource.Error(it.message.toString(), null) }
             .flowOn(coroutineDispatchers.io())
 
+    override suspend fun getTotalTimeInMillisBetween(
+        startDate: Long,
+        endDate: Long
+    ): Flow<Resource<Long>> =
+        runLocalDataSource.getTotalTimeInMillisBetween(startDate, endDate)
+            .catch { Resource.Error(it.message.toString(), null) }
+            .flowOn(coroutineDispatchers.io())
+
+    override suspend fun getTotalCaloriesBurnedBetween(
+        startDate: Long,
+        endDate: Long
+    ): Flow<Resource<Int>> =
+        runLocalDataSource.getTotalCaloriesBurnedBetween(startDate, endDate)
+            .catch { Resource.Error(it.message.toString(), null) }
+            .flowOn(coroutineDispatchers.io())
+
+    override suspend fun getTotalDistanceInMetersBetween(
+        startDate: Long,
+        endDate: Long
+    ): Flow<Resource<Int>> =
+        runLocalDataSource.getTotalDistanceInMetersBetween(startDate, endDate)
+            .catch { Resource.Error(it.message.toString(), null) }
+            .flowOn(coroutineDispatchers.io())
+
+    override suspend fun getTotalAverageSpeedInKMHBetween(
+        startDate: Long,
+        endDate: Long
+    ): Flow<Resource<Double>> =
+        runLocalDataSource.getTotalAverageSpeedInKMHBetween(startDate, endDate)
+            .catch { Resource.Error(it.message.toString(), null) }
+            .flowOn(coroutineDispatchers.io())
+
+    override suspend fun getTotalStepCountBetween(
+        startDate: Long,
+        endDate: Long
+    ): Flow<Resource<Int>> =
+        runLocalDataSource.getTotalStepCountBetween(startDate, endDate)
+            .catch { Resource.Error(it.message.toString(), null) }
+            .flowOn(coroutineDispatchers.io())
+
     override suspend fun getTotalTimeInMillis(): Flow<Resource<Long>> =
         runLocalDataSource.getTotalTimeInMillis()
             .catch { Resource.Error(it.message.toString(), null) }

@@ -1,6 +1,5 @@
 package com.ferechamitbeyli.presentation.viewmodel.activities.home_activity.fragments
 
-import android.util.Log
 import com.ferechamitbeyli.domain.Resource
 import com.ferechamitbeyli.domain.dispatchers.CoroutineDispatchers
 import com.ferechamitbeyli.domain.entity.Run
@@ -34,58 +33,53 @@ class RunsViewModel @Inject constructor(
     private var _runEventsChannel = MutableSharedFlow<EventState>()
     val runEventsChannel: SharedFlow<EventState> = _runEventsChannel
 
-    private var _runs = MutableStateFlow<List<Run>>(mutableListOf())
-    val runs: StateFlow<List<Run>> = _runs
+    private var _runsFlow = MutableStateFlow<List<Run>>(mutableListOf())
+    val runsFlow: StateFlow<List<Run>> = _runsFlow
 
-    private val runsSortedByDate = flow {
+    private fun runsSortedByDate() = ioScope.launch {
         runUseCases.getAllRunsSortedByDateUseCase.invoke().collect { response ->
             if (response is Resource.Success) {
-                emit(response.data)
+                response.data?.let { _runsFlow.emit(it) }
             }
-        }
-
-
-        runUseCases.getAllRunsSortedByDateUseCase.invoke().collectLatest { runs ->
-            runs.data?.let { _runs.emit(it) }
         }
     }
 
-    private val runsSortedByRunTime = flow {
+    private fun runsSortedByRunTime() = ioScope.launch {
         runUseCases.getAllRunsSortedByTimeInMillisUseCase.invoke().collect { response ->
             if (response is Resource.Success) {
-                emit(response.data)
+                response.data?.let { _runsFlow.emit(it) }
             }
         }
     }
 
-    private val runsSortedByCaloriesBurned = flow {
+    private fun runsSortedByCaloriesBurned() = ioScope.launch {
         runUseCases.getAllRunsSortedByCaloriesBurnedUseCase.invoke().collect { response ->
             if (response is Resource.Success) {
-                emit(response.data)
+                response.data?.let { _runsFlow.emit(it) }
             }
         }
     }
 
-    private val runsSortedByDistance = flow {
+    private fun runsSortedByDistance() = ioScope.launch {
         runUseCases.getAllRunsSortedByDistanceUseCase.invoke().collect { response ->
             if (response is Resource.Success) {
-                emit(response.data)
+                response.data?.let { _runsFlow.emit(it) }
             }
         }
     }
 
-    private val runsSortedByAvgSpeed = flow {
+    private fun runsSortedByAvgSpeed() = ioScope.launch {
         runUseCases.getAllRunsSortedByAverageSpeedUseCase.invoke().collect { response ->
             if (response is Resource.Success) {
-                emit(response.data)
+                response.data?.let { _runsFlow.emit(it) }
             }
         }
     }
 
-    private val runsSortedByStepCount = flow {
+    private fun runsSortedByStepCount() = ioScope.launch {
         runUseCases.getAllRunsSortedByStepCountUseCase.invoke().collect { response ->
             if (response is Resource.Success) {
-                emit(response.data)
+                response.data?.let { _runsFlow.emit(it) }
             }
         }
     }
@@ -100,7 +94,7 @@ class RunsViewModel @Inject constructor(
                         _runEventsChannel.emit(EventState.Error(deleteImgResponse.message.toString()))
                     }
                     is Resource.Loading -> {
-                        /** NO-OP **/
+                        _runEventsChannel.emit(EventState.Loading())
                     }
                     is Resource.Success -> {
                         runUseCases.removeRunFromRemoteDBUseCase.invoke(
@@ -151,34 +145,22 @@ class RunsViewModel @Inject constructor(
     fun sortRuns(sortType: RunSortType) = ioScope.launch {
         when (sortType) {
             RunSortType.DATE -> {
-                runsSortedByDate.collectLatest { runsList ->
-                    runsList?.let { _runs.value = it }
-                }
+                runsSortedByDate()
             }
             RunSortType.RUN_TIME -> {
-                runsSortedByRunTime.collectLatest { runsList ->
-                    runsList?.let { _runs.value = it }
-                }
+                runsSortedByRunTime()
             }
             RunSortType.CALORIES_BURNED -> {
-                runsSortedByCaloriesBurned.collectLatest { runsList ->
-                    runsList?.let { _runs.value = it }
-                }
+                runsSortedByCaloriesBurned()
             }
             RunSortType.AVG_SPEED -> {
-                runsSortedByAvgSpeed.collectLatest { runsList ->
-                    runsList?.let { _runs.value = it }
-                }
+                runsSortedByAvgSpeed()
             }
             RunSortType.DISTANCE -> {
-                runsSortedByDistance.collectLatest { runsList ->
-                    runsList?.let { _runs.value = it }
-                }
+                runsSortedByDistance()
             }
             RunSortType.STEP_COUNT -> {
-                runsSortedByStepCount.collectLatest { runsList ->
-                    runsList?.let { _runs.value = it }
-                }
+                runsSortedByStepCount()
             }
         }.also {
             this@RunsViewModel.runSortType = sortType
@@ -187,14 +169,11 @@ class RunsViewModel @Inject constructor(
 
     fun getAllRunsFromRemoteDatabase() = flow<List<Run>> {
         runUseCases.getAllRunsFromRemoteDBUseCase.invoke().collectLatest { remoteDBResponse ->
-            Log.d("RUN_FROM_DB_outer", "entered here")
             when (remoteDBResponse) {
                 is Resource.Error -> {
-                    Log.d("RUN_FROM_DB_ERR", "entered here")
                     _runEventsChannel.emit(EventState.Error(remoteDBResponse.message.toString()))
                 }
                 is Resource.Loading -> {
-                    Log.d("RUN_FROM_DB_LOAD", "entered here")
                     /** NO-OP **/
                 }
                 is Resource.Success -> {

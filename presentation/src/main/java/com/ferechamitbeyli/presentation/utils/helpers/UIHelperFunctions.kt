@@ -134,6 +134,18 @@ class UIHelperFunctions {
                 PendingIntent.FLAG_UPDATE_CURRENT
             }
 
+        /** Other Helper Functions **/
+
+        fun capitalizeFirstLetter(
+            string: String,
+            delimiter: String = " ",
+            separator: String = " "
+        ): String {
+            return string.split(delimiter).joinToString(separator = separator) {
+                it.lowercase().replaceFirstChar { char -> char.titlecase() }
+            }
+        }
+
 
     }
 

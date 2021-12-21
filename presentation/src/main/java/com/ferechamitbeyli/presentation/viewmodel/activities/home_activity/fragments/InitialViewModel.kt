@@ -3,6 +3,7 @@ package com.ferechamitbeyli.presentation.viewmodel.activities.home_activity.frag
 import com.ferechamitbeyli.domain.Resource
 import com.ferechamitbeyli.domain.dispatchers.CoroutineDispatchers
 import com.ferechamitbeyli.presentation.utils.helpers.NetworkConnectionTracker
+import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.capitalizeFirstLetter
 import com.ferechamitbeyli.presentation.utils.states.EventState
 import com.ferechamitbeyli.presentation.utils.usecases.SessionUseCases
 import com.ferechamitbeyli.presentation.viewmodel.base.BaseViewModel

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/lightGrey">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/itemDisplayedDateTitle_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:fontFamily="@font/montserrat_bold"
+        android:textColor="@color/normalText"
+        android:textSize="@dimen/title3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="This month" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/itemDisplayedDateRange_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:fontFamily="@font/montserrat_light"
+        android:textColor="@color/normalText"
+        android:textSize="@dimen/paragraph"
+        app:layout_constraintBottom_toBottomOf="@+id/itemDisplayedDateTitle_tv"
+        app:layout_constraintStart_toEndOf="@+id/itemDisplayedDateTitle_tv"
+        app:layout_constraintTop_toTopOf="@+id/itemDisplayedDateTitle_tv"
+        tools:text="13.12.21 - 13.01.21" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/itemStatisticsTotalRunTimeTitle_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:fontFamily="@font/montserrat_medium"
+        android:text="@string/total_run_time"
+        android:textColor="@color/normalText"
+        android:textSize="@dimen/paragraph"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemDisplayedDateRange_tv" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/itemStatisticsTotalRunTimeValue_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/montserrat_medium"
+        android:textColor="@color/normalText"
+        android:textSize="@dimen/paragraph2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemStatisticsTotalRunTimeTitle_tv"
+        tools:text="01:04:01:04" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/itemStatisticsTotalAvgRunSpeedTitle_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:fontFamily="@font/montserrat_medium"
+        android:text="@string/total_average_run_speed"
+        android:textColor="@color/normalText"
+        android:textSize="@dimen/paragraph"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemStatisticsTotalRunTimeValue_tv" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/itemStatisticsTotalAvgRunSpeedValue_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/montserrat_medium"
+        android:textColor="@color/normalText"
+        android:textSize="@dimen/paragraph2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemStatisticsTotalAvgRunSpeedTitle_tv"
+        tools:text="13.5 km/h" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/itemStatisticsTotalRunDistanceTitle_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:fontFamily="@font/montserrat_medium"
+        android:text="@string/total_run_distance"
+        android:textColor="@color/normalText"
+        android:textSize="@dimen/paragraph"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemStatisticsTotalAvgRunSpeedValue_tv" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/itemStatisticsTotalRunDistanceValue_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/montserrat_medium"
+        android:textColor="@color/normalText"
+        android:textSize="@dimen/paragraph2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemStatisticsTotalRunDistanceTitle_tv"
+        tools:text="1345 meters" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/itemStatisticsTotalCaloriesBurnedTitle_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:fontFamily="@font/montserrat_medium"
+        android:text="@string/total_calories_burned"
+        android:textColor="@color/normalText"
+        android:textSize="@dimen/paragraph"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemStatisticsTotalRunDistanceValue_tv" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/itemStatisticsTotalCaloriesBurnedValue_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/montserrat_medium"
+        android:textColor="@color/normalText"
+        android:textSize="@dimen/paragraph2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemStatisticsTotalCaloriesBurnedTitle_tv"
+        tools:text="560 kcal" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/itemStatisticsTotalStepsTitle_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:fontFamily="@font/montserrat_medium"
+        android:text="@string/total_steps"
+        android:textColor="@color/normalText"
+        android:textSize="@dimen/paragraph"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemStatisticsTotalCaloriesBurnedValue_tv" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/itemStatisticsTotalStepsValue_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/montserrat_medium"
+        android:textColor="@color/normalText"
+        android:textSize="@dimen/paragraph2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemStatisticsTotalStepsTitle_tv"
+        tools:text="11940" />
+
+    <View
+        android:id="@+id/itemStatisticsBottomLine_v"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/hintText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

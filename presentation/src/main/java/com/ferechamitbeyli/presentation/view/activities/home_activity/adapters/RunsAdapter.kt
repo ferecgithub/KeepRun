@@ -1,6 +1,5 @@
 package com.ferechamitbeyli.presentation.view.activities.home_activity.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -15,7 +14,7 @@ import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companio
 import java.text.SimpleDateFormat
 import java.util.*
 
-class RunsAdapter(val context: Context) : RecyclerView.Adapter<RunsAdapter.RunsViewHolder>() {
+class RunsAdapter : RecyclerView.Adapter<RunsAdapter.RunsViewHolder>() {
 
     inner class RunsViewHolder(val binding: ItemRunLayoutBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -55,7 +54,7 @@ class RunsAdapter(val context: Context) : RecyclerView.Adapter<RunsAdapter.RunsV
                 timeInMillis = run.timestamp
             }
 
-            val dateFormat = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
+            val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
             itemDateTv.text = dateFormat.format(calendar.time)
 
             val time = calculateElapsedTime(run.timeInMillis)

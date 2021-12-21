@@ -60,7 +60,7 @@ class TrackingViewModel @Inject constructor(
                         _trackingEventsChannel.emit(EventState.Error(imageUrlResponse.message.toString()))
                     }
                     is Resource.Loading -> {
-                        /** NO-OP **/
+                        _trackingEventsChannel.emit(EventState.Loading())
                     }
                     is Resource.Success -> {
                         runUseCases.insertRunToRemoteDBUseCase.invoke(
@@ -72,7 +72,7 @@ class TrackingViewModel @Inject constructor(
                                     _trackingEventsChannel.emit(EventState.Error(databaseResponse.message.toString()))
                                 }
                                 is Resource.Loading -> {
-                                    /** NO-OP **/
+                                    _trackingEventsChannel.emit(EventState.Loading())
                                 }
                                 is Resource.Success -> {
                                     _trackingEventsChannel.emit(EventState.Success(databaseResponse.data))

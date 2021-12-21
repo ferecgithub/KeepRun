@@ -38,6 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/montserrat_regular"
+            android:gravity="center"
             android:hint="@string/sorted_by"
             android:inputType="none"
             android:textColor="@color/normalText" />
@@ -61,9 +62,9 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat_bold"
         android:gravity="center"
-        android:visibility="gone"
         android:text="@string/empty_recyclerview_description"
         android:textSize="@dimen/paragraph"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@id/vertical9_gl"
         app:layout_constraintStart_toStartOf="@id/vertical1_gl"
         app:layout_constraintTop_toTopOf="@id/horizontal525_gl" />

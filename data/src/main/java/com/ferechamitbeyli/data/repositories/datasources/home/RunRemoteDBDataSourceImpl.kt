@@ -63,11 +63,9 @@ class RunRemoteDBDataSourceImpl @Inject constructor(
                 if (task.isSuccessful) {
                     mapImageUrl = task.result.toString()
                 }
-
-
             }
 
-            delay(2000)
+            delay(2500)
 
             if (mapImageUrl != null) {
                 emit(Resource.Success(mapImageUrl.toString()))

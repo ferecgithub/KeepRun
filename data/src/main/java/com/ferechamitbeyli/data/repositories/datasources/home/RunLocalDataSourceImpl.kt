@@ -19,9 +19,11 @@ class RunLocalDataSourceImpl @Inject constructor(
     private val coroutineDispatchers: CoroutineDispatchers
 ) : RunLocalDataSource {
 
-    override suspend fun insertToDB(run: Run) = runDao.insert(runEntityMapper.mapFromDomainModel(run))
+    override suspend fun insertToDB(run: Run) =
+        runDao.insert(runEntityMapper.mapFromDomainModel(run))
 
-    override suspend fun insertMultipleToDB(vararg run: Run) = runDao.insertMultiple(*runEntityMapper.mapFromDomainModelList(run.toList()).toTypedArray())
+    override suspend fun insertMultipleToDB(vararg run: Run) =
+        runDao.insertMultiple(*runEntityMapper.mapFromDomainModelList(run.toList()).toTypedArray())
 
     override suspend fun removeFromDB(run: Run) {
         runDao.remove(runEntityMapper.mapFromDomainModel(run))
@@ -35,25 +37,21 @@ class RunLocalDataSourceImpl @Inject constructor(
         runDao.getAllRunsSortedByDate()
             .map { list -> Resource.Success(runEntityMapper.mapToDomainModelList(list)) }
             .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
-    //runDao.getAllRunsSortedByDate().map { list -> list.map { runEntity -> runEntity.toRun() } }
 
     override suspend fun getAllRunsSortedByTimeInMillis(): Flow<Resource<List<Run>>> =
         runDao.getAllRunsSortedByTimeInMillis()
             .map { list -> Resource.Success(runEntityMapper.mapToDomainModelList(list)) }
             .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
-    //runDao.getAllRunsSortedByTimeInMillis().map { list -> list.map { runEntity -> runEntity.toRun() } }
 
     override suspend fun getAllRunsSortedByCaloriesBurned(): Flow<Resource<List<Run>>> =
         runDao.getAllRunsSortedByCaloriesBurned()
             .map { list -> Resource.Success(runEntityMapper.mapToDomainModelList(list)) }
             .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
-    //runDao.getAllRunsSortedByCaloriesBurned().map { list -> list.map { runEntity -> runEntity.toRun() } }
 
     override suspend fun getAllRunsSortedByAverageSpeed(): Flow<Resource<List<Run>>> =
         runDao.getAllRunsSortedByAverageSpeed()
             .map { list -> Resource.Success(runEntityMapper.mapToDomainModelList(list)) }
             .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
-    //runDao.getAllRunsSortedByAverageSpeed().map { list -> list.map { runEntity -> runEntity.toRun() } }
 
     override suspend fun getAllRunsSortedByDistance(): Flow<Resource<List<Run>>> =
         runDao.getAllRunsSortedByDistance()
@@ -64,12 +62,45 @@ class RunLocalDataSourceImpl @Inject constructor(
         runDao.getAllRunsSortedByStepCount()
             .map { list -> Resource.Success(runEntityMapper.mapToDomainModelList(list)) }
             .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
-    //runDao.getAllRunsSortedByDistance().map { list -> list.map { runEntity -> runEntity.toRun() } }
+
+    override suspend fun getTotalTimeInMillisBetween(
+        startDate: Long,
+        endDate: Long
+    ): Flow<Resource<Long>> =
+        runDao.getTotalTimeInMillisBetween(startDate, endDate).map { Resource.Success(it) }
+            .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
+
+    override suspend fun getTotalCaloriesBurnedBetween(
+        startDate: Long,
+        endDate: Long
+    ): Flow<Resource<Int>> =
+        runDao.getTotalCaloriesBurnedBetween(startDate, endDate).map { Resource.Success(it) }
+            .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
+
+    override suspend fun getTotalDistanceInMetersBetween(
+        startDate: Long,
+        endDate: Long
+    ): Flow<Resource<Int>> =
+        runDao.getTotalDistanceInMetersBetween(startDate, endDate).map { Resource.Success(it) }
+            .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
+
+    override suspend fun getTotalAverageSpeedInKMHBetween(
+        startDate: Long,
+        endDate: Long
+    ): Flow<Resource<Double>> =
+        runDao.getTotalAverageSpeedInKMHBetween(startDate, endDate).map { Resource.Success(it) }
+            .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
+
+    override suspend fun getTotalStepCountBetween(
+        startDate: Long,
+        endDate: Long
+    ): Flow<Resource<Int>> =
+        runDao.getTotalStepCountBetween(startDate, endDate).map { Resource.Success(it) }
+            .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
 
     override suspend fun getTotalTimeInMillis(): Flow<Resource<Long>> =
         runDao.getTotalTimeInMillis().map { Resource.Success(it) }
             .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
-    //runDao.getTotalTimeInMillis()
 
     override suspend fun getTotalCaloriesBurned(): Flow<Resource<Int>> =
         runDao.getTotalCaloriesBurned().map { Resource.Success(it) }
@@ -86,37 +117,5 @@ class RunLocalDataSourceImpl @Inject constructor(
     override suspend fun getTotalStepCount(): Flow<Resource<Int>> =
         runDao.getTotalStepCount().map { Resource.Success(it) }
             .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
-
-    /*
-    override suspend fun getAllRunsSortedByDate(): Flow<List<Run>> =
-        runDao.getAllRunsSortedByDate().map { list -> RunEntityMapper.mapToDomainModelList(list) }
-        //runDao.getAllRunsSortedByDate().map { list -> list.map { runEntity -> runEntity.toRun() } }
-
-    override suspend fun getAllRunsSortedByTimeInMillis(): Flow<List<Run>> =
-        runDao.getAllRunsSortedByTimeInMillis().map { list -> RunEntityMapper.mapToDomainModelList(list) }
-        //runDao.getAllRunsSortedByTimeInMillis().map { list -> list.map { runEntity -> runEntity.toRun() } }
-
-    override suspend fun getAllRunsSortedByCaloriesBurned(): Flow<List<Run>> =
-        runDao.getAllRunsSortedByCaloriesBurned().map { list -> RunEntityMapper.mapToDomainModelList(list) }
-        //runDao.getAllRunsSortedByCaloriesBurned().map { list -> list.map { runEntity -> runEntity.toRun() } }
-
-    override suspend fun getAllRunsSortedByAverageSpeed(): Flow<List<Run>> =
-        runDao.getAllRunsSortedByAverageSpeed().map { list -> RunEntityMapper.mapToDomainModelList(list) }
-        //runDao.getAllRunsSortedByAverageSpeed().map { list -> list.map { runEntity -> runEntity.toRun() } }
-
-    override suspend fun getAllRunsSortedByDistance(): Flow<List<Run>> =
-        runDao.getAllRunsSortedByDistance().map { list -> RunEntityMapper.mapToDomainModelList(list) }
-        //runDao.getAllRunsSortedByDistance().map { list -> list.map { runEntity -> runEntity.toRun() } }
-
-    override suspend fun getTotalTimeInMillis(): Flow<Long> = runDao.getTotalTimeInMillis()
-
-    override suspend fun getTotalCaloriesBurned(): Flow<Int> = runDao.getTotalCaloriesBurned()
-
-    override suspend fun getTotalDistanceInMeters(): Flow<Int> = runDao.getTotalDistanceInMeters()
-
-    override suspend fun getTotalAverageSpeedInKMH(): Flow<Double> = runDao.getTotalAverageSpeedInKMH()
-
-    override suspend fun getTotalStepCount(): Flow<Int> = runDao.getTotalStepCount()
-     */
 
 }
