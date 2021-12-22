@@ -6,5 +6,6 @@ import javax.inject.Inject
 class UpdateUsernameToRemoteDBUseCase @Inject constructor(
     private val sessionRepository: SessionRepository
 ) {
-    suspend operator fun invoke(username: String) = sessionRepository.updateUsernameToRemoteDB(username)
+    suspend operator fun invoke(username: String) =
+        sessionRepository.updateUsernameToRemoteDB(username)
 }

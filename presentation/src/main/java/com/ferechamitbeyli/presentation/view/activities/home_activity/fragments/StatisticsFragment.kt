@@ -14,7 +14,6 @@ import com.ferechamitbeyli.presentation.databinding.FragmentStatisticsBinding
 import com.ferechamitbeyli.presentation.uimodels.StatisticsUIModel
 import com.ferechamitbeyli.presentation.utils.enums.DateType
 import com.ferechamitbeyli.presentation.utils.helpers.PermissionManager
-import com.ferechamitbeyli.presentation.utils.helpers.StatisticsHelperFunctions
 import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions
 import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.visible
 import com.ferechamitbeyli.presentation.view.activities.home_activity.adapters.StatisticsAdapter
@@ -24,8 +23,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import java.text.SimpleDateFormat
-import java.util.*
 
 @AndroidEntryPoint
 class StatisticsFragment : BaseFragment<FragmentStatisticsBinding>() {
@@ -48,15 +45,11 @@ class StatisticsFragment : BaseFragment<FragmentStatisticsBinding>() {
 
         setupOnClickListeners()
 
+        setupRecyclerView()
 
-        getDays()
-
-        getDays(-3)
-
+        getStatistics()
 
     }
-
-
 
     private fun setupRecyclerView() =
         binding.statisticsRv.apply {
@@ -72,7 +65,9 @@ class StatisticsFragment : BaseFragment<FragmentStatisticsBinding>() {
     }
 
     private fun getStatistics() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-
+        viewModel.statisticsFlow.collectLatest {
+            populateRecyclerView(it)
+        }
     }
 
     private fun handleEmptyRecyclerView(list: List<Any>) {
@@ -96,8 +91,6 @@ class StatisticsFragment : BaseFragment<FragmentStatisticsBinding>() {
             ArrayAdapter(requireContext(), R.layout.spinner_item, dateOptions)
         binding.statisticsDateDisplaySp.setAdapter(arrayAdapter)
 
-        selectInitialDateTypeIfEmpty()
-
         setSelectionPerDateType()
 
         binding.statisticsDateDisplaySp.setOnItemClickListener { _, _, position, _ ->
@@ -110,41 +103,21 @@ class StatisticsFragment : BaseFragment<FragmentStatisticsBinding>() {
                 }
             }
         }
-
-    }
-
-    private fun selectInitialDateTypeIfEmpty() {
-        if (!binding.statisticsDateDisplaySp.hasSelection()) {
-            binding.statisticsDateDisplaySp.setText(binding.statisticsDateDisplaySp.adapter.getItem(0).toString(), false)
-        }
     }
 
     private fun setSelectionPerDateType() {
+
         when (viewModel.dateType) {
-            DateType.TODAY -> binding.statisticsDateDisplaySp.setSelection(0)
-            DateType.THIS_WEEK -> binding.statisticsDateDisplaySp.setSelection(1)
-            DateType.THIS_MONTH -> binding.statisticsDateDisplaySp.setSelection(2)
+            DateType.TODAY -> binding.statisticsDateDisplaySp.setText(
+                binding.statisticsDateDisplaySp.adapter.getItem(0).toString(), false
+            )
+            DateType.THIS_WEEK -> binding.statisticsDateDisplaySp.setText(
+                binding.statisticsDateDisplaySp.adapter.getItem(1).toString(), false
+            )
+            DateType.THIS_MONTH -> binding.statisticsDateDisplaySp.setText(
+                binding.statisticsDateDisplaySp.adapter.getItem(2).toString(), false
+            )
         }
-    }
-
-    private fun getDays(number: Int = 0) {
-        val calendar1 = Calendar.getInstance().apply {
-            timeInMillis = StatisticsHelperFunctions.getTimestampOfToday()[0]
-        }
-        val calendar2 = Calendar.getInstance().apply {
-            timeInMillis = StatisticsHelperFunctions.getTimestampOfToday()[1]
-        }
-
-        val dateFormat = SimpleDateFormat("dd.MM.yyyy hh:mm:ss a", Locale.getDefault())
-        println("**********************")
-        if (number == 0) {
-            println("THIS_WEEK_START DATE IS: ${dateFormat.format(calendar1.time)}")
-            println("THIS_WEEK_END DATE IS: ${dateFormat.format(calendar2.time)}")
-        } else {
-            println("START DATE IS: ${dateFormat.format(calendar1.time)}")
-            println("END DATE IS: ${dateFormat.format(calendar2.time)}")
-        }
-        println("**********************")
     }
 
     private fun navigateToTrackingFragment() {
@@ -191,6 +164,11 @@ class StatisticsFragment : BaseFragment<FragmentStatisticsBinding>() {
                 snackBar.show()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        statisticsAdapter = null
+        super.onDestroyView()
     }
 
     override fun onResume() {

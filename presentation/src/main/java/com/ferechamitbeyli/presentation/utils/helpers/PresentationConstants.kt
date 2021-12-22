@@ -1,6 +1,7 @@
 package com.ferechamitbeyli.presentation.utils.helpers
 
 import android.graphics.Color
+import com.google.android.gms.maps.model.JointType
 
 object PresentationConstants {
 
@@ -20,9 +21,6 @@ object PresentationConstants {
     const val PUSH_NOTIFICATION_CHANNEL_NAME = "keeprun_push_channel"
     const val PUSH_NOTIFICATION_ID = 6
 
-    // Cancel Dialog Tag
-    const val CANCEL_TRACKING_DIALOG_TAG = "cancel_tracking_dialog"
-
     const val PENDING_INTENT_REQUEST_CODE = 4
     const val PENDING_INTENT_PAUSE_REQUEST_CODE = 7
     const val PENDING_INTENT_START_OR_RESUME_REQUEST_CODE = 8
@@ -35,8 +33,7 @@ object PresentationConstants {
     const val TIMER_UPDATE_INTERVAL = 50L
 
     const val POLYLINE_COLOR = Color.GREEN
-    const val POLYLINE_WIDTH = 8f
-
-    const val MAP_CAMERA_ZOOM = 15f
+    const val POLYLINE_JOINT_TYPE = JointType.ROUND
+    const val POLYLINE_WIDTH = 10f
 
 }

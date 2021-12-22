@@ -6,5 +6,6 @@ import javax.inject.Inject
 class CacheFirstUseStateUseCase @Inject constructor(
     private val sessionRepository: SessionRepository
 ) {
-    suspend operator fun invoke(isFirstTime: Boolean) = sessionRepository.cacheFirstUseState(isFirstTime)
+    suspend operator fun invoke(isFirstTime: Boolean) =
+        sessionRepository.cacheFirstUseState(isFirstTime)
 }

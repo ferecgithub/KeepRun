@@ -1,5 +1,6 @@
 package com.ferechamitbeyli.presentation.viewmodel.activities.home_activity.fragments
 
+import androidx.lifecycle.SavedStateHandle
 import com.ferechamitbeyli.domain.Resource
 import com.ferechamitbeyli.domain.dispatchers.CoroutineDispatchers
 import com.ferechamitbeyli.domain.entity.Run
@@ -20,11 +21,12 @@ import javax.inject.Inject
 class RunsViewModel @Inject constructor(
     private val sessionUseCases: SessionUseCases,
     private val runUseCases: RunUseCases,
+    private val savedStateHandle: SavedStateHandle,
     networkConnectionTracker: NetworkConnectionTracker,
     coroutineDispatchers: CoroutineDispatchers
 ) : BaseViewModel(networkConnectionTracker, coroutineDispatchers) {
 
-    var runSortType = RunSortType.DATE
+    var runSortType = savedStateHandle["runSortType"] ?: RunSortType.DATE
 
     init {
         sortRuns(runSortType)
@@ -164,6 +166,7 @@ class RunsViewModel @Inject constructor(
             }
         }.also {
             this@RunsViewModel.runSortType = sortType
+            savedStateHandle["runSortType"] = sortType
         }
     }
 

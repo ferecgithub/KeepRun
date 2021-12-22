@@ -144,7 +144,8 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>() {
                             enableSignInButtonIfAllValid(validEmailFlag, validPasswordFlag)
                         }
                         ValidationErrorResults.EMPTY_PASSWORD -> {
-                            binding.signInPasswordEt.error = getString(R.string.password_empty_error)
+                            binding.signInPasswordEt.error =
+                                getString(R.string.password_empty_error)
                             validPasswordFlag = false
                             enableSignInButtonIfAllValid(validEmailFlag, validPasswordFlag)
                         }
@@ -183,15 +184,21 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>() {
                         it.message,
                         Snackbar.LENGTH_LONG
                     ).show()
+                    setAvailabilityOfSignInButton(true)
                 }
                 is EventState.Loading -> {
-                    /** NO-OP **/
+                    setAvailabilityOfSignInButton(false)
                 }
                 is EventState.Success -> {
+                    setAvailabilityOfSignInButton(true)
                     requireActivity().startNewActivity(HomeActivity::class.java)
                 }
             }
         }
+    }
+
+    private fun setAvailabilityOfSignInButton(isEnabled: Boolean) {
+        binding.signInBtn.enable(isEnabled)
     }
 
     private fun checkInternetConnection() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
@@ -210,6 +217,7 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>() {
             } else {
                 internetConnectionFlag = false
                 snackBar.show()
+                setAvailabilityOfSignInButton(true)
             }
         }
     }

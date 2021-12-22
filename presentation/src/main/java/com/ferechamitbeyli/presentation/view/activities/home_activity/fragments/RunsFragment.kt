@@ -65,7 +65,6 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
         requireActivity().findViewById<FloatingActionButton>(R.id.add_run_fab).setOnClickListener {
             checkPermissionsBeforeNavigateToTrackingFragment()
         }
-
     }
 
     private fun adjustSortingSpinner() {
@@ -73,8 +72,6 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
         val arrayAdapter =
             ArrayAdapter(requireContext(), R.layout.spinner_item, sortingOptions)
         binding.runsSortSp.setAdapter(arrayAdapter)
-
-        selectInitialSortTypeIfEmpty()
 
         setSelectionPerRunSortType()
 
@@ -91,23 +88,28 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
                 }
             }
         }
-
-    }
-
-    private fun selectInitialSortTypeIfEmpty() {
-        if (!binding.runsSortSp.hasSelection()) {
-            binding.runsSortSp.setText(binding.runsSortSp.adapter.getItem(0).toString(), false)
-        }
     }
 
     private fun setSelectionPerRunSortType() {
         when (viewModel.runSortType) {
-            RunSortType.DATE -> binding.runsSortSp.setSelection(0)
-            RunSortType.RUN_TIME -> binding.runsSortSp.setSelection(1)
-            RunSortType.CALORIES_BURNED -> binding.runsSortSp.setSelection(2)
-            RunSortType.DISTANCE -> binding.runsSortSp.setSelection(3)
-            RunSortType.AVG_SPEED -> binding.runsSortSp.setSelection(4)
-            RunSortType.STEP_COUNT -> binding.runsSortSp.setSelection(5)
+            RunSortType.DATE -> binding.runsSortSp.setText(
+                binding.runsSortSp.adapter.getItem(0).toString(), false
+            )
+            RunSortType.RUN_TIME -> binding.runsSortSp.setText(
+                binding.runsSortSp.adapter.getItem(1).toString(), false
+            )
+            RunSortType.CALORIES_BURNED -> binding.runsSortSp.setText(
+                binding.runsSortSp.adapter.getItem(2).toString(), false
+            )
+            RunSortType.DISTANCE -> binding.runsSortSp.setText(
+                binding.runsSortSp.adapter.getItem(3).toString(), false
+            )
+            RunSortType.AVG_SPEED -> binding.runsSortSp.setText(
+                binding.runsSortSp.adapter.getItem(4).toString(), false
+            )
+            RunSortType.STEP_COUNT -> binding.runsSortSp.setText(
+                binding.runsSortSp.adapter.getItem(5).toString(), false
+            )
         }
     }
 
@@ -142,7 +144,6 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
             } else {
                 populateRecyclerView(RunToUIMapper.mapFromDomainModelList(runsFromDB))
             }
-
         }
     }
 

@@ -66,56 +66,36 @@ class RunLocalDataSourceImpl @Inject constructor(
     override suspend fun getTotalTimeInMillisBetween(
         startDate: Long,
         endDate: Long
-    ): Flow<Resource<Long>> =
+    ): Flow<Resource<Long?>> =
         runDao.getTotalTimeInMillisBetween(startDate, endDate).map { Resource.Success(it) }
             .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
 
     override suspend fun getTotalCaloriesBurnedBetween(
         startDate: Long,
         endDate: Long
-    ): Flow<Resource<Int>> =
+    ): Flow<Resource<Int?>> =
         runDao.getTotalCaloriesBurnedBetween(startDate, endDate).map { Resource.Success(it) }
             .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
 
     override suspend fun getTotalDistanceInMetersBetween(
         startDate: Long,
         endDate: Long
-    ): Flow<Resource<Int>> =
+    ): Flow<Resource<Int?>> =
         runDao.getTotalDistanceInMetersBetween(startDate, endDate).map { Resource.Success(it) }
             .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
 
     override suspend fun getTotalAverageSpeedInKMHBetween(
         startDate: Long,
         endDate: Long
-    ): Flow<Resource<Double>> =
+    ): Flow<Resource<Double?>> =
         runDao.getTotalAverageSpeedInKMHBetween(startDate, endDate).map { Resource.Success(it) }
             .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
 
     override suspend fun getTotalStepCountBetween(
         startDate: Long,
         endDate: Long
-    ): Flow<Resource<Int>> =
+    ): Flow<Resource<Int?>> =
         runDao.getTotalStepCountBetween(startDate, endDate).map { Resource.Success(it) }
-            .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
-
-    override suspend fun getTotalTimeInMillis(): Flow<Resource<Long>> =
-        runDao.getTotalTimeInMillis().map { Resource.Success(it) }
-            .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
-
-    override suspend fun getTotalCaloriesBurned(): Flow<Resource<Int>> =
-        runDao.getTotalCaloriesBurned().map { Resource.Success(it) }
-            .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
-
-    override suspend fun getTotalDistanceInMeters(): Flow<Resource<Int>> =
-        runDao.getTotalDistanceInMeters().map { Resource.Success(it) }
-            .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
-
-    override suspend fun getTotalAverageSpeedInKMH(): Flow<Resource<Double>> =
-        runDao.getTotalAverageSpeedInKMH().map { Resource.Success(it) }
-            .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
-
-    override suspend fun getTotalStepCount(): Flow<Resource<Int>> =
-        runDao.getTotalStepCount().map { Resource.Success(it) }
             .catch { Resource.Error(it.toString(), null) }.flowOn(coroutineDispatchers.io())
 
 }

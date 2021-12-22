@@ -63,7 +63,7 @@ class RunRepositoryImpl @Inject constructor(
     override suspend fun getTotalTimeInMillisBetween(
         startDate: Long,
         endDate: Long
-    ): Flow<Resource<Long>> =
+    ): Flow<Resource<Long?>> =
         runLocalDataSource.getTotalTimeInMillisBetween(startDate, endDate)
             .catch { Resource.Error(it.message.toString(), null) }
             .flowOn(coroutineDispatchers.io())
@@ -71,7 +71,7 @@ class RunRepositoryImpl @Inject constructor(
     override suspend fun getTotalCaloriesBurnedBetween(
         startDate: Long,
         endDate: Long
-    ): Flow<Resource<Int>> =
+    ): Flow<Resource<Int?>> =
         runLocalDataSource.getTotalCaloriesBurnedBetween(startDate, endDate)
             .catch { Resource.Error(it.message.toString(), null) }
             .flowOn(coroutineDispatchers.io())
@@ -79,7 +79,7 @@ class RunRepositoryImpl @Inject constructor(
     override suspend fun getTotalDistanceInMetersBetween(
         startDate: Long,
         endDate: Long
-    ): Flow<Resource<Int>> =
+    ): Flow<Resource<Int?>> =
         runLocalDataSource.getTotalDistanceInMetersBetween(startDate, endDate)
             .catch { Resource.Error(it.message.toString(), null) }
             .flowOn(coroutineDispatchers.io())
@@ -87,7 +87,7 @@ class RunRepositoryImpl @Inject constructor(
     override suspend fun getTotalAverageSpeedInKMHBetween(
         startDate: Long,
         endDate: Long
-    ): Flow<Resource<Double>> =
+    ): Flow<Resource<Double?>> =
         runLocalDataSource.getTotalAverageSpeedInKMHBetween(startDate, endDate)
             .catch { Resource.Error(it.message.toString(), null) }
             .flowOn(coroutineDispatchers.io())
@@ -95,33 +95,8 @@ class RunRepositoryImpl @Inject constructor(
     override suspend fun getTotalStepCountBetween(
         startDate: Long,
         endDate: Long
-    ): Flow<Resource<Int>> =
+    ): Flow<Resource<Int?>> =
         runLocalDataSource.getTotalStepCountBetween(startDate, endDate)
-            .catch { Resource.Error(it.message.toString(), null) }
-            .flowOn(coroutineDispatchers.io())
-
-    override suspend fun getTotalTimeInMillis(): Flow<Resource<Long>> =
-        runLocalDataSource.getTotalTimeInMillis()
-            .catch { Resource.Error(it.message.toString(), null) }
-            .flowOn(coroutineDispatchers.io())
-
-    override suspend fun getTotalCaloriesBurned(): Flow<Resource<Int>> =
-        runLocalDataSource.getTotalCaloriesBurned()
-            .catch { Resource.Error(it.message.toString(), null) }
-            .flowOn(coroutineDispatchers.io())
-
-    override suspend fun getTotalDistanceInMeters(): Flow<Resource<Int>> =
-        runLocalDataSource.getTotalDistanceInMeters()
-            .catch { Resource.Error(it.message.toString(), null) }
-            .flowOn(coroutineDispatchers.io())
-
-    override suspend fun getTotalAverageSpeedInKMH(): Flow<Resource<Double>> =
-        runLocalDataSource.getTotalAverageSpeedInKMH()
-            .catch { Resource.Error(it.message.toString(), null) }
-            .flowOn(coroutineDispatchers.io())
-
-    override suspend fun getTotalStepCount(): Flow<Resource<Int>> =
-        runLocalDataSource.getTotalStepCount()
             .catch { Resource.Error(it.message.toString(), null) }
             .flowOn(coroutineDispatchers.io())
 

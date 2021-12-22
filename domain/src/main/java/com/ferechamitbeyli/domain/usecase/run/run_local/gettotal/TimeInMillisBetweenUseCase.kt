@@ -8,6 +8,6 @@ import javax.inject.Inject
 class TimeInMillisBetweenUseCase @Inject constructor(
     private val runRepository: RunRepository
 ) {
-    suspend operator fun invoke(startDate: Long, endDate: Long): Flow<Resource<Long>> =
+    suspend operator fun invoke(startDate: Long, endDate: Long): Flow<Resource<Long?>> =
         runRepository.getTotalTimeInMillisBetween(startDate, endDate)
 }

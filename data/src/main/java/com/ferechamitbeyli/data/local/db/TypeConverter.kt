@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.room.TypeConverter
 import java.io.ByteArrayOutputStream
-import java.util.*
 
 class TypeConverter {
 
@@ -19,11 +18,5 @@ class TypeConverter {
         bmp.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
         return outputStream.toByteArray()
     }
-
-    @TypeConverter
-    fun fromTimestamp(value: Long?): Date? = if (null == value) null else Date(value)
-
-    @TypeConverter
-    fun dateToTimestamp(date: Date?): Long? = date?.time
 
 }

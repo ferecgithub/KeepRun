@@ -6,5 +6,6 @@ import javax.inject.Inject
 class UpdateUserNotificationStateUseCase @Inject constructor(
     private val sessionRepository: SessionRepository
 ) {
-    suspend operator fun invoke(isNotificationEnabled: Boolean) = sessionRepository.updateUserNotificationState(isNotificationEnabled)
+    suspend operator fun invoke(isNotificationEnabled: Boolean) =
+        sessionRepository.updateUserNotificationState(isNotificationEnabled)
 }

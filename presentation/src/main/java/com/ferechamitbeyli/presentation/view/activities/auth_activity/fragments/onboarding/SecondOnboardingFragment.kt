@@ -55,7 +55,4 @@ class SecondOnboardingFragment : BaseFragment<FragmentSecondOnboardingBinding>()
     }
 
 
-
-
-
 }

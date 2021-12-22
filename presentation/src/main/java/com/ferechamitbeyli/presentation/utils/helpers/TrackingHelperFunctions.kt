@@ -18,7 +18,11 @@ object TrackingHelperFunctions {
         val hours = (elapsedTime / (1000 * 60 * 60) % 24)
 
         val decimal: NumberFormat = DecimalFormat("00")
-        return "${decimal.format(hours)}:${decimal.format(minutes)}:${decimal.format(seconds)}:${decimal.format(millis)}"
+        return "${decimal.format(hours)}:${decimal.format(minutes)}:${decimal.format(seconds)}:${
+            decimal.format(
+                millis
+            )
+        }"
     }
 
     fun calculateTimeFromDatabase(elapsedTime: Long): String {
@@ -29,7 +33,19 @@ object TrackingHelperFunctions {
 
         val decimal: NumberFormat = DecimalFormat("00")
         val hourDecimal: NumberFormat = DecimalFormat("000")
-        return "${hourDecimal.format(hours)}:${decimal.format(minutes)}:${decimal.format(seconds)}:${decimal.format(millis)}"
+        return if (hours < 100L) {
+            "${decimal.format(hours)}:${decimal.format(minutes)}:${decimal.format(seconds)}:${
+                decimal.format(
+                    millis
+                )
+            }"
+        } else {
+            "${hourDecimal.format(hours)}:${decimal.format(minutes)}:${decimal.format(seconds)}:${
+                decimal.format(
+                    millis
+                )
+            }"
+        }
     }
 
     fun calculateDistance(locationList: PolylineList, inKilometers: Boolean): Double {

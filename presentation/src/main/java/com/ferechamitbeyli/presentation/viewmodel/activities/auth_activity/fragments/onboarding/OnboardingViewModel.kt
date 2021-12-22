@@ -62,6 +62,4 @@ class OnboardingViewModel @Inject constructor(
     }
 
 
-
-
 }

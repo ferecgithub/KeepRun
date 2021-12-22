@@ -41,21 +41,21 @@ object StatisticsHelperFunctions {
 
         //decrement week number by 1 for the previous week
         //increment week number by 1 for the next week
-        calendar[Calendar.WEEK_OF_YEAR] = currentWeekNumber + destinedWeek
-
-        //set first day of week
-        calendar[Calendar.DAY_OF_WEEK] = Calendar.MONDAY
-
-        //get start date of previous week
-        val startDate = calendar.timeInMillis
-
-        calendar[Calendar.WEEK_OF_YEAR] = currentWeekNumber + destinedWeek - 3
+        calendar[Calendar.WEEK_OF_YEAR] = currentWeekNumber + destinedWeek + 1
 
         //set last day of week
         calendar[Calendar.DAY_OF_WEEK] = Calendar.SUNDAY
 
-        //get end date of previous week
+        //get start date of previous week
         val endDate = calendar.timeInMillis
+
+        calendar[Calendar.WEEK_OF_YEAR] = currentWeekNumber + destinedWeek - 4
+
+        //set last day of week
+        calendar[Calendar.DAY_OF_WEEK] = Calendar.MONDAY
+
+        //get end date of previous week
+        val startDate = calendar.timeInMillis
 
         return arrayOf(startDate, endDate)
     }

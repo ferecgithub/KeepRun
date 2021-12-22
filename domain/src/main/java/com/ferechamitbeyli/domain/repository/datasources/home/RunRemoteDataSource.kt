@@ -15,15 +15,4 @@ interface RunRemoteDataSource {
     /** Get all functions **/
     suspend fun getAllRunsFromRemoteDB(): Flow<Resource<List<Run>>>
 
-    /*
-    /** Get total functions **/
-    suspend fun getTotalTimeInMillisFromRemote(): Flow<Resource<Long>>
-    suspend fun getTotalCaloriesBurnedFromRemote(): Flow<Resource<Int>>
-    suspend fun getTotalDistanceInMetersFromRemote(): Flow<Resource<Int>>
-    suspend fun getTotalAverageSpeedInKMHFromRemote(): Flow<Resource<Double>>
-    suspend fun getTotalStepCountFromRemote(): Flow<Resource<Int>>
-
-     */
-
-
 }

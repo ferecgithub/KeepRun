@@ -6,5 +6,6 @@ import javax.inject.Inject
 class UpdateUserWeightToRemoteDBUseCase @Inject constructor(
     private val sessionRepository: SessionRepository
 ) {
-    suspend operator fun invoke(weight: Double) = sessionRepository.updateUserWeightToRemoteDB(weight)
+    suspend operator fun invoke(weight: Double) =
+        sessionRepository.updateUserWeightToRemoteDB(weight)
 }

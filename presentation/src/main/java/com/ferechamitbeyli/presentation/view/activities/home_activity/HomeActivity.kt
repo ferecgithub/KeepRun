@@ -50,7 +50,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun navigateToTrackingFragmentWithAction(intent: Intent?) {
-        if(intent?.action == PresentationConstants.ACTION_NAVIGATE_TO_TRACKING_FRAGMENT) {
+        if (intent?.action == PresentationConstants.ACTION_NAVIGATE_TO_TRACKING_FRAGMENT) {
             navController.navigate(R.id.action_global_trackingFragment)
         }
     }

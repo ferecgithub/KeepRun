@@ -47,29 +47,11 @@ class RunRemoteDBDataSourceImpl @Inject constructor(
             val runMapStorageReference = firebaseStorageReference.child(RUNS_STORAGE_REF)
                 .child(firebaseAuth.currentUser?.uid.toString()).child(timestamp)
 
-            val uploadTask = runMapStorageReference.putBytes(byteArray)
+            val uploadTask = runMapStorageReference.putBytes(byteArray).await()
 
-            var mapImageUrl: String? = null
+            val downloadUrl = uploadTask.storage.downloadUrl.await()
 
-            uploadTask.continueWithTask { task ->
-                if (!task.isSuccessful) {
-                    task.exception?.let {
-                        throw it
-                    }
-                }
-                runMapStorageReference.downloadUrl
-
-            }.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    mapImageUrl = task.result.toString()
-                }
-            }
-
-            delay(2500)
-
-            if (mapImageUrl != null) {
-                emit(Resource.Success(mapImageUrl.toString()))
-            }
+            emit(Resource.Success(downloadUrl.toString()))
 
         }.catch {
             emit(Resource.Error(it.message.toString()))
@@ -80,7 +62,7 @@ class RunRemoteDBDataSourceImpl @Inject constructor(
 
             emit(Resource.Loading())
 
-            val runMapStorageReference = firebaseStorageReference.child(RUNS_STORAGE_REF)
+            firebaseStorageReference.child(RUNS_STORAGE_REF)
                 .child(firebaseAuth.currentUser?.uid.toString()).child(timestamp)
                 .delete().await().also {
                     emit(Resource.Success("Map Image is successfully deleted."))

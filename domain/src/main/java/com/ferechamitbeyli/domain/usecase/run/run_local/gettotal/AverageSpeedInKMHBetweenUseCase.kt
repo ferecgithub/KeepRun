@@ -8,6 +8,6 @@ import javax.inject.Inject
 class AverageSpeedInKMHBetweenUseCase @Inject constructor(
     private val runRepository: RunRepository
 ) {
-    suspend operator fun invoke(startDate: Long, endDate:Long): Flow<Resource<Double>> =
+    suspend operator fun invoke(startDate: Long, endDate:Long): Flow<Resource<Double?>> =
         runRepository.getTotalAverageSpeedInKMHBetween(startDate, endDate)
 }

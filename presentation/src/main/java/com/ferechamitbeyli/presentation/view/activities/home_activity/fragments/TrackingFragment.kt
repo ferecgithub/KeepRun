@@ -6,7 +6,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.graphics.Color
 import android.location.Location
 import android.location.LocationManager
 import android.os.Build
@@ -30,6 +29,9 @@ import com.ferechamitbeyli.presentation.utils.helpers.PresentationConstants.ACTI
 import com.ferechamitbeyli.presentation.utils.helpers.PresentationConstants.ACTION_START_OR_RESUME_SERVICE
 import com.ferechamitbeyli.presentation.utils.helpers.PresentationConstants.ACTION_STOP_SERVICE
 import com.ferechamitbeyli.presentation.utils.helpers.PresentationConstants.FOLLOW_POLYLINE_ZOOM
+import com.ferechamitbeyli.presentation.utils.helpers.PresentationConstants.POLYLINE_COLOR
+import com.ferechamitbeyli.presentation.utils.helpers.PresentationConstants.POLYLINE_JOINT_TYPE
+import com.ferechamitbeyli.presentation.utils.helpers.PresentationConstants.POLYLINE_WIDTH
 import com.ferechamitbeyli.presentation.utils.helpers.SinglePolyline
 import com.ferechamitbeyli.presentation.utils.helpers.TrackingHelperFunctions.calculateDistance
 import com.ferechamitbeyli.presentation.utils.helpers.TrackingHelperFunctions.calculateElapsedTime
@@ -374,9 +376,9 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
             locationList.forEach {
                 val polyline = map.addPolyline(
                     PolylineOptions().apply {
-                        width(10f)
-                        color(Color.GREEN)
-                        jointType(JointType.ROUND)
+                        width(POLYLINE_WIDTH)
+                        color(POLYLINE_COLOR)
+                        jointType(POLYLINE_JOINT_TYPE)
                         startCap(ButtCap())
                         endCap(ButtCap())
                         addAll(it)

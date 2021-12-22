@@ -23,12 +23,6 @@ data class RunUseCases @Inject constructor(
     val getTotalStepCountBetweenUseCase: StepCountBetweenUseCase,
     val getTotalTimeInMillisBetweenUseCase: TimeInMillisBetweenUseCase,
 
-    val getTotalAverageSpeedUseCase: AverageSpeedInKMHUseCase,
-    val getTotalCaloriesBurnedUseCase: CaloriesBurnedUseCase,
-    val getTotalDistanceInMetersUseCase: DistanceInMetersUseCase,
-    val getTotalStepCountUseCase: StepCountUseCase,
-    val getTotalTimeInMillisUseCase: TimeInMillisUseCase,
-
     val insertMultipleRunsUseCase: InsertMultipleRunsUseCase,
     val insertRunUseCase: InsertRunUseCase,
     val removeAllRunsUseCase: RemoveAllRunsUseCase,

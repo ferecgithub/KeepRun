@@ -96,7 +96,8 @@ class ForgotPassFragment : BaseFragment<FragmentForgotPassBinding>() {
                             enableSendButtonIfAllValid(validEmailFlag)
                         }
                         ValidationErrorResults.INVALID_EMAIL -> {
-                            binding.forgotPassEmailEt.error = getString(R.string.email_invalid_error)
+                            binding.forgotPassEmailEt.error =
+                                getString(R.string.email_invalid_error)
                             validEmailFlag = false
                             enableSendButtonIfAllValid(validEmailFlag)
                         }
@@ -125,11 +126,13 @@ class ForgotPassFragment : BaseFragment<FragmentForgotPassBinding>() {
             when (it) {
                 is EventState.Error -> {
                     Snackbar.make(binding.root, it.message, Snackbar.LENGTH_LONG).show()
+                    setAvailabilityOfForgotPassButtons(true)
                 }
                 is EventState.Loading -> {
-                    /** NO-OP **/
+                    setAvailabilityOfForgotPassButtons(false)
                 }
                 is EventState.Success -> {
+                    setAvailabilityOfForgotPassButtons(true)
                     navigateToSignInFragment()
                     Snackbar.make(
                         binding.root,
@@ -141,9 +144,18 @@ class ForgotPassFragment : BaseFragment<FragmentForgotPassBinding>() {
         }
     }
 
+    private fun setAvailabilityOfForgotPassButtons(isEnabled: Boolean) {
+        binding.forgotPassSendBtn.enable(isEnabled)
+        binding.forgotPassBackBtn.enable(isEnabled)
+    }
+
     private fun checkInternetConnection() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
         val snackBar =
-            Snackbar.make(binding.root, getString(R.string.no_internet_error), Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(
+                binding.root,
+                getString(R.string.no_internet_error),
+                Snackbar.LENGTH_INDEFINITE
+            )
         viewModel.networkState.collect {
             if (it) {
                 internetConnectionFlag = true
@@ -151,6 +163,7 @@ class ForgotPassFragment : BaseFragment<FragmentForgotPassBinding>() {
             } else {
                 internetConnectionFlag = false
                 snackBar.show()
+                setAvailabilityOfForgotPassButtons(true)
             }
         }
     }

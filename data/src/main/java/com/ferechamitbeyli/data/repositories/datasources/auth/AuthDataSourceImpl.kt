@@ -28,6 +28,8 @@ class AuthDataSourceImpl @Inject constructor(
         username: String
     ): Flow<Resource<User>> = flow<Resource<User>> {
 
+        emit(Resource.Loading())
+
         val data = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
         data.user?.let {
 
@@ -51,6 +53,8 @@ class AuthDataSourceImpl @Inject constructor(
         email: String,
         password: String
     ): Flow<Resource<User>> = flow<Resource<User>> {
+
+        emit(Resource.Loading())
 
         val data = firebaseAuth.signInWithEmailAndPassword(email, password).await()
 
@@ -77,6 +81,8 @@ class AuthDataSourceImpl @Inject constructor(
 
     override suspend fun sendResetPassword(email: String): Flow<Resource<String>> =
         flow<Resource<String>> {
+
+            emit(Resource.Loading())
 
             firebaseAuth.sendPasswordResetEmail(email).await().also {
                 emit(Resource.Success("Password reset email is sent."))

@@ -178,6 +178,8 @@ class SessionRemoteDataSourceImpl @Inject constructor(
     override suspend fun updateUserChangesToRemoteDB(user: User): Flow<Resource<String>> =
         flow<Resource<String>> {
 
+            emit(Resource.Loading())
+
             var onSuccessFlag: Boolean? = null
 
             val currentUser = userDtoMapper.mapFromDomainModel(user)
@@ -219,14 +221,13 @@ class SessionRemoteDataSourceImpl @Inject constructor(
     override suspend fun updateUsernameToRemoteDB(username: String): Flow<Resource<String>> =
         flow<Resource<String>> {
 
-            var onSuccessFlag: Boolean? = null
+            emit(Resource.Loading())
 
             val mappedUsername = mapOf(
                 DataConstants.USERS_TABLE_USERNAME_REF to username
             )
 
             databaseReference.child(DataConstants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                //.child(Constants.USERS_TABLE_USERNAME_REF)
                 .updateChildren(mappedUsername).await()
 
             val profileChangeRequest = UserProfileChangeRequest.Builder()
@@ -239,15 +240,6 @@ class SessionRemoteDataSourceImpl @Inject constructor(
                 }
             }
 
-            /*
-            if (onSuccessFlag == true) {
-                emit(Resource.Success("Username is successfully updated."))
-            } else {
-                emit(Resource.Error("An error occurred while updating the username."))
-            }
-
-             */
-
         }.catch {
             emit(Resource.Error(it.message.toString()))
         }.flowOn(coroutineDispatchers.io())
@@ -255,26 +247,16 @@ class SessionRemoteDataSourceImpl @Inject constructor(
     override suspend fun updateUserNotificationState(isNotificationEnabled: Boolean): Flow<Resource<String>> =
         flow<Resource<String>> {
 
-            var onSuccessFlag: Boolean? = null
+            emit(Resource.Loading())
 
             val mappedUserNotificationState = mapOf(
                 DataConstants.USERS_TABLE_NOTIFICATION_ENABLE_REF to isNotificationEnabled
             )
 
             databaseReference.child(DataConstants.USERS_TABLE_REF).child(firebaseAuth.uid!!)
-                //.child(Constants.USERS_TABLE_NOTIFICATION_ENABLE_REF)
                 .updateChildren(mappedUserNotificationState).await().also {
                     emit(Resource.Success("Notification request is successfully updated."))
                 }
-
-            /*
-            if (onSuccessFlag == true) {
-                emit(Resource.Success("Notification request is successfully updated."))
-            } else {
-                emit(Resource.Error("An error occurred while updating the notification request."))
-            }
-
-             */
 
         }.catch {
             emit(Resource.Error(it.message.toString()))
@@ -283,7 +265,7 @@ class SessionRemoteDataSourceImpl @Inject constructor(
     override suspend fun updateUserWeightToRemoteDB(weight: Double): Flow<Resource<String>> =
         flow<Resource<String>> {
 
-            //var onSuccessFlag: Boolean? = null
+            emit(Resource.Loading())
 
             val mappedUserWeight = mapOf(
                 DataConstants.USERS_TABLE_WEIGHT_REF to weight
@@ -294,22 +276,15 @@ class SessionRemoteDataSourceImpl @Inject constructor(
                     emit(Resource.Success("Notification request is successfully updated."))
                 }
 
-
-            /*
-            if (onSuccessFlag == true) {
-                emit(Resource.Success("Notification request is successfully updated."))
-            } else {
-                emit(Resource.Error("An error occurred while updating the notification request."))
-            }
-
-             */
-
         }.catch {
             emit(Resource.Error(it.message.toString()))
         }.flowOn(coroutineDispatchers.io())
 
     override suspend fun updateUserPassword(password: String): Flow<Resource<String>> =
         flow<Resource<String>> {
+
+            emit(Resource.Loading())
+
             firebaseAuth.currentUser?.updatePassword(password)?.await().also {
                 emit(Resource.Success("Password is successfully changed."))
             }

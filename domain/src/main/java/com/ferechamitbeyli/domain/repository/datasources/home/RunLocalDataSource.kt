@@ -19,15 +19,9 @@ interface RunLocalDataSource {
     suspend fun getAllRunsSortedByStepCount(): Flow<Resource<List<Run>>>
 
     /** Get total functions **/
-    suspend fun getTotalTimeInMillisBetween(startDate: Long, endDate: Long): Flow<Resource<Long>>
-    suspend fun getTotalCaloriesBurnedBetween(startDate: Long, endDate: Long): Flow<Resource<Int>>
-    suspend fun getTotalDistanceInMetersBetween(startDate: Long, endDate: Long): Flow<Resource<Int>>
-    suspend fun getTotalAverageSpeedInKMHBetween(startDate: Long, endDate: Long): Flow<Resource<Double>>
-    suspend fun getTotalStepCountBetween(startDate: Long, endDate: Long): Flow<Resource<Int>>
-
-    suspend fun getTotalTimeInMillis(): Flow<Resource<Long>>
-    suspend fun getTotalCaloriesBurned(): Flow<Resource<Int>>
-    suspend fun getTotalDistanceInMeters(): Flow<Resource<Int>>
-    suspend fun getTotalAverageSpeedInKMH(): Flow<Resource<Double>>
-    suspend fun getTotalStepCount(): Flow<Resource<Int>>
+    suspend fun getTotalTimeInMillisBetween(startDate: Long, endDate: Long): Flow<Resource<Long?>>
+    suspend fun getTotalCaloriesBurnedBetween(startDate: Long, endDate: Long): Flow<Resource<Int?>>
+    suspend fun getTotalDistanceInMetersBetween(startDate: Long, endDate: Long): Flow<Resource<Int?>>
+    suspend fun getTotalAverageSpeedInKMHBetween(startDate: Long, endDate: Long): Flow<Resource<Double?>>
+    suspend fun getTotalStepCountBetween(startDate: Long, endDate: Long): Flow<Resource<Int?>>
 }

@@ -55,7 +55,4 @@ class FirstOnboardingFragment : BaseFragment<FragmentFirstOnboardingBinding>() {
     }
 
 
-
-
-
 }

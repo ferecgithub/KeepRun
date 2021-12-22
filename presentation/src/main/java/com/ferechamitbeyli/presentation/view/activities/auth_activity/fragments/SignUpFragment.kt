@@ -180,7 +180,8 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                             )
                         }
                         ValidationErrorResults.EMPTY_USERNAME -> {
-                            binding.signUpUsernameEt.error = getString(R.string.username_empty_error)
+                            binding.signUpUsernameEt.error =
+                                getString(R.string.username_empty_error)
                             validUsernameFlag = false
                             enableSignUpButtonIfAllValid(
                                 validUsernameFlag,
@@ -201,7 +202,8 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                             )
                         }
                         ValidationErrorResults.EMPTY_PASSWORD -> {
-                            binding.signUpPasswordEt.error = getString(R.string.password_empty_error)
+                            binding.signUpPasswordEt.error =
+                                getString(R.string.password_empty_error)
                             validPasswordFlag = false
                             enableSignUpButtonIfAllValid(
                                 validUsernameFlag,
@@ -211,7 +213,8 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                             )
                         }
                         ValidationErrorResults.EMPTY_CONFIRM_PASSWORD -> {
-                            binding.signUpPassAgainEt.error = getString(R.string.password_empty_error)
+                            binding.signUpPassAgainEt.error =
+                                getString(R.string.password_empty_error)
                             validConfirmPasswordFlag = false
                             enableSignUpButtonIfAllValid(
                                 validUsernameFlag,
@@ -231,7 +234,8 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                             )
                         }
                         ValidationErrorResults.PASSWORDS_NOT_MATCHED -> {
-                            binding.signUpPassAgainEt.error = getString(R.string.password_match_error)
+                            binding.signUpPassAgainEt.error =
+                                getString(R.string.password_match_error)
                             validConfirmPasswordFlag = false
                             enableSignUpButtonIfAllValid(
                                 validUsernameFlag,
@@ -292,9 +296,10 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                         it.message,
                         Snackbar.LENGTH_LONG
                     ).show()
+                    setAvailabilityOfSignUpButton(true)
                 }
                 is EventState.Loading -> {
-                    /** NO-OP **/
+                    setAvailabilityOfSignUpButton(false)
                 }
                 is EventState.Success -> {
                     UIHelperFunctions.showSnackbar(
@@ -304,10 +309,15 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                         it.message.toString(),
                         Snackbar.LENGTH_LONG
                     ).show()
+                    setAvailabilityOfSignUpButton(true)
                     navigateToSignInFragment()
                 }
             }
         }
+    }
+
+    private fun setAvailabilityOfSignUpButton(isEnabled: Boolean) {
+        binding.signUpBtn.enable(isEnabled)
     }
 
     private fun checkInternetConnection() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
@@ -325,6 +335,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
             } else {
                 internetConnectionFlag = false
                 snackBar.show()
+                setAvailabilityOfSignUpButton(true)
             }
         }
     }

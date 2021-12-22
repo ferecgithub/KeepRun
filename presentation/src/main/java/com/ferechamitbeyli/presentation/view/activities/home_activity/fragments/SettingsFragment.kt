@@ -290,9 +290,10 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>() {
                         it.message,
                         Snackbar.LENGTH_LONG
                     ).show()
+                    setAvailabilityOfSettingButtons(true)
                 }
                 is EventState.Loading -> {
-                    /** NO-OP **/
+                    setAvailabilityOfSettingButtons(false)
                 }
                 is EventState.Success -> {
                     showSnackbar(
@@ -302,9 +303,15 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>() {
                         it.message.toString(),
                         Snackbar.LENGTH_SHORT
                     ).show()
+                    setAvailabilityOfSettingButtons(true)
                 }
             }
         }
+    }
+
+    private fun setAvailabilityOfSettingButtons(isEnabled: Boolean) {
+        binding.settingsLogoutBtn.enable(isEnabled)
+        binding.settingsSaveBtn.enable(isEnabled)
     }
 
 
@@ -400,6 +407,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>() {
             } else {
                 internetConnectionFlag = false
                 snackBar.show()
+                setAvailabilityOfSettingButtons(true)
             }
         }
     }

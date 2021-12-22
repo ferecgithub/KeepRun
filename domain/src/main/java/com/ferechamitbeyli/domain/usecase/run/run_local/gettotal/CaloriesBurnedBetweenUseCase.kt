@@ -8,6 +8,6 @@ import javax.inject.Inject
 class CaloriesBurnedBetweenUseCase @Inject constructor(
     private val runRepository: RunRepository
 ) {
-    suspend operator fun invoke(startDate: Long, endDate: Long): Flow<Resource<Int>> =
+    suspend operator fun invoke(startDate: Long, endDate: Long): Flow<Resource<Int?>> =
         runRepository.getTotalCaloriesBurnedBetween(startDate, endDate)
 }

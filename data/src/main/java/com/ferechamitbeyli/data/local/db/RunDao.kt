@@ -38,53 +38,18 @@ interface RunDao {
     fun getAllRunsSortedByStepCount(): Flow<List<RunEntity>>
 
     @Query("SELECT SUM(time_in_millis) FROM runs WHERE timestamp BETWEEN :startDate AND :endDate")
-    fun getTotalTimeInMillisBetween(startDate: Long, endDate: Long): Flow<Long>
+    fun getTotalTimeInMillisBetween(startDate: Long, endDate: Long): Flow<Long?>
 
     @Query("SELECT SUM(calories_burned) FROM runs WHERE timestamp BETWEEN :startDate AND :endDate")
-    fun getTotalCaloriesBurnedBetween(startDate: Long, endDate: Long): Flow<Int>
+    fun getTotalCaloriesBurnedBetween(startDate: Long, endDate: Long): Flow<Int?>
 
     @Query("SELECT SUM(distance_in_meters) FROM runs WHERE timestamp BETWEEN :startDate AND :endDate")
-    fun getTotalDistanceInMetersBetween(startDate: Long, endDate: Long): Flow<Int>
+    fun getTotalDistanceInMetersBetween(startDate: Long, endDate: Long): Flow<Int?>
 
     @Query("SELECT AVG(avg_speed_in_kmh) FROM runs WHERE timestamp BETWEEN :startDate AND :endDate")
-    fun getTotalAverageSpeedInKMHBetween(startDate: Long, endDate: Long): Flow<Double>
+    fun getTotalAverageSpeedInKMHBetween(startDate: Long, endDate: Long): Flow<Double?>
 
     @Query("SELECT SUM(steps) FROM runs WHERE timestamp BETWEEN :startDate AND :endDate")
-    fun getTotalStepCountBetween(startDate: Long, endDate: Long): Flow<Int>
-
-    @Query("SELECT SUM(time_in_millis) FROM runs")
-    fun getTotalTimeInMillis(): Flow<Long>
-
-    @Query("SELECT SUM(calories_burned) FROM runs")
-    fun getTotalCaloriesBurned(): Flow<Int>
-
-    @Query("SELECT SUM(time_in_millis) FROM runs")
-    fun getTotalDistanceInMeters(): Flow<Int>
-
-    @Query("SELECT SUM(time_in_millis) FROM runs")
-    fun getTotalAverageSpeedInKMH(): Flow<Double>
-
-    @Query("SELECT SUM(time_in_millis) FROM runs")
-    fun getTotalStepCount(): Flow<Int>
-
-
-/*
-    @Query("SELECT SUM(time_in_millis) FROM runs")
-    fun getTotalTimeInMillis(): Flow<Long>
-
-    @Query("SELECT SUM(calories_burned) FROM runs")
-    fun getTotalCaloriesBurned(): Flow<Int>
-
-    @Query("SELECT SUM(distance_in_meters) FROM runs")
-    fun getTotalDistanceInMeters(): Flow<Int>
-
-    @Query("SELECT AVG(avg_speed_in_kmh) FROM runs")
-    fun getTotalAverageSpeedInKMH(): Flow<Double>
-
-    @Query("SELECT SUM(steps) FROM runs")
-    fun getTotalStepCount(): Flow<Int>
-
- */
-
+    fun getTotalStepCountBetween(startDate: Long, endDate: Long): Flow<Int?>
 
 }

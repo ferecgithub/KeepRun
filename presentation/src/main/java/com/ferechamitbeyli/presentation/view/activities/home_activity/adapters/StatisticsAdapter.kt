@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ferechamitbeyli.presentation.databinding.ItemStatisticsLayoutBinding
 import com.ferechamitbeyli.presentation.uimodels.StatisticsUIModel
+import com.ferechamitbeyli.presentation.utils.helpers.TrackingHelperFunctions.calculateTimeFromDatabase
 
 class StatisticsAdapter : RecyclerView.Adapter<StatisticsAdapter.StatisticsViewHolder>() {
 
@@ -45,11 +46,14 @@ class StatisticsAdapter : RecyclerView.Adapter<StatisticsAdapter.StatisticsViewH
         val statistic = differ.currentList[position]
 
         holder.binding.apply {
+            itemDisplayedDateTitleTv.text = statistic.dateTitle
             itemDisplayedDateRangeTv.text = statistic.dateRange
-            itemStatisticsTotalRunTimeValueTv.text = statistic.totalRunTime
-            itemStatisticsTotalAvgRunSpeedValueTv.text = statistic.totalAvgRunSpeed
-            itemStatisticsTotalRunDistanceValueTv.text = statistic.totalRunDistance
-            itemStatisticsTotalCaloriesBurnedValueTv.text = statistic.totalCaloriesBurned
+            itemStatisticsTotalRunTimeValueTv.text =
+                calculateTimeFromDatabase(statistic.totalRunTime.toLong())
+            itemStatisticsTotalAvgRunSpeedValueTv.text =
+                String.format("%.2f km/h", statistic.totalAvgRunSpeed.toFloat())
+            itemStatisticsTotalRunDistanceValueTv.text = "${statistic.totalRunDistance} meters"
+            itemStatisticsTotalCaloriesBurnedValueTv.text = "${statistic.totalCaloriesBurned} kcal"
             itemStatisticsTotalStepsValueTv.text = statistic.totalSteps
         }
 
