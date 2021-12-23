@@ -24,6 +24,7 @@ import com.ferechamitbeyli.presentation.view.activities.home_activity.adapters.R
 import com.ferechamitbeyli.presentation.view.activities.home_activity.adapters.SwipeToDeleteCallback
 import com.ferechamitbeyli.presentation.view.base.BaseFragment
 import com.ferechamitbeyli.presentation.viewmodel.activities.home_activity.fragments.RunsViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -58,6 +59,7 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
         listenEventChannel()
 
         setupOnClickListeners()
+
 
     }
 
@@ -234,21 +236,30 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
                         it.message,
                         Snackbar.LENGTH_LONG
                     ).show()
+                    setAvailabilityOfBottomNavigationView(true)
                 }
                 is EventState.Loading -> {
-                    /** NO-OP **/
+                    setAvailabilityOfBottomNavigationView(false)
                 }
                 is EventState.Success -> {
-                    UIHelperFunctions.showSnackbar(
-                        binding.root,
-                        requireContext(),
-                        true,
-                        it.message.toString(),
-                        Snackbar.LENGTH_LONG
-                    ).show()
+                    if (it.message != null) {
+                        UIHelperFunctions.showSnackbar(
+                            binding.root,
+                            requireContext(),
+                            true,
+                            it.message.toString(),
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+                    setAvailabilityOfBottomNavigationView(true)
                 }
             }
         }
+    }
+
+    private fun setAvailabilityOfBottomNavigationView(isEnabled: Boolean) {
+        requireActivity().findViewById<BottomNavigationView>(R.id.home_bnv).menu.getItem(1).isEnabled =
+            isEnabled
     }
 
     override fun onResume() {
@@ -277,6 +288,7 @@ class RunsFragment : BaseFragment<FragmentRunsBinding>() {
             } else {
                 internetConnectionFlag = false
                 snackBar.show()
+                setAvailabilityOfBottomNavigationView(true)
             }
         }
     }

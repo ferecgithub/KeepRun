@@ -41,7 +41,10 @@ class RunsViewModel @Inject constructor(
     private fun runsSortedByDate() = ioScope.launch {
         runUseCases.getAllRunsSortedByDateUseCase.invoke().collect { response ->
             if (response is Resource.Success) {
-                response.data?.let { _runsFlow.emit(it) }
+                response.data?.let {
+                    _runEventsChannel.emit(EventState.Success())
+                    _runsFlow.emit(it)
+                }
             }
         }
     }
@@ -49,7 +52,10 @@ class RunsViewModel @Inject constructor(
     private fun runsSortedByRunTime() = ioScope.launch {
         runUseCases.getAllRunsSortedByTimeInMillisUseCase.invoke().collect { response ->
             if (response is Resource.Success) {
-                response.data?.let { _runsFlow.emit(it) }
+                response.data?.let {
+                    _runEventsChannel.emit(EventState.Success())
+                    _runsFlow.emit(it)
+                }
             }
         }
     }
@@ -57,7 +63,10 @@ class RunsViewModel @Inject constructor(
     private fun runsSortedByCaloriesBurned() = ioScope.launch {
         runUseCases.getAllRunsSortedByCaloriesBurnedUseCase.invoke().collect { response ->
             if (response is Resource.Success) {
-                response.data?.let { _runsFlow.emit(it) }
+                response.data?.let {
+                    _runEventsChannel.emit(EventState.Success())
+                    _runsFlow.emit(it)
+                }
             }
         }
     }
@@ -65,7 +74,10 @@ class RunsViewModel @Inject constructor(
     private fun runsSortedByDistance() = ioScope.launch {
         runUseCases.getAllRunsSortedByDistanceUseCase.invoke().collect { response ->
             if (response is Resource.Success) {
-                response.data?.let { _runsFlow.emit(it) }
+                response.data?.let {
+                    _runEventsChannel.emit(EventState.Success())
+                    _runsFlow.emit(it)
+                }
             }
         }
     }
@@ -81,7 +93,10 @@ class RunsViewModel @Inject constructor(
     private fun runsSortedByStepCount() = ioScope.launch {
         runUseCases.getAllRunsSortedByStepCountUseCase.invoke().collect { response ->
             if (response is Resource.Success) {
-                response.data?.let { _runsFlow.emit(it) }
+                response.data?.let {
+                    _runEventsChannel.emit(EventState.Success())
+                    _runsFlow.emit(it)
+                }
             }
         }
     }
@@ -109,7 +124,7 @@ class RunsViewModel @Inject constructor(
                                     _runEventsChannel.emit(EventState.Error(deleteResponse.message.toString()))
                                 }
                                 is Resource.Loading -> {
-                                    /** NO-OP **/
+                                    _runEventsChannel.emit(EventState.Loading())
                                 }
                                 is Resource.Success -> {
                                     _runEventsChannel.emit(EventState.Success(deleteResponse.data.toString()))
@@ -125,14 +140,14 @@ class RunsViewModel @Inject constructor(
     fun getUserWeightFromRemoteDB() = flow<Double> {
         sessionUseCases.getUserWeightFromRemoteDBUseCase.invoke().collect { remoteDBResponse ->
             when (remoteDBResponse) {
-                is Resource.Success -> {
-                    remoteDBResponse.data?.let { weight -> emit(weight) }
-                }
                 is Resource.Error -> {
                     _runEventsChannel.emit(EventState.Error(remoteDBResponse.message.toString()))
                 }
                 is Resource.Loading -> {
-                    /** NO-OP **/
+                    _runEventsChannel.emit(EventState.Loading())
+                }
+                is Resource.Success -> {
+                    remoteDBResponse.data?.let { weight -> emit(weight) }
                 }
             }
         }
@@ -177,10 +192,10 @@ class RunsViewModel @Inject constructor(
                     _runEventsChannel.emit(EventState.Error(remoteDBResponse.message.toString()))
                 }
                 is Resource.Loading -> {
-                    /** NO-OP **/
+                    _runEventsChannel.emit(EventState.Loading())
                 }
                 is Resource.Success -> {
-                    /** NO-OP **/
+                    _runEventsChannel.emit(EventState.Success())
                 }
             }
         }
