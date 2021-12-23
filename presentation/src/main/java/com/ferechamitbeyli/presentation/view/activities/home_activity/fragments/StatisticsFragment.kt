@@ -43,6 +43,8 @@ class StatisticsFragment : BaseFragment<FragmentStatisticsBinding>() {
 
         checkInternetConnection()
 
+        clearFocusFromSpinner()
+
         setupOnClickListeners()
 
         setupRecyclerView()
@@ -103,6 +105,10 @@ class StatisticsFragment : BaseFragment<FragmentStatisticsBinding>() {
                 }
             }
         }
+    }
+
+    private fun clearFocusFromSpinner() {
+        binding.statisticsDateDisplaySp.clearFocus()
     }
 
     private fun setSelectionPerDateType() {

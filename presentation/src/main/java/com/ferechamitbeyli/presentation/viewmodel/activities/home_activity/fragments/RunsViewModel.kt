@@ -164,10 +164,10 @@ class RunsViewModel @Inject constructor(
             RunSortType.STEP_COUNT -> {
                 runsSortedByStepCount()
             }
-        }.also {
-            this@RunsViewModel.runSortType = sortType
-            savedStateHandle["runSortType"] = sortType
         }
+    }.also {
+        this@RunsViewModel.runSortType = sortType
+        savedStateHandle["runSortType"] = sortType
     }
 
     fun getAllRunsFromRemoteDatabase() = flow<List<Run>> {
@@ -180,7 +180,7 @@ class RunsViewModel @Inject constructor(
                     /** NO-OP **/
                 }
                 is Resource.Success -> {
-                    _runEventsChannel.emit(EventState.Success(remoteDBResponse.message.toString()))
+                    /** NO-OP **/
                 }
             }
         }

@@ -5,7 +5,8 @@
     android:id="@+id/nav_home_graph"
     app:startDestination="@id/runsFragment">
 
-    <action android:id="@+id/action_global_trackingFragment"
+    <action
+        android:id="@+id/action_global_trackingFragment"
         app:destination="@id/trackingFragment"
         app:launchSingleTop="true" />
 
@@ -27,7 +28,7 @@
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popUpTo="@id/activityRecognitionPermissionFragment"
-            app:popUpToInclusive="false"/>
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/initialFragment"
@@ -63,7 +64,11 @@
             app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_runsFragment_to_locationPermissionFragment"
-            app:destination="@id/locationPermissionFragment" />
+            app:destination="@id/locationPermissionFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popUpTo="@id/locationPermissionFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -79,7 +84,11 @@
             app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_settingsFragment_to_locationPermissionFragment"
-            app:destination="@id/locationPermissionFragment" />
+            app:destination="@id/locationPermissionFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popUpTo="@id/locationPermissionFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/statisticsFragment"
@@ -95,7 +104,11 @@
             app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_statisticsFragment_to_locationPermissionFragment"
-            app:destination="@id/locationPermissionFragment" />
+            app:destination="@id/locationPermissionFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popUpTo="@id/locationPermissionFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"
@@ -111,7 +124,11 @@
             app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_aboutFragment_to_locationPermissionFragment"
-            app:destination="@id/locationPermissionFragment" />
+            app:destination="@id/locationPermissionFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popUpTo="@id/locationPermissionFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/locationPermissionFragment"
@@ -144,25 +161,25 @@
             app:enterAnim="@anim/from_left"
             app:exitAnim="@anim/to_right"
             app:popUpTo="@id/trackingFragment"
-            app:popUpToInclusive="false"/>
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_activityRecognitionPermissionFragment_to_backgroundLocationPermissionFragment"
             app:destination="@id/backgroundLocationPermissionFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popUpTo="@id/backgroundLocationPermissionFragment"
-            app:popUpToInclusive="false"/>
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/backgroundLocationPermissionFragment"
         android:name="com.ferechamitbeyli.presentation.view.activities.home_activity.fragments.BackgroundLocationPermissionFragment"
-        android:label="BackgroundLocationPermissionFragment" >
+        android:label="BackgroundLocationPermissionFragment">
         <action
             android:id="@+id/action_backgroundLocationPermissionFragment_to_trackingFragment"
             app:destination="@id/trackingFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popUpTo="@id/trackingFragment"
-            app:popUpToInclusive="false"/>
+            app:popUpToInclusive="false" />
     </fragment>
 </navigation>

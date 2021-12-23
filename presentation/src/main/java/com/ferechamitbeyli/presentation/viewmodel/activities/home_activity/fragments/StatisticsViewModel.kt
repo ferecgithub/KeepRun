@@ -27,11 +27,11 @@ class StatisticsViewModel @Inject constructor(
 
     var dateType = savedStateHandle["dateType"] ?: DateType.TODAY
 
-    private val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-
     init {
         displayStatisticsByDate(dateType)
     }
+
+    private val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
 
     private var _statisticsFlow = MutableStateFlow<List<StatisticsUIModel>>(mutableListOf())
     val statisticsFlow: StateFlow<List<StatisticsUIModel>> = _statisticsFlow
@@ -41,7 +41,6 @@ class StatisticsViewModel @Inject constructor(
 
         val formattedStartOfMonthDate = dateFormat.format(dateRangeArray[0])
         val formattedEndOfMonthDate = dateFormat.format(dateRangeArray[1])
-
 
         combine(
             runUseCases.getTotalTimeInMillisBetweenUseCase.invoke(
@@ -459,13 +458,10 @@ class StatisticsViewModel @Inject constructor(
             DateType.TODAY -> {
                 getStatisticsOfToday().collect()
             }
-
             DateType.THIS_WEEK -> {
                 getStatisticsOfThisWeek().collect()
             }
-
             DateType.THIS_MONTH -> {
-
                 combine(
                     getStatisticsOfWholeOfTheMonth(),
                     getStatisticsOfFirstWeekOfTheMonth(),
@@ -478,13 +474,11 @@ class StatisticsViewModel @Inject constructor(
                 }.collect {
                     _statisticsFlow.emit(it)
                 }
-
             }
-
-        }.also {
-            this@StatisticsViewModel.dateType = dateType
-            savedStateHandle["dateType"] = dateType
         }
+    }.also {
+        this@StatisticsViewModel.dateType = dateType
+        savedStateHandle["dateType"] = dateType
     }
 
 }

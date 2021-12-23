@@ -1,6 +1,5 @@
 package com.ferechamitbeyli.data.repositories.datasources.home
 
-import android.util.Log
 import com.ferechamitbeyli.data.local.db.RunDao
 import com.ferechamitbeyli.data.local.entities.RunEntity
 import com.ferechamitbeyli.data.remote.entities.RunDto
@@ -127,10 +126,8 @@ class RunRemoteDBDataSourceImpl @Inject constructor(
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.exists()) {
-                            var number = 0
                             for (runSnapshot in snapshot.children) {
                                 val run = runSnapshot.getValue(RunDto::class.java)
-                                Log.d("DATA_FROM_Run", "${run?.avgSpeedInKMH} ${number++}")
                                 run?.let { runList.add(it) }
                             }
                         }
