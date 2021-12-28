@@ -33,10 +33,10 @@ import com.ferechamitbeyli.presentation.utils.helpers.PresentationConstants.POLY
 import com.ferechamitbeyli.presentation.utils.helpers.PresentationConstants.POLYLINE_JOINT_TYPE
 import com.ferechamitbeyli.presentation.utils.helpers.PresentationConstants.POLYLINE_WIDTH
 import com.ferechamitbeyli.presentation.utils.helpers.SinglePolyline
+import com.ferechamitbeyli.presentation.utils.helpers.TrackingHelperFunctions
 import com.ferechamitbeyli.presentation.utils.helpers.TrackingHelperFunctions.calculateDistance
 import com.ferechamitbeyli.presentation.utils.helpers.TrackingHelperFunctions.calculateElapsedTime
 import com.ferechamitbeyli.presentation.utils.helpers.TrackingHelperFunctions.calculateMETValue
-import com.ferechamitbeyli.presentation.utils.helpers.TrackingHelperFunctions.setCameraPosition
 import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.enable
 import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.fromVectorToBitmap
 import com.ferechamitbeyli.presentation.utils.helpers.UIHelperFunctions.Companion.showSnackbar
@@ -408,47 +408,67 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
             isKilled.value == false
         ) {
             val bounds = LatLngBounds.Builder()
+            var isBoundsEmpty = true;
+
             locationList.forEach { polyline ->
                 polyline.forEach {
                     bounds.include(it)
+                    isBoundsEmpty = false;
                 }
             }
-            map.animateCamera(
-                CameraUpdateFactory.newLatLngBounds(
-                    bounds.build(),
-                    100
-                ), 1500, null
-            )
-            addStartMarker(locationList.first().first())
-            addEndMarker(locationList.last().last())
+            if (!isBoundsEmpty) {
+                map.animateCamera(
+                    CameraUpdateFactory.newLatLngBounds(
+                        bounds.build(),
+                        100
+                    ), 1500, null
+                )
+                addStartMarker(locationList.first().first())
+                addEndMarker(locationList.last().last())
+            }
         }
     }
 
     private fun saveRunToDBWithScreenshot() {
-        val distanceInMeters = calculateDistance(locationList, false)
-        val timeInMs = runTimeInMillis
-        val steps = stepCount
-        val avgSpeedInKMH =
-            round((distanceInMeters / 1000f) / (timeInMs / 1000f / 60 / 60) * 10) / 10f
-        val timestamp = Calendar.getInstance().timeInMillis
-
-        // caloriesBurned = MET * 3.5 * weight / 200
-        val caloriesBurned =
-            (calculateMETValue(avgSpeedInKMH * 1000) * 3.5 * weight / 200 * timeInMs / 1000f / 60).toInt()
-        map.snapshot { screenshot ->
-            val run = RunUIModel(
-                image = screenshot,
-                timestamp = timestamp,
-                avgSpeedInKMH = avgSpeedInKMH,
-                distanceInMeters = distanceInMeters.toInt(),
-                timeInMillis = timeInMs,
-                caloriesBurned = caloriesBurned,
-                steps = steps
-            )
-
-            viewModel.saveRunToSynced(run)
+        var distanceInMeters = 0.0
+        if (locationList.first().isNotEmpty()) {
+            distanceInMeters = calculateDistance(locationList, false)
         }
-        stopTheRun()
+        if (distanceInMeters >= 10.0) {
+            val timeInMs = runTimeInMillis
+            val steps = stepCount
+            val avgSpeedInKMH =
+                round((distanceInMeters / 1000f) / (timeInMs / 1000f / 60 / 60) * 10) / 10f
+            val timestamp = Calendar.getInstance().timeInMillis
+
+            // caloriesBurned = MET * 3.5 * weight / 200
+            val caloriesBurned =
+                (calculateMETValue(avgSpeedInKMH * 1000) * 3.5 * weight / 200 * timeInMs / 1000f / 60).toInt()
+            map.snapshot { screenshot ->
+                val run = RunUIModel(
+                    image = screenshot,
+                    timestamp = timestamp,
+                    avgSpeedInKMH = avgSpeedInKMH,
+                    distanceInMeters = distanceInMeters.toInt(),
+                    timeInMillis = timeInMs,
+                    caloriesBurned = caloriesBurned,
+                    steps = steps
+                )
+
+                viewModel.saveRunToSynced(run)
+            }
+            stopTheRun()
+        } else {
+            showSnackbar(
+                binding.root,
+                requireContext(),
+                false,
+                getString(R.string.too_low_distance),
+                Snackbar.LENGTH_LONG
+            ).show()
+            stopTheRun()
+        }
+
     }
 
     private fun addStartMarker(position: LatLng) {
@@ -483,21 +503,26 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
 
     @SuppressLint("MissingPermission")
     private fun resetMap() {
-        fusedLocationProviderClient.lastLocation.addOnCompleteListener {
-            val lastKnownLocation = LatLng(
-                it.result.latitude,
-                it.result.longitude
-            )
-            map.animateCamera(
-                CameraUpdateFactory.newCameraPosition(
-                    setCameraPosition(lastKnownLocation, FOLLOW_POLYLINE_ZOOM)
+        if (locationList.isNotEmpty()) {
+            fusedLocationProviderClient.lastLocation.addOnCompleteListener {
+                val lastKnownLocation = LatLng(
+                    it.result.latitude,
+                    it.result.longitude
                 )
-            )
-            polylineList.forEach { polyline -> polyline.remove() }
-            markerList.forEach { marker -> marker.remove() }
-            locationList.clear()
-            markerList.clear()
-            setInitialValues()
+                map.animateCamera(
+                    CameraUpdateFactory.newCameraPosition(
+                        TrackingHelperFunctions.setCameraPosition(
+                            lastKnownLocation,
+                            FOLLOW_POLYLINE_ZOOM
+                        )
+                    )
+                )
+                polylineList.forEach { polyline -> polyline.remove() }
+                markerList.forEach { marker -> marker.remove() }
+                locationList.clear()
+                markerList.clear()
+                setInitialValues()
+            }
         }
     }
 

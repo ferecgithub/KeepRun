@@ -95,12 +95,6 @@ dependencies {
     kapt DaggerHilt.hilt_android_compiler_kapt
     kapt DaggerHilt.hilt_compiler_kapt
 
-    /*
-    // Glide
-    implementation Glide.glide
-    kapt Glide.glide_compiler_kapt
-     */
-
     // Coil
     implementation Coil.coil
 
@@ -113,15 +107,11 @@ dependencies {
     // SquareUp Logcat
     implementation SquareUpLogcat.squareup_logcat
 
-    // MPAndroidChart
-    implementation MPAndroidChart.mpAndroidChart
-
     // Test Suites
     implementation TestSuites.junit_jupiter_api
     implementation TestSuites.junit_jupiter_engine
     implementation TestSuites.mockk
     implementation TestSuites.androidx_text_espresso_core
-
 
 
 }
