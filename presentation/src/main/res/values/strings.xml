@@ -127,8 +127,6 @@
     <string name="total_run_distance">Total Run Distance</string>
     <string name="total_calories_burned">Total Calories Burned</string>
     <string name="total_steps">Total Steps</string>
-    <string name="first_week">First Week</string>
-    <string name="second_week">Second Week</string>
     <string name="too_low_distance">You run less than 10 meters. To record the run you have to run at least 10 meters.</string>
 
 </resources>
