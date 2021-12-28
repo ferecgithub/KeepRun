@@ -503,27 +503,31 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
 
     @SuppressLint("MissingPermission")
     private fun resetMap() {
-        if (locationList.isNotEmpty()) {
-            fusedLocationProviderClient.lastLocation.addOnCompleteListener {
-                val lastKnownLocation = LatLng(
-                    it.result.latitude,
-                    it.result.longitude
-                )
-                map.animateCamera(
-                    CameraUpdateFactory.newCameraPosition(
-                        TrackingHelperFunctions.setCameraPosition(
-                            lastKnownLocation,
-                            FOLLOW_POLYLINE_ZOOM
+        fusedLocationProviderClient.locationAvailability.addOnCompleteListener {
+            if (it.result.isLocationAvailable) {
+                fusedLocationProviderClient.lastLocation.addOnCompleteListener {
+                    val lastKnownLocation = LatLng(
+                        it.result.latitude,
+                        it.result.longitude
+                    )
+                    map.animateCamera(
+                        CameraUpdateFactory.newCameraPosition(
+                            TrackingHelperFunctions.setCameraPosition(
+                                lastKnownLocation,
+                                FOLLOW_POLYLINE_ZOOM
+                            )
                         )
                     )
-                )
-                polylineList.forEach { polyline -> polyline.remove() }
-                markerList.forEach { marker -> marker.remove() }
-                locationList.clear()
-                markerList.clear()
-                setInitialValues()
+                    polylineList.forEach { polyline -> polyline.remove() }
+                    markerList.forEach { marker -> marker.remove() }
+                    locationList.clear()
+                    markerList.clear()
+                    setInitialValues()
+                }
             }
+
         }
+
     }
 
     private fun navigateToRunsFragment() {
