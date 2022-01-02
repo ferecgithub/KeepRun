@@ -407,12 +407,12 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
             isKilled.value == false
         ) {
             val bounds = LatLngBounds.Builder()
-            var isBoundsEmpty = true;
+            var isBoundsEmpty = true
 
             locationList.forEach { polyline ->
                 polyline.forEach {
                     bounds.include(it)
-                    isBoundsEmpty = false;
+                    isBoundsEmpty = false
                 }
             }
             if (!isBoundsEmpty) {
@@ -506,10 +506,10 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
     private fun resetMap() {
         fusedLocationProviderClient.locationAvailability.addOnCompleteListener {
             if (it.result.isLocationAvailable) {
-                fusedLocationProviderClient.lastLocation.addOnCompleteListener {
+                fusedLocationProviderClient.lastLocation.addOnCompleteListener { locationResponse ->
                     val lastKnownLocation = LatLng(
-                        it.result.latitude,
-                        it.result.longitude
+                        locationResponse.result.latitude,
+                        locationResponse.result.longitude
                     )
                     map.animateCamera(
                         CameraUpdateFactory.newCameraPosition(
@@ -526,9 +526,7 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
                     setInitialValues()
                 }
             }
-
         }
-
     }
 
     private fun navigateToRunsFragment() {
@@ -631,7 +629,6 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
                 binding.goBackBtn.enable(true)
             }
         }
-
     }
 
     override fun onResume() {
@@ -696,6 +693,5 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
             }
         }
     }
-
-
+    
 }
