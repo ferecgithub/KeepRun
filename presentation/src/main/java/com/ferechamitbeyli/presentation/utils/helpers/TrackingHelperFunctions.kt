@@ -63,8 +63,8 @@ object TrackingHelperFunctions {
         }
     }
 
-    fun calculateMETValue(mph: Double): Float =
-        when (mph) {
+    fun calculateMETValue(milesPerHour: Double): Float =
+        when (milesPerHour) {
             in 0.0..2.1 -> 2.0f // strolling, very slow
             in 2.1..3.6 -> 4.5f // briskly & carrying objects less than 25 lbs
             in 3.6..5.1 -> 8.0f // running, around 5 mph (12 min/mile)

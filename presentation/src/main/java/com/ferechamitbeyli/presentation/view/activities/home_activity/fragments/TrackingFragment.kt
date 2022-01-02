@@ -52,7 +52,6 @@ import com.google.android.gms.maps.model.*
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
@@ -443,7 +442,7 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
 
             // caloriesBurned = MET * 3.5 * weight / 200
             val caloriesBurned =
-                (calculateMETValue(avgSpeedInKMH * 1000) * 3.5 * weight / 200 * timeInMs / 1000f / 60).toInt()
+                (calculateMETValue(convertKilometersPerHourToMilesPerHour(avgSpeedInKMH)) * 3.5 * weight / 200 * timeInMs / 1000f / 60).toInt()
             map.snapshot { screenshot ->
                 val run = RunUIModel(
                     image = screenshot,
@@ -470,6 +469,8 @@ class TrackingFragment : BaseFragment<FragmentTrackingBinding>(), LocationListen
         }
 
     }
+
+    private fun convertKilometersPerHourToMilesPerHour(kmsPerHour: Double) = kmsPerHour * 0.621
 
     private fun addStartMarker(position: LatLng) {
         val marker = map.addMarker(

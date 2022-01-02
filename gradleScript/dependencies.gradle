@@ -30,17 +30,19 @@ ext {
     appcompat = '1.4.0'
     core_ktx = '1.7.0'
     constraintlayout = '2.1.2'
-    legacy_support_v4 = "1.0.0"
+    legacy_support_v4 = '1.0.0'
+    core_splashscreen = '1.0.0-alpha01'
 
     AndroidX = [
             appcompat: "androidx.appcompat:appcompat:${appcompat}",
             constraint_layout: "androidx.constraintlayout:constraintlayout:${constraintlayout}",
             legacy_support_v4: "androidx.legacy:legacy-support-v4:${legacy_support_v4}",
-            core_ktx: "androidx.core:core-ktx:${core_ktx}"
+            core_ktx: "androidx.core:core-ktx:${core_ktx}",
+            core_splashscreen: "androidx.core:core-splashscreen:${core_splashscreen}"
     ]
 
     // Domain specific
-    kotlin_version = '1.6.0'
+    kotlin_version = '1.6.10'
 
     Domain = [
             kotlin_version: "org.jetbrains.kotlin:kotlin-stdlib:${kotlin_version}"
@@ -84,7 +86,7 @@ ext {
     ]
 
     // Navigation
-    navigation = '2.4.0-beta02'
+    navigation = '2.4.0-rc01'
 
     Navigation = [
             navigation_fragment_ktx: "androidx.navigation:navigation-fragment-ktx:${navigation}",
@@ -102,7 +104,7 @@ ext {
     ]
 
     // Room
-    room = "2.3.0"
+    room = '2.4.0'
 
     Room = [
             room_runtime: "androidx.room:room-runtime:${room}",
@@ -117,12 +119,12 @@ ext {
     ]
 
     // Firebase
-    firebase_bom = '29.0.1'
+    firebase_bom = '29.0.3'
     firebase_auth_ktx = "21.0.1"
     firebase_database = '20.0.3'
     firebase_storage = "20.0.0"
-    firebase_crashlytics = '18.2.5'
-    firebase_analytics = "20.0.0"
+    firebase_crashlytics = '18.2.6'
+    firebase_analytics = '20.0.2'
     firebase_messaging = "23.0.0"
 
     Firebase = [
@@ -137,7 +139,7 @@ ext {
     ]
 
     // Coroutines
-    kotlinx_coroutines = "1.5.2"
+    kotlinx_coroutines = '1.6.0-native-mt'
 
     Coroutines = [
             kotlinx_coroutines_core: "org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinx_coroutines}",
@@ -162,8 +164,8 @@ ext {
     ]
 
     // PlayServices
-    play_services_location = "18.0.0"
-    play_services_maps = '18.0.0'
+    play_services_location = '19.0.0'
+    play_services_maps = '18.0.1'
 
     PlayServices = [
             kotlinx_coroutines_play_services: "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${kotlinx_coroutines}",
@@ -266,7 +268,7 @@ ext {
 
     // Test Suites
     junit = '5.8.2'
-    mockk = '1.12.1'
+    mockk = '1.12.2'
 
     espresso_core = "3.4.0"
 
