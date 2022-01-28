@@ -17,5 +17,4 @@ class OnboardingAdapter(
 
     override fun createFragment(position: Int) = fragmentList[position]
 
-
 }
