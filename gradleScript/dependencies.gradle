@@ -42,7 +42,7 @@ ext {
     ]
 
     // Domain specific
-    kotlin_version = '1.6.10'
+    kotlin_version = '1.6.20'
 
     Domain = [
             kotlin_version: "org.jetbrains.kotlin:kotlin-stdlib:${kotlin_version}"
@@ -56,7 +56,7 @@ ext {
     ]
 
     // AppClasspath
-    build_gradle = '7.1.1'
+    build_gradle = '7.1.2'
     kotlin_gradle_plugin = "1.6.0"
     navigation_safe_args_gradle_plugin = "2.5.0-alpha01"
     hilt_android_gradle_plugin = "2.38.1"
@@ -86,7 +86,7 @@ ext {
     ]
 
     // Navigation
-    navigation = '2.5.0-alpha02'
+    navigation = '2.5.0-alpha03'
 
     Navigation = [
             navigation_fragment_ktx: "androidx.navigation:navigation-fragment-ktx:${navigation}",
@@ -104,7 +104,7 @@ ext {
     ]
 
     // Room
-    room = '2.4.1'
+    room = '2.4.2'
 
     Room = [
             room_runtime: "androidx.room:room-runtime:${room}",
@@ -119,13 +119,13 @@ ext {
     ]
 
     // Firebase
-    firebase_bom = '29.1.0'
-    firebase_auth_ktx = "21.0.1"
-    firebase_database = '20.0.3'
-    firebase_storage = "20.0.0"
-    firebase_crashlytics = '18.2.8'
-    firebase_analytics = '20.1.0'
-    firebase_messaging = "23.0.0"
+    firebase_bom = '29.3.0'
+    firebase_auth_ktx = '21.0.3'
+    firebase_database = '20.0.4'
+    firebase_storage = '20.0.1'
+    firebase_crashlytics = '18.2.9'
+    firebase_analytics = '20.1.2'
+    firebase_messaging = '23.0.2'
 
     Firebase = [
             firebase_bom: "com.google.firebase:firebase-bom:${firebase_bom}",
@@ -139,7 +139,7 @@ ext {
     ]
 
     // Coroutines
-    kotlinx_coroutines = '1.6.0-native-mt'
+    kotlinx_coroutines = '1.6.1-native-mt'
 
     Coroutines = [
             kotlinx_coroutines_core: "org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinx_coroutines}",
@@ -157,7 +157,7 @@ ext {
     ]
 
     // OkHttp3
-    okhttp3_logging_interceptor = '5.0.0-alpha.4'
+    okhttp3_logging_interceptor = '5.0.0-alpha.6'
 
     OkHttp3 = [
             logging_interceptor: "com.squareup.okhttp3:logging-interceptor:${okhttp3_logging_interceptor}"
@@ -175,7 +175,7 @@ ext {
 
     // Google Maps SDK Utils
     google_maps_utils = '2.3.0'
-    google_maps_utils_ktx = '3.3.0'
+    google_maps_utils_ktx = '3.4.0'
 
     GoogleMapsUtils = [
             google_maps_utils: "com.google.maps.android:android-maps-utils:${google_maps_utils}",
@@ -268,7 +268,7 @@ ext {
 
     // Test Suites
     junit = '5.8.2'
-    mockk = '1.12.2'
+    mockk = '1.12.3'
 
     espresso_core = "3.4.0"
 

@@ -25,6 +25,9 @@ build/
 # Signing files
 .signing/
 
+# Google services file
+google-services.json
+
 # Local configuration file (sdk path, etc)
 local.properties
 
