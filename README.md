@@ -1,13 +1,11 @@
 # KeepRun
-A running analysis application written in Kotlin with the latest and greatest Android libraries
+KeepRun, a run analysis application that was developed for Android mobile devices to support getting in the habit of running as a healthy activity. Users can track their running/jogging speeds, running distance, calories burned, step count, and route taken via a map interface.
 
 ### Used Technologies and Libraries
-
-* Clean Architecute & MVVM
-* Android Architecture Components (Lifecycle, Navigation, Room, DataStore)
-* Dagger Hilt
+* Clean Architecture & MVVM
+* Kotlin
 * Kotlin Coroutines
 * Google Maps API
-* Firebase (Authentication, Realtime Database, Storage, Cloud Messaging)
-* Coil
-* LeakCanary
+* Dagger Hilt
+* Jetpack Components ( Navigation, Room, DataStore, LiveData, Lifecycle, ViewModel )
+* Firebase services ( Authentication, Realtime Database, Storage, Cloud Messaging )
