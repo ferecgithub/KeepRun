@@ -262,7 +262,7 @@ class SessionRemoteDataSourceImpl @Inject constructor(
             emit(Resource.Error(it.message.toString()))
         }.flowOn(coroutineDispatchers.io())
 
-    override suspend fun updateUserWeightToRemoteDB(weight: Double): Flow<Resource<String>> =
+        override suspend fun updateUserWeightToRemoteDB(weight: Double): Flow<Resource<String>> =
         flow<Resource<String>> {
 
             emit(Resource.Loading())

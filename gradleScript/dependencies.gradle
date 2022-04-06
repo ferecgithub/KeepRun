@@ -56,7 +56,7 @@ ext {
     ]
 
     // AppClasspath
-    build_gradle = '7.1.0'
+    build_gradle = '7.1.1'
     kotlin_gradle_plugin = "1.6.0"
     navigation_safe_args_gradle_plugin = "2.5.0-alpha01"
     hilt_android_gradle_plugin = "2.38.1"
@@ -75,7 +75,7 @@ ext {
     ]
 
     // Lifecycle
-    lifecycle = '2.4.0'
+    lifecycle = '2.4.1'
 
     Lifecycle = [
             lifecycle_viewmodel_ktx: "androidx.lifecycle:lifecycle-viewmodel-ktx:${lifecycle}",
@@ -86,7 +86,7 @@ ext {
     ]
 
     // Navigation
-    navigation = '2.5.0-alpha01'
+    navigation = '2.5.0-alpha02'
 
     Navigation = [
             navigation_fragment_ktx: "androidx.navigation:navigation-fragment-ktx:${navigation}",
@@ -119,12 +119,12 @@ ext {
     ]
 
     // Firebase
-    firebase_bom = '29.0.4'
+    firebase_bom = '29.1.0'
     firebase_auth_ktx = "21.0.1"
     firebase_database = '20.0.3'
     firebase_storage = "20.0.0"
-    firebase_crashlytics = '18.2.7'
-    firebase_analytics = '20.0.2'
+    firebase_crashlytics = '18.2.8'
+    firebase_analytics = '20.1.0'
     firebase_messaging = "23.0.0"
 
     Firebase = [
@@ -157,7 +157,7 @@ ext {
     ]
 
     // OkHttp3
-    okhttp3_logging_interceptor = '5.0.0-alpha.3'
+    okhttp3_logging_interceptor = '5.0.0-alpha.4'
 
     OkHttp3 = [
             logging_interceptor: "com.squareup.okhttp3:logging-interceptor:${okhttp3_logging_interceptor}"
@@ -183,9 +183,9 @@ ext {
     ]
 
     // Dagger Hilt
-    dagger_hilt = '2.40.5'
+    dagger_hilt = '2.41'
     hilt_lifecycle_viewmodel = "1.0.0-alpha03"
-    hilt_compiler = '2.40.5'
+    hilt_compiler = '2.41'
 
     DaggerHilt = [
             hilt_android: "com.google.dagger:hilt-android:${dagger_hilt}",
