@@ -9,7 +9,7 @@ KeepRun, a run analysis application that was developed for Android mobile device
 * Dagger Hilt
 * Jetpack Components ( Navigation, Room, DataStore, LiveData, Lifecycle, ViewModel )
 * Firebase services ( Authentication, Realtime Database, Storage, Cloud Messaging )
-* 
+
 ### Screens
 
 #### The application welcomes you with a splash screen and onboarding screens
